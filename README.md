@@ -1,4 +1,4 @@
-# Elvira - Aplicativo de Lançador para Idosos
+# Elvira - Aplicativo de Launcher para Idosos
 
 Bem-vindo ao repositório do projeto Elvira, desenvolvido durante o Hackathop de Mkt ADVB/PR. 
 
