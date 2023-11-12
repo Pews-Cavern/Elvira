@@ -1,16 +1,12 @@
 # Elvira - Aplicativo de Launcher para Idosos
 
-Bem-vindo ao repositório do projeto Elvira, desenvolvido durante o Hackathop de Mkt ADVB/PR. 
-
-## Sobre o Evento
-
-O Hackathop é uma emocionante maratona de inovação que desafia estudantes e empreendedores a criar soluções inovadoras para os setores de marketing e vendas. Nossa equipe, composta por [@PewDizinho](https://github.com/PewDizinho) (Paulo Eduardo) e [@ToCrossBridge](https://github.com/ToCrossBridge) (Beatriz Lima), participou deste evento com o objetivo de criar uma aplicação que simplificasse a experiência de uso de smartphones para idosos.
+Bem-vindo ao repositório do projeto Elvira, um aplicativo desenvolvido com foco na facilidade de uso por idosos.
 
 ## Sobre o Aplicativo
 
 ### O Projeto
 
-Elvira é um aplicativo de lançador (launcher) desenvolvido com foco na facilidade de uso por idosos. O aplicativo oferece uma interface intuitiva e funcionalidades especialmente projetadas para atender às necessidades específicas dessa faixa etária.
+Elvira é um aplicativo de lançador (launcher) desenvolvido com uma interface intuitiva e funcionalidades especialmente projetadas para atender às necessidades específicas de idosos.
 
 ### Características Principais
 
