@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:Elvira/util/battery.dart';
+import 'package:Elvira/util/tts.dart';
+import 'package:Elvira/util/voice.dart';
 import 'package:battery_info/battery_info_plugin.dart';
 import 'package:flutter/material.dart';
 
@@ -72,32 +74,40 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Button 1'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize:
-                                  const Size(double.infinity, double.infinity),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                               Voice().startListening().then((value) {
+                                 print(value);
+                               });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                minimumSize: const Size(
+                                    double.infinity, double.infinity),
+                              ),
+                              child: const Icon(
+                                Icons.mic,
+                                size: 150,
+                              ),
                             ),
                           ),
                         ),
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Button 1.2'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize:
-                                  const Size(double.infinity, double.infinity),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Button 2'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize:
-                                  const Size(double.infinity, double.infinity),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                minimumSize: const Size(
+                                    double.infinity, double.infinity),
+                              ),
+                              child: const Icon(
+                                Icons.phone,
+                                size: 150,
+                              ),
                             ),
                           ),
                         ),
@@ -113,20 +123,31 @@ class _HomeState extends State<Home> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {},
-                            child: const Text('Button 3'),
                             style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
                               minimumSize:
                                   const Size(double.infinity, double.infinity),
+                            ),
+                            child: const Icon(
+                              Icons.phone,
+                              size: 150,
                             ),
                           ),
                         ),
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Button 4'),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize:
-                                  const Size(double.infinity, double.infinity),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                minimumSize: const Size(
+                                    double.infinity, double.infinity),
+                              ),
+                              child: const Icon(
+                                Icons.phone,
+                                size: 150,
+                              ),
                             ),
                           ),
                         ),

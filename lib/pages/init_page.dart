@@ -1,3 +1,4 @@
+import 'package:Elvira/util/voice.dart';
 import 'package:flutter/material.dart';
 import 'package:Elvira/pages/home.dart';
 
@@ -13,11 +14,9 @@ class _InitPageState extends State<InitPage>
   late AnimationController _controller;
   late Animation<double> _animation;
 
-
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -26,7 +25,7 @@ class _InitPageState extends State<InitPage>
       parent: _controller,
       curve: Curves.easeInOut,
     );
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _controller.forward().whenComplete(() {
           Navigator.pushReplacement(
