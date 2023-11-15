@@ -78,9 +78,7 @@ class _HomeState extends State<Home> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                             child: ElevatedButton(
                               onPressed: () {
-                               Voice().startListening().then((value) {
-                                 print(value);
-                               });
+                               Voice().startListening();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,

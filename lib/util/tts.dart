@@ -13,7 +13,7 @@ class tts {
      await flutterTts.setLanguage("pt-BR");
   }
 
-  Future speak(String text) async {
+  Future say(String text) async {
     return await flutterTts.speak(text);
   }
 }

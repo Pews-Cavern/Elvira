@@ -1,4 +1,7 @@
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:Elvira/util/voice_commands.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class Voice {
   static final Voice _Voice = Voice._internal();
@@ -11,22 +14,24 @@ class Voice {
     return (status);
   }
 
-  stt.SpeechErrorListener errorListener = (error) {
+  SpeechErrorListener errorListener = (error) {
     // print('errorListener $error');
   };
-  late stt.SpeechToText speech;
+  late SpeechToText speech;
   void init() async {
-    speech = stt.SpeechToText();
+    speech = SpeechToText();
     await speech.initialize(onStatus: statusListener, onError: errorListener);
   }
 
-  Future startListening() async {
-    return await speech.listen(onResult: onSpeechResult);
+  Future<void> startListening() async {
+    await speech.listen(onResult: onSpeechResult);
   }
 
-  Future<String?> onSpeechResult(result) async {
+  Future<void> onSpeechResult(retultReturn) async {
+    String result = retultReturn.recognizedWords;
     if (!speech.isListening) {
-      return result.recognizedWords;
+      print(result);
+      VoiceCommands(result);
     }
   }
 }
