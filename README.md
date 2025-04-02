@@ -40,7 +40,7 @@ Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, o El
 ---
 
 ## **Licença**
-Clique aqui para ler a nossa [LICENSA](https://github.com/Pews-Cavern/Elvira/blob/main/LICENCE)
+Clique aqui para ler a nossa [LICENÇA](https://github.com/Pews-Cavern/Elvira/blob/main/LICENCE)
 
 ---
 
