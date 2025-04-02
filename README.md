@@ -25,9 +25,9 @@ Elvira é um launcher Android projetado para simplificar a experiência digital 
 ---
 
 ## **Por Que Open Source?**
-Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, o Elvira é 100% open source e sempre será gratuito. Queremos que desenvolvedores, cuidadores e entusiastas possam colaborar para tornar o projeto ainda melhor.
+Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, o Elvira é 100% open source e sempre será gratuito. Queremos que desenvolvedores, designers, cuidadores e entusiastas possam colaborar para tornar o projeto ainda melhor.
 
-- **Doações:** Se você acredita no impacto do Elvira e quer apoiar o projeto, doações são apreciadas, mas nunca obrigatórias.
+- **Doações:** Se você acredita no impacto do Elvira e quer apoiar o projeto, doações podem ser realizadas via a chave pix `701ef5f4-f8b3-4a7c-af80-4e6a53264e3c`, doações são apreciadas, mas nunca obrigatórias.
 
 ---
 
@@ -39,15 +39,10 @@ Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, o El
 
 ---
 
-## **Instalação**
-As instruções detalhadas de instalação estarão disponíveis em breve.
+## **Licença**
+Clique aqui para ler a nossa [LICENSA](https://github.com/Pews-Cavern/Elvira/blob/main/LICENCE)
 
 ---
 
-
----
-
-Criado com por Paulo Eduardo Konopka (PewDizinho) em homenagem à Dona Elvira  
+Criado com por Paulo Eduardo Konopka (PewDizinho) em homenagem à Dona Elvira 
 Junte-se a nós nessa missão de tornar a tecnologia mais acessível para todos!
-
----
