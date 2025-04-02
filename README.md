@@ -5,7 +5,7 @@
 ---
 
 ## **História do Projeto**  
-O projeto foi idealizado por **Paulo Eduardo Konopka (PewDizinho)** como uma homenagem à sua bisavó, Dona Elvira. Inspirado pelas dificuldades que ela enfrentava no uso de tecnologias, Paulo decidiu criar uma solução acessível, intuitiva e adaptável para ajudar não apenas sua família, mas qualquer pessoa que precise de suporte para usar um smartphone.  
+O projeto foi idealizado por **Paulo Eduardo Konopka (PewDizinho)** como uma homenagem à sua falecida bisavó, Dona Elvira. Inspirado pelas dificuldades que ela enfrentava no uso de tecnologias, Paulo decidiu criar uma solução acessível, intuitiva e adaptável para ajudar não apenas sua família, mas qualquer pessoa que precise de suporte para usar um smartphone.  
 
 ---
 
@@ -44,5 +44,5 @@ Clique aqui para ler a nossa [LICENSA](https://github.com/Pews-Cavern/Elvira/blo
 
 ---
 
-Criado com por Paulo Eduardo Konopka (PewDizinho) em homenagem à Dona Elvira 
+Criado por Paulo Eduardo Konopka (PewDizinho) em homenagem à Dona Elvira 
 Junte-se a nós nessa missão de tornar a tecnologia mais acessível para todos!
