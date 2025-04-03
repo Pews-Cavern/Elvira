@@ -9,7 +9,7 @@ O projeto foi idealizado por **Paulo Eduardo Konopka ([PewDizinho](https://githu
 
 ---
 
-## **O Que é o Elvira?**  
+## **O Que é a Elvira?**  
 Elvira é um launcher Android projetado para simplificar a experiência digital de idosos e pessoas com necessidades especiais. Ele transforma o smartphone em uma ferramenta amigável, com interface acessível e funcionalidades essenciais adaptadas às limitações do usuário.
 
 ---
@@ -25,9 +25,9 @@ Elvira é um launcher Android projetado para simplificar a experiência digital 
 ---
 
 ## **Por Que Open Source?**
-Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, o Elvira é 100% open source e sempre será gratuito. Queremos que desenvolvedores, designers, cuidadores e entusiastas possam colaborar para tornar o projeto ainda melhor.
+Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, a Elvira é 100% open source e sempre será gratuito. Queremos que desenvolvedores, designers, cuidadores e entusiastas possam colaborar para tornar o projeto ainda melhor.
 
-- **Doações:** Se você acredita no impacto do Elvira e quer apoiar o projeto, doações podem ser realizadas via a chave pix `701ef5f4-f8b3-4a7c-af80-4e6a53264e3c`, doações são apreciadas, mas nunca obrigatórias.
+- **Doações:** Se você acredita no impacto da Elvira e quer apoiar o projeto, doações podem ser realizadas via a chave pix `701ef5f4-f8b3-4a7c-af80-4e6a53264e3c`, doações são apreciadas, mas nunca obrigatórias.
 
 ---
 
