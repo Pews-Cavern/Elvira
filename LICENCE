@@ -1,27 +1,48 @@
-LICENÇA DO PROJETO ELVIRA
+LICENÇA DE USO – PROJETO ELVIRA
+1. Permissão de Uso
+O código-fonte do projeto Elvira é disponibilizado para uso pessoal, educacional e contribuições voluntárias. O uso comercial, monetização direta ou indireta e qualquer forma de exploração financeira são proibidos sem autorização expressa por escrito do autor original, Paulo Eduardo Konopka (PewDizinho).
 
-1. Uso Permitido 
-O código-fonte do projeto Elvira é disponibilizado para fins de estudo, uso pessoal e contribuição voluntária. O uso comercial ou qualquer aplicação que desvirtue os objetivos do projeto é estritamente proibido.
+2. Modificações e Redistribuição
+Você pode modificar e redistribuir este código, desde que todas as seguintes condições sejam cumpridas:
 
-2. Proibição de Modificações e Redistribuições
-Você pode utilizar o código para fins pessoais, mas não é permitido modificar, redistribuir ou criar derivados deste código-fonte PARA FINS COMERCIAIS sem a autorização expressa por escrito do autor original, Paulo Eduardo Konopka (PewDizinho), este código deve ser disponibilizado de maneira gratuita.
+Não se passar pelo projeto original: Distribuições derivadas não podem usar o nome "Elvira", sua identidade visual, imagens ou sugerir qualquer afiliação oficial com o projeto original.
+
+Manter esta licença: O software derivado deve incluir esta licença na íntegra, garantindo que as mesmas regras sejam aplicadas à nova versão.
+
+Manter os créditos: O código-fonte modificado deve reconhecer o projeto original, citando o autor e o repositório oficial:
+🔗 https://github.com/Pews-Cavern/Elvira
 
 3. Proteção da Marca "Elvira"
-O nome "Elvira", bem como suas imagens, identidade visual e qualquer elemento associado ao projeto, são protegidos. Nenhuma versão derivada ou aplicação baseada neste projeto pode utilizar o nome "Elvira", suas fotos ou sugerir afiliação com o projeto original sem permissão explícita. Este é um projeto baseado na imagem da minha falecida bisavó, Dona Elvira, tenham noção!
+O nome "Elvira", suas imagens, identidade visual e qualquer elemento associado ao projeto são protegidos. Nenhuma distribuição derivada pode:
 
-4. Proibição de Venda 
-É estritamente proibida a venda ou qualquer forma de comercialização deste software, seja em sua forma original ou modificada.
+Usar o nome "Elvira" ou variantes que possam confundir os usuários.
 
-5. Contribuições Voluntárias  
-Contribuições para o projeto são bem-vindas, mas ao submeter qualquer alteração ou melhoria, você concede ao autor original o direito exclusivo de integrar, modificar ou rejeitar tais contribuições no repositório oficial.
+Utilizar logotipos, imagens ou qualquer elemento visual do projeto original.
 
-6. Garantia Limitada  
-Este software é fornecido "como está", sem garantias de qualquer tipo. O autor não se responsabiliza por quaisquer problemas decorrentes do uso do aplicativo.
+Alegar que tem suporte, afiliação ou qualquer ligação oficial com o projeto original.
 
-7. Declaração sobre o Repositório Oficial  
-O repositório oficial do projeto Elvira é este: https://github.com/Pews-Cavern/Elvira.  
+O projeto Elvira é inspirado na memória da minha bisavó, Dona Elvira, e deve ser tratado com respeito.
 
-Não me responsabilizo por modificações ou distribuições feitas a partir deste repositórios. Caso você encontre versões alternativas ou derivadas do Elvira, esteja ciente de que elas não são afiliadas ao projeto original e podem não refletir os valores, intenções ou funcionalidades desenvolvidas por mim, Paulo Eduardo Konopka (PewDizinho).
+4. Proibição de Comercialização
+É estritamente proibida a venda ou qualquer forma de monetização do software, seja em sua forma original ou modificada.
 
-Nota Importante:
-Este projeto é baseado na imagem e memória da minha falecida bisavó, Dona Elvira. Por favor, respeitem a integridade do projeto.
+Nenhuma distribuição derivada pode cobrar pelo software ou por serviços relacionados à sua instalação ou uso.
+
+5. Contribuições
+Contribuições voluntárias são bem-vindas, mas ao submetê-las ao repositório oficial, o autor original tem o direito exclusivo de aceitá-las, modificá-las ou rejeitá-las.
+
+As contribuições não concedem direitos de propriedade sobre o projeto principal.
+
+6. Isenção de Responsabilidade
+O projeto Elvira é fornecido "como está", sem garantias de qualquer tipo. O autor não se responsabiliza por danos, problemas ou incompatibilidades decorrentes do uso do software.
+
+7. Repositório Oficial
+O único repositório oficial do Elvira é:
+🔗 https://github.com/Pews-Cavern/Elvira
+
+O autor não se responsabiliza por versões modificadas distribuídas fora desse repositório. Caso encontre versões alternativas, saiba que não possuem relação oficial com o projeto original.
+
+Nota Final
+O projeto Elvira foi criado para ajudar idosos a usarem tecnologia de forma mais acessível e amigável. Se quiser modificar ou redistribuir, faça isso com respeito e siga as regras desta licença.
+
+Paulo Eduardo Konopka (PewDizinho)
