@@ -45,4 +45,3 @@ Clique aqui para ler a nossa [LICENÇA](https://github.com/Pews-Cavern/Elvira/bl
 ---
 
 Criado por Paulo Eduardo Konopka ([PewDizinho](https://github.com/PewDizinho)) em homenagem à Dona Elvira 
-Junte-se a nós nessa missão de tornar a tecnologia mais acessível para todos!
