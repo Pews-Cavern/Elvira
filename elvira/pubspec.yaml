@@ -13,21 +13,21 @@ dependencies:
   # UI e Acessibilidade
   cupertino_icons: ^1.0.8
   google_fonts: ^6.1.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
   flutter_svg: ^2.0.10+1
 
   # Local Database
   sqflite: ^2.3.2
   path_provider: ^2.1.2
 
-  # TTS (Voz Offline)
-  flutter_tts: ^3.8.3
+  # TTS (Voz Offline) erro de nuget
+  #flutter_tts: ^3.8.3
 
   # Notificações Locais
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^19.0.0
 
   # Permissões
-  permission_handler: ^11.3.1
+  permission_handler: ^12.0.0
 
   # Comunicação com WhatsApp (via intents)
   url_launcher: ^6.2.5
@@ -39,14 +39,14 @@ dependencies:
   receive_sharing_intent: ^1.6.4
 
   # Outras utilidades
-  intl: ^0.19.0
+  intl: ^0.20.2
   shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
@@ -55,6 +55,7 @@ flutter:
     - assets/images/
     - assets/audio/
     - assets/fonts/
+    - assets/icons/
 
 #  fonts:
 #    - family: Sora

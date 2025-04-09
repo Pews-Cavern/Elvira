@@ -1,37 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:elvira/src/ui/theme/elvira_colors.dart';
+import 'package:elvira/src/ui/widgets/icons/elvira_icon.dart';
 
 class ElviraIconButton extends StatelessWidget {
-  final IconData icon;
+  final Image icon;
   final String label;
   final VoidCallback onPressed;
-  final Color color;
+  final ElviraColor color;
 
   const ElviraIconButton({
     super.key,
     required this.icon,
     required this.label,
     required this.onPressed,
-    this.color = Colors.blueAccent,
+    this.color = ElviraColor.primary,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 250,
+        minWidth: 180,
+        minHeight: 70,
+      ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: color,
+          backgroundColor: elviraColorMap[color],
           padding: const EdgeInsets.all(12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 32, color: Colors.white),
+            Image.asset(
+              ElviraIcon.elvira.path,
+              
+              width: 48,
+              height: 48,
+              fit: BoxFit.contain,
+            ),
             const SizedBox(height: 8),
-            Text(label, style: const TextStyle(fontSize: 16, color: Colors.white)),
+            Flexible(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                textWidthBasis: TextWidthBasis.longestLine,
+                softWrap: true,
+                //overflow: TextOverflow.visible,
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
