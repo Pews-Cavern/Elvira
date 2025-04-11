@@ -1,6 +1,15 @@
 // elvira_icon.dart
 
-enum ElviraIcon { elviraPaulo, elvira, nelson, cogwheel, medicine, emergency, phone}
+enum ElviraIcon {
+  elviraPaulo,
+  elvira,
+  nelson,
+  cogwheel,
+  medicine,
+  emergency,
+  phone,
+  elviraGolden,
+}
 
 extension ElviraIconPath on ElviraIcon {
   String get path {
@@ -19,6 +28,8 @@ extension ElviraIconPath on ElviraIcon {
         return 'assets/icons/emergency.png';
       case ElviraIcon.phone:
         return 'assets/icons/phone.png';
+      case ElviraIcon.elviraGolden:
+        return 'assets/icons/Elvira_Goldenrod.png';
     }
   }
 }

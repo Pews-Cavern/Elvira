@@ -15,40 +15,58 @@ class MainScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 50, 16, 50),
-          child: GridView.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-            children: [
-              HomeFeatureButton(
-                onPressed: () => print('clicou '),
-                icon: Image.asset(ElviraIcon.phone.path),
-                label: 'Telefone',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-              ),
-              HomeFeatureButton(
-                onPressed: () => print('clicou '),
-                icon: Image.asset(ElviraIcon.medicine.path),
-                label: 'Medicamentos',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-              ),
-              HomeFeatureButton(
-                onPressed: () => print('clicou '),
-                icon: Image.asset(ElviraIcon.emergency.path),
-                label: 'Emergência',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-              ),
-              HomeFeatureButton(
-                onPressed: () => print('clicou '),
-                icon: Image.asset(ElviraImage.elviraPortrait.path),
-                label: 'Elvira',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final double gridWidth = constraints.maxWidth;
+              final double gridHeight = constraints.maxHeight;
+              final double itemHeight =
+                  (gridHeight - 40) / 3; // considerando espaçamento
+              final double itemWidth = (gridWidth - 40) / 2;
+
+              return GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
+                childAspectRatio: itemWidth / itemHeight,
+                children: [
+                  HomeFeatureButton(
+                    onPressed: () => print('clicou'),
+                    icon: Image.asset(ElviraIcon.phone.path),
+                    label: 'Telefone',
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  HomeFeatureButton(
+                    onPressed: () => print('clicou'),
+                    icon: Image.asset(ElviraIcon.medicine.path),
+                    label: 'Medicamentos',
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  HomeFeatureButton(
+                    onPressed: () => print('clicou'),
+                    icon: Image.asset(ElviraIcon.emergency.path),
+                    label: 'Emergência',
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  HomeFeatureButton(
+                    onPressed: () => print('clicou'),
+                    icon: Image.asset(ElviraIcon.cogwheel.path),
+                    label: 'Configurações',
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  HomeFeatureButton(
+                    onPressed: () => print('clicou'),
+                    icon: Image.asset(ElviraIcon.elviraGolden.path),
+                    label: 'Elvira',
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
