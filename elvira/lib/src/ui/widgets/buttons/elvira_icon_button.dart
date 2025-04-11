@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:elvira/src/ui/theme/elvira_colors.dart';
-import 'package:elvira/src/ui/widgets/icons/elvira_icon.dart';
+import 'package:elvira/src/ui/theme/images/elvira_icon.dart';
 
 class ElviraIconButton extends StatelessWidget {
   final Image icon;
