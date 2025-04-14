@@ -1,5 +1,7 @@
+import 'package:elvira/src/ui/theme/elvira_colors.dart';
 import 'package:elvira/src/ui/theme/images/elvira_number.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PhoneDialScreen extends StatefulWidget {
   const PhoneDialScreen({super.key});
@@ -25,45 +27,117 @@ class _PhoneDialScreenState extends State<PhoneDialScreen> {
     }
   }
 
+  void _makeCall() async {
+    final Uri uri = Uri(scheme: 'tel', path: _input);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível fazer a ligação')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Discador'),
-        backgroundColor: Colors.black,
+        title: Text(
+          'Discador',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: elviraColorMap[ElviraColor.onBackground],
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 40),
-          Text(
-            _input,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 40,
-              letterSpacing: 4,
+          SizedBox(height: size.height * 0.02),
+          Container(
+            color: Colors.white,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.03),
+            child: Center(
+              child: Text(
+                _input,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: size.width * 0.09,
+                  letterSpacing: 4,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 40),
-          _buildDialPad(),
-          const SizedBox(height: 30),
-          IconButton(
-            icon: const Icon(Icons.backspace, color: Colors.white, size: 36),
-            onPressed: _onBackspace,
+          SizedBox(height: size.height * 0.02),
+          Flexible(child: _buildDialPad(size)),
+          SizedBox(height: size.height * 0.03),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: size.height * 0.08,
+                  child: ElevatedButton.icon(
+                    onPressed: _onBackspace,
+                    icon: const Icon(Icons.backspace, size: 32),
+                    label: const Text('Apagar', style: TextStyle(fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[800],
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: size.height * 0.08,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      if (_input.isNotEmpty) {
+                        _makeCall();
+                      }
+                    },
+                    icon: const Icon(Icons.call, size: 32),
+                    label: const Text('Ligar', style: TextStyle(fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          _input.isNotEmpty ? Colors.green : Colors.grey[800],
+                      foregroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDialPad() {
+  Widget _buildDialPad(Size size) {
     final List<ElviraNumber> dialButtons = [
-      ElviraNumber.one, ElviraNumber.two, ElviraNumber.three,
-      ElviraNumber.four, ElviraNumber.five, ElviraNumber.six,
-      ElviraNumber.seven, ElviraNumber.eight, ElviraNumber.nine,
-      ElviraNumber.dot,
+      ElviraNumber.one,
+      ElviraNumber.two,
+      ElviraNumber.three,
+      ElviraNumber.four,
+      ElviraNumber.five,
+      ElviraNumber.six,
+      ElviraNumber.seven,
+      ElviraNumber.eight,
+      ElviraNumber.nine,
+      ElviraNumber.asterisk,
       ElviraNumber.zero,
-      ElviraNumber.dot, // usar dot como placeholder pra * e #
+      ElviraNumber.hashtag,
     ];
 
     final List<String> inputKeys = [
@@ -82,7 +156,7 @@ class _PhoneDialScreenState extends State<PhoneDialScreen> {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
       child: GridView.builder(
         shrinkWrap: true,
         itemCount: dialButtons.length,
@@ -100,11 +174,17 @@ class _PhoneDialScreenState extends State<PhoneDialScreen> {
             onPressed: () => _onNumberPressed(inputChar),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(size.width * 0.05),
               elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-            child: Image.asset(assetPath, width: 48, height: 48),
+            child: Image.asset(
+              assetPath,
+              width: size.width * 0.12,
+              height: size.width * 0.12,
+            ),
           );
         },
       ),

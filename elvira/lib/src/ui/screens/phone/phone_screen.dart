@@ -58,7 +58,7 @@ class PhoneScreen extends StatelessWidget {
                       icon: Icons.history,
                       label: 'Chamadas Recentes',
                       onTap: () {
-                        // Tela de histórico
+                        Navigator.pushNamed(context, AppRoutes.callHistory);
                       },
                     ),
                     _buildPhoneAction(

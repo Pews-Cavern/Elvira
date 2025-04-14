@@ -12,6 +12,8 @@ enum ElviraNumber {
   eight,
   nine,
   dot,
+  asterisk,
+  hashtag,
 }
 
 extension ElviraNumberPath on ElviraNumber {
@@ -39,6 +41,10 @@ extension ElviraNumberPath on ElviraNumber {
         return 'assets/fonts/numbers/9.png';
       case ElviraNumber.dot:
         return 'assets/fonts/numbers/dot.png';
+      case ElviraNumber.asterisk:
+        return 'assets/fonts/numbers/asterisk.png';
+      case ElviraNumber.hashtag:
+        return 'assets/fonts/numbers/hashtag.png';
     }
   }
 }
