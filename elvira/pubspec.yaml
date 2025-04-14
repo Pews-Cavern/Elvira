@@ -59,6 +59,7 @@ flutter:
     - assets/images/personagens/elvira/
     - assets/audio/
     - assets/fonts/
+    - assets/fonts/numbers/
     - assets/icons/
 
 #  fonts:

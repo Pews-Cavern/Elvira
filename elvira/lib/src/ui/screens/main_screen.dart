@@ -1,5 +1,5 @@
+import 'package:elvira/src/config/routes.dart';
 import 'package:elvira/src/ui/theme/images/elvira_icon.dart';
-import 'package:elvira/src/ui/theme/images/elvira_images.dart';
 import 'package:elvira/src/ui/widgets/bars/top_status_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:elvira/src/ui/widgets/buttons/pew_buttons.dart';
@@ -14,7 +14,7 @@ class MainScreen extends StatelessWidget {
       appBar: TopStatusBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 50, 16, 50),
+          padding: const EdgeInsets.all(20),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final double gridWidth = constraints.maxWidth;
@@ -30,7 +30,8 @@ class MainScreen extends StatelessWidget {
                 childAspectRatio: itemWidth / itemHeight,
                 children: [
                   HomeFeatureButton(
-                    onPressed: () => print('clicou'),
+                    onPressed:
+                        () => Navigator.pushNamed(context, AppRoutes.phone),
                     icon: Image.asset(ElviraIcon.phone.path),
                     label: 'Telefone',
                     backgroundColor: Colors.white,
