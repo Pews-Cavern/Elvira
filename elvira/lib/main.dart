@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'src/ui/screens/main_screen.dart';
+import 'package:elvira/src/config/routes.dart';
 
 void main() {
   runApp(const ElviraApp());
@@ -10,10 +10,11 @@ class ElviraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Elvira Teste',
-      home: MainScreen(),
+      title: 'Elvira',
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }

@@ -58,13 +58,7 @@ class MainScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     textColor: Colors.black,
                   ),
-                  HomeFeatureButton(
-                    onPressed: () => print('clicou'),
-                    icon: Image.asset(ElviraIcon.elviraGolden.path),
-                    label: 'Elvira',
-                    backgroundColor: Colors.white,
-                    textColor: Colors.black,
-                  ),
+                 
                 ],
               );
             },
