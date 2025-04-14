@@ -13,8 +13,8 @@ class ElviraApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Elvira',
-      //initialRoute: AppRoutes.home,
-      initialRoute: AppRoutes.dialPad,
+      initialRoute: AppRoutes.home,
+      //initialRoute: AppRoutes.dialPad,
       onGenerateRoute: AppRoutes.generateRoute,
     );
   }
