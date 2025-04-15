@@ -29,7 +29,10 @@ dependencies:
   # Permissões
   permission_handler: ^12.0.0
 
-  # Comunicação com WhatsApp (via intents)
+  # Contatos reais do dispositivo
+  contacts_service_plus: ^1.1.4
+
+  # Comunicação com WhatsApp (via intents) e etc
   url_launcher: ^6.2.5
 
   # Controle de Estado (opcional)

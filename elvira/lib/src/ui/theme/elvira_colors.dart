@@ -1,41 +1,30 @@
 import 'package:flutter/material.dart';
 
-/// Cores otimizadas para interfaces de idosos, seguindo padrões de:
-/// - Alto contraste (> 4.5:1)
-/// - Evitar combinações problemáticas para daltonismo
-/// - Tons calmantes e funcionais
+/// Cores otimizadas para interfaces de idosos
 enum ElviraColor {
-  background, // Fundo principal
-  onBackground, // Texto/Elementos sobre o fundo
-  primary, // Cor primária (ações principais)
-  secondary, // Cor secundária (destaques suaves)
-  error, // Erros/Alertas críticos
-  surface, // Superfícies secundárias
-  onSurface, // Texto/Elementos sobre superfície
-  interactive, // Elementos interativos (botões)
-  success, // Confirmações positivas
+  background,
+  onBackground,
+  primary,
+  secondary,
+  error,
+  surface,
+  onSurface,
+  interactive,
+  success,
+  warning, 
 }
 
-/// Mapa de cores com explicações técnicas e de acessibilidade
 const elviraColorMap = {
-  // Fundo claro com alto contraste (evita brilho excessivo)
-  ElviraColor.background: Color(0xFFF8F9FA), // Cinza claro (L* 98)
-  // Texto preto puro para máxima legibilidade (contraste 19:1)
-  ElviraColor.onBackground: Color(0xFF212529), // Quase preto (L* 15)
-  // Azul escuro modificado (evita perda de saturação em idosos)
-  ElviraColor.primary: Color(0xFF2C3E50), // Azul petróleo (L* 25)
-  // Verde escuro acessível (bom para 95% dos casos de daltonismo)
-  ElviraColor.secondary: Color(0xFF27AE60), // Verde esmeralda (L* 35)
-  // Vermelho escuro não saturado (visível para protanopia)
-  ElviraColor.error: Color(0xFFC0392B), // Vermelho terroso (L* 30)
-  // Superfície cinza médio para reduzir fadiga visual
-  ElviraColor.surface: Color(0xFFECF0F1), // Cinza azulado (L* 94)
-  // Texto escuro para superfícies claras (contraste 15:1)
-  ElviraColor.onSurface: Color(0xFF2C3E50), // Igual ao primário
-  // Laranja escuro para elementos interativos (visível para tritanopia)
-  ElviraColor.interactive: Color(0xFFE67E22), // Laranja terroso (L* 40)
-  // Verde azulado para confirmações (diferenciável para deuteranopia)
-  ElviraColor.success: Color(0xFF16A085), // Verde água (L* 38)
+  ElviraColor.background: Color(0xFFF8F9FA),
+  ElviraColor.onBackground: Color(0xFF212529),
+  ElviraColor.primary: Color(0xFF2C3E50),
+  ElviraColor.secondary: Color(0xFF27AE60),
+  ElviraColor.error: Color(0xFFC0392B),
+  ElviraColor.surface: Color(0xFFECF0F1),
+  ElviraColor.onSurface: Color(0xFF2C3E50),
+  ElviraColor.interactive: Color(0xFFE67E22),
+  ElviraColor.success: Color(0xFF16A085),
+  ElviraColor.warning: Color(0xFFF39C12), // Amarelo âmbar
 };
 
 

@@ -49,9 +49,9 @@ class PhoneScreen extends StatelessWidget {
                     ),
                     _buildPhoneAction(
                       icon: Icons.contact_phone,
-                      label: 'Contatos Favoritos',
+                      label: 'Contatos',
                       onTap: () {
-                        // Navega pra tela de contatos
+                       Navigator.pushNamed(context, AppRoutes.contacts);
                       },
                     ),
                     _buildPhoneAction(
@@ -64,6 +64,20 @@ class PhoneScreen extends StatelessWidget {
                     _buildPhoneAction(
                       icon: Icons.settings_phone,
                       label: 'Configurar Contatos',
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.contactManagement);
+                      },
+                    ),
+                    _buildPhoneAction(
+                      icon: Icons.account_circle,
+                      label: 'Paulo',
+                      onTap: () {
+                        // Tela de config de chamadas
+                      },
+                    ),
+                    _buildPhoneAction(
+                      icon: Icons.account_circle,
+                      label: 'Claudete',
                       onTap: () {
                         // Tela de config de chamadas
                       },

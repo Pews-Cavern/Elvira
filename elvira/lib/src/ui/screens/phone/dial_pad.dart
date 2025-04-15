@@ -1,7 +1,9 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:elvira/src/ui/theme/elvira_colors.dart';
 import 'package:elvira/src/ui/theme/images/elvira_number.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PhoneDialScreen extends StatefulWidget {
   const PhoneDialScreen({super.key});
@@ -12,6 +14,44 @@ class PhoneDialScreen extends StatefulWidget {
 
 class _PhoneDialScreenState extends State<PhoneDialScreen> {
   String _input = '';
+  DateTime? _lastOpened;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedInput();
+  }
+
+  Future<void> _loadSavedInput() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString('dial_input') ?? '';
+    final last = prefs.getInt('dial_last') ?? 0;
+
+    final now = DateTime.now();
+    final savedTime = DateTime.fromMillisecondsSinceEpoch(last);
+
+    if (now.difference(savedTime).inMinutes >= 0.2) {
+      await prefs.remove('dial_input');
+      await prefs.remove('dial_last');
+    } else {
+      setState(() {
+        _input = saved;
+        _lastOpened = savedTime;
+      });
+    }
+  }
+
+  Future<void> _saveInput() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('dial_input', _input);
+    await prefs.setInt('dial_last', DateTime.now().millisecondsSinceEpoch);
+  }
+
+  Future<void> _clearSavedInput() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('dial_input');
+    await prefs.remove('dial_last');
+  }
 
   void _onNumberPressed(String value) {
     setState(() {
@@ -31,11 +71,18 @@ class _PhoneDialScreenState extends State<PhoneDialScreen> {
     final Uri uri = Uri(scheme: 'tel', path: _input);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
+      await _clearSavedInput(); // limpa após chamada
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Não foi possível fazer a ligação')),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _saveInput(); // salva ao sair
+    super.dispose();
   }
 
   @override
@@ -53,7 +100,7 @@ class _PhoneDialScreenState extends State<PhoneDialScreen> {
             color: elviraColorMap[ElviraColor.onBackground],
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [

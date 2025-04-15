@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:elvira/src/ui/theme/elvira_colors.dart';
-import 'package:elvira/src/ui/widgets/bars/top_status_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CallHistoryScreen extends StatelessWidget {
   const CallHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final dummyCalls = [
       {
         'name': 'Maria Silva',
@@ -41,6 +44,112 @@ class CallHistoryScreen extends StatelessWidget {
       }
     }
 
+    void _showCallConfirmation(
+      BuildContext context,
+      String name,
+      String number,
+    ) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: SizedBox(
+                width: screenWidth * 0.8,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.phone_forwarded, size: 48, color: Colors.green),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Retornar chamada para\n$name?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.06,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                       
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[800],
+                              padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.025,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Não',
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                       
+                        const SizedBox(width: 16),
+
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              final Uri uri = Uri(scheme: 'tel', path: number);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Não foi possível fazer a ligação',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.025,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Sim',
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: elviraColorMap[ElviraColor.background],
       body: SafeArea(
@@ -60,7 +169,7 @@ class CallHistoryScreen extends StatelessWidget {
                   Text(
                     'Chamadas Recentes',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: screenWidth * 0.07,
                       fontWeight: FontWeight.bold,
                       color: elviraColorMap[ElviraColor.onBackground],
                     ),
@@ -115,9 +224,17 @@ class CallHistoryScreen extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () {
-                              // lógica de retorno de chamada
+                              _showCallConfirmation(
+                                context,
+                                call['name']!,
+                                call['number']!,
+                              );
                             },
-                            icon: const Icon(Icons.phone, size: 32, color: Colors.green),
+                            icon: const Icon(
+                              Icons.phone,
+                              size: 32,
+                              color: Colors.green,
+                            ),
                           ),
                         ],
                       ),
