@@ -22,48 +22,55 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               children: [
-                // Status (hora, data, bateria)
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const StatusBarWidget(),
                 ),
-                const SizedBox(height: 16),
-                // Grade de apps
+                const SizedBox(height: 14),
                 Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 1.1,
-                    children: const [
-                      _AppTile(emoji: '📞', label: 'Ligar', route: AppRoutes.discagem, color: Color(0xFFE6F1FB)),
-                      _AppTile(emoji: '💊', label: 'Remédios', route: AppRoutes.remedios, color: Color(0xFFE8F8F2)),
-                      _AppTile(emoji: '👥', label: 'Contatos', route: AppRoutes.contatos, color: Color(0xFFE6F1FB)),
-                      _AppTile(emoji: '🪪', label: 'Identidade', route: AppRoutes.identidade, color: Color(0xFFFFF3E0)),
-                      _AppTile(emoji: '🔔', label: 'Avisos', route: AppRoutes.notificacoes, color: Color(0xFFF3E5F5)),
-                      _AppTile(emoji: '⚙️', label: 'Cuidador', route: AppRoutes.cuidadorPin, color: Color(0xFFE6F1FB)),
-                    ],
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final spacing = 12.0;
+                      final tileWidth = (constraints.maxWidth - spacing) / 2;
+                      final tileHeight = tileWidth * 0.88;
+                      return GridView.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: spacing,
+                        crossAxisSpacing: spacing,
+                        childAspectRatio: tileWidth / tileHeight,
+                        children: const [
+                          _AppTile(emoji: '📞', label: 'Ligar', route: AppRoutes.discagem, color: Color(0xFFDCEEFB)),
+                          _AppTile(emoji: '💊', label: 'Remédios', route: AppRoutes.remedios, color: Color(0xFFD9F4EA)),
+                          _AppTile(emoji: '👥', label: 'Contatos', route: AppRoutes.contatos, color: Color(0xFFDCEEFB)),
+                          _AppTile(emoji: '🪪', label: 'Identidade', route: AppRoutes.identidade, color: Color(0xFFFFF0CC)),
+                          _AppTile(emoji: '🔔', label: 'Avisos', route: AppRoutes.notificacoes, color: Color(0xFFF0E5F8)),
+                          _AppTile(emoji: '⚙️', label: 'Cuidador', route: AppRoutes.cuidadorPin, color: Color(0xFFDCEEFB)),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 12),
-                // Botão de emergência
                 SizedBox(
                   width: double.infinity,
-                  height: 72,
+                  height: 76,
                   child: ElevatedButton.icon(
-                    onPressed: () => Navigator.pushNamed(context, AppRoutes.emergencia),
-                    icon: const Icon(Icons.warning_amber_rounded, size: 32),
+                    onPressed: () {
+                      HapticFeedback.heavyImpact();
+                      Navigator.pushNamed(context, AppRoutes.emergencia);
+                    },
+                    icon: const Icon(Icons.warning_amber_rounded, size: 34),
                     label: Text('EMERGÊNCIA', style: AppTextStyles.buttonLarge),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      elevation: 3,
+                      elevation: 4,
                     ),
                   ),
                 ),
@@ -94,15 +101,18 @@ class _AppTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: color,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => Navigator.pushNamed(context, route),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          Navigator.pushNamed(context, route);
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 44)),
-            const SizedBox(height: 8),
+            Text(emoji, style: const TextStyle(fontSize: 48)),
+            const SizedBox(height: 10),
             Text(label, style: AppTextStyles.appLabel.copyWith(color: AppColors.primary)),
           ],
         ),

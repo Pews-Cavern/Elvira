@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/providers/contatos_provider.dart';
@@ -12,6 +13,7 @@ class ContatosScreen extends StatelessWidget {
   const ContatosScreen({super.key});
 
   Future<void> _ligar(String telefone) async {
+    HapticFeedback.heavyImpact();
     final uri = Uri(scheme: 'tel', path: telefone);
     if (await canLaunchUrl(uri)) await launchUrl(uri);
   }
@@ -28,26 +30,29 @@ class ContatosScreen extends StatelessWidget {
           }
           if (provider.contatos.isEmpty) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('📋', style: TextStyle(fontSize: 60)),
-                  const SizedBox(height: 16),
-                  Text('Nenhum contato cadastrado', style: AppTextStyles.h3),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Peça ao cuidador para adicionar contatos',
-                    style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('📋', style: TextStyle(fontSize: 72)),
+                    const SizedBox(height: 20),
+                    Text('Nenhum contato cadastrado', style: AppTextStyles.h3, textAlign: TextAlign.center),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Peça ao cuidador para adicionar seus contatos',
+                      style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             );
           }
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: provider.contatos.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
             itemBuilder: (_, i) => _ContatoTile(
               contato: provider.contatos[i],
               onLigar: () => _ligar(provider.contatos[i].telefone),
@@ -68,36 +73,39 @@ class _ContatoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withAlpha(13), blurRadius: 4, offset: const Offset(0, 2))],
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(15), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: Row(
         children: [
-          ContatoAvatar(contato: contato),
-          const SizedBox(width: 14),
+          ContatoAvatar(contato: contato, radius: 32),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(contato.nome, style: AppTextStyles.contactName),
+                const SizedBox(height: 2),
                 Text(Contato.relacaoLabel(contato.relacao), style: AppTextStyles.contactRelation),
+                const SizedBox(height: 2),
                 Text(contato.telefone, style: AppTextStyles.contactPhone),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Material(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.green,
+            borderRadius: BorderRadius.circular(16),
             clipBehavior: Clip.hardEdge,
             child: InkWell(
               onTap: onLigar,
-              child: const Padding(
-                padding: EdgeInsets.all(14),
-                child: Icon(Icons.call, color: Colors.white, size: 26),
+              child: const SizedBox(
+                width: 68,
+                height: 68,
+                child: Icon(Icons.call, color: Colors.white, size: 32),
               ),
             ),
           ),

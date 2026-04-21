@@ -17,9 +17,9 @@ class _Step2GenderScreenState extends State<Step2GenderScreen> {
   String? _selected;
 
   final _opcoes = const [
-    {'valor': 'feminino', 'emoji': '👵🏼', 'titulo': 'Avó / Senhora', 'sub': 'Feminino'},
-    {'valor': 'masculino', 'emoji': '👴🏼', 'titulo': 'Avô / Senhor', 'sub': 'Masculino'},
-    {'valor': 'nao_informado', 'emoji': '🙂', 'titulo': 'Prefiro não dizer', 'sub': ''},
+    {'valor': 'feminino', 'imagem': 'assets/images/personagens/elvira/Elvira_Portrait.png', 'titulo': 'Avó / Senhora', 'sub': 'Feminino'},
+    {'valor': 'masculino', 'imagem': 'assets/images/personagens/nelson/Nelson_Portrait.png', 'titulo': 'Avô / Senhor', 'sub': 'Masculino'},
+    {'valor': 'nao_informado', 'imagem': '', 'titulo': 'Prefiro não dizer', 'sub': ''},
   ];
 
   Future<void> _continuar() async {
@@ -60,7 +60,9 @@ class _Step2GenderScreenState extends State<Step2GenderScreen> {
                 ),
                 child: Row(
                   children: [
-                    Text(op['emoji'] as String, style: const TextStyle(fontSize: 28)),
+                    (op['imagem'] as String).isNotEmpty
+                        ? Image.asset(op['imagem'] as String, width: 48, height: 48, fit: BoxFit.contain)
+                        : const Text('🙂', style: TextStyle(fontSize: 36)),
                     const SizedBox(width: 16),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

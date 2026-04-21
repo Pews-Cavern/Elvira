@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/providers/dose_provider.dart';
@@ -36,13 +37,22 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
           final registros = doseProvider.registrosHoje;
           if (registros.isEmpty) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('💊', style: TextStyle(fontSize: 60)),
-                  const SizedBox(height: 16),
-                  Text('Nenhum remédio hoje', style: AppTextStyles.h3),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('💊', style: TextStyle(fontSize: 72)),
+                    const SizedBox(height: 20),
+                    Text('Nenhum remédio hoje', style: AppTextStyles.h3, textAlign: TextAlign.center),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Você está em dia! 🎉',
+                      style: AppTextStyles.body.copyWith(color: AppColors.green),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -50,7 +60,7 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: registros.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
+            separatorBuilder: (_, _) => const SizedBox(height: 14),
             itemBuilder: (_, i) {
               final reg = registros[i];
               final med = medProvider.getMedicamento(reg.doseId);
@@ -59,8 +69,14 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
                 nomeRemedio: med?.nome ?? 'Remédio',
                 dosagemRemedio: med != null ? '${med.dosagem} ${med.unidade}' : '',
                 instrucao: med?.instrucaoUso,
-                onTomado: () => context.read<DoseProvider>().marcarTomado(reg.id!),
-                onAdiar: () => context.read<DoseProvider>().adiarDose(reg.id!),
+                onTomado: () {
+                  HapticFeedback.mediumImpact();
+                  context.read<DoseProvider>().marcarTomado(reg.id!);
+                },
+                onAdiar: () {
+                  HapticFeedback.lightImpact();
+                  context.read<DoseProvider>().adiarDose(reg.id!);
+                },
               );
             },
           );
@@ -147,68 +163,76 @@ class _DoseTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: _bgColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: _borderColor, width: 2),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text(hora, style: AppTextStyles.medicTime),
+              Text(hora, style: AppTextStyles.medicTime.copyWith(fontSize: 24)),
               const SizedBox(width: 10),
-              Text(_statusIcon, style: const TextStyle(fontSize: 20)),
+              Text(_statusIcon, style: const TextStyle(fontSize: 22)),
               const SizedBox(width: 6),
-              Text(_statusLabel, style: AppTextStyles.body.copyWith(color: _borderColor)),
+              Text(_statusLabel, style: AppTextStyles.body.copyWith(color: _borderColor, fontWeight: FontWeight.w600)),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('💊', style: TextStyle(fontSize: 28)),
+              const Text('💊', style: TextStyle(fontSize: 32)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(nomeRemedio, style: AppTextStyles.medicName),
+                    const SizedBox(height: 2),
                     Text(dosagemRemedio, style: AppTextStyles.medicDetail),
-                    if (instrucao != null)
+                    if (instrucao != null && instrucao!.isNotEmpty) ...[
+                      const SizedBox(height: 2),
                       Text(instrucao!, style: AppTextStyles.medicDetail),
+                    ],
                   ],
                 ),
               ),
             ],
           ),
           if (!jaFinalizado) ...[
-            const SizedBox(height: 12),
-            Row(
+            const SizedBox(height: 14),
+            Column(
               children: [
-                Expanded(
-                  child: ElevatedButton(
+                SizedBox(
+                  width: double.infinity,
+                  height: 64,
+                  child: ElevatedButton.icon(
                     onPressed: onTomado,
+                    icon: const Text('✅', style: TextStyle(fontSize: 22)),
+                    label: Text('Já tomei', style: AppTextStyles.button.copyWith(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.green,
                       foregroundColor: Colors.white,
-                      minimumSize: const Size(0, 52),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
-                    child: Text('✅ Já tomei', style: AppTextStyles.button.copyWith(color: Colors.white)),
                   ),
                 ),
                 if (registro.status == StatusDose.perdido) ...[
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton.icon(
                       onPressed: onAdiar,
+                      icon: const Text('⏰', style: TextStyle(fontSize: 20)),
+                      label: Text('Lembrar daqui 15 min', style: AppTextStyles.button.copyWith(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.amber,
                         foregroundColor: Colors.white,
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: Text('Tomar agora', style: AppTextStyles.button.copyWith(color: Colors.white)),
                     ),
                   ),
                 ],

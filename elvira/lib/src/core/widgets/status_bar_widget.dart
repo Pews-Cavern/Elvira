@@ -74,12 +74,12 @@ class _StatusBarWidgetState extends State<StatusBarWidget> {
             Icon(
               _charging ? Icons.battery_charging_full : Icons.battery_full,
               color: _batteryColor,
-              size: 20,
+              size: 26,
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
             Text(
               '$_batteryLevel%',
-              style: AppTextStyles.body.copyWith(color: _batteryColor, fontSize: 16),
+              style: AppTextStyles.body.copyWith(color: _batteryColor, fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ],
         ),

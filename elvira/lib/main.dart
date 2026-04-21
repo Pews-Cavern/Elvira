@@ -59,6 +59,7 @@ class ElviraApp extends StatefulWidget {
 class _ElviraAppState extends State<ElviraApp> {
   StreamSubscription<AlarmSet>? _alarmSub;
   Set<int> _idsAntes = {};
+  bool _redirectedToOnboarding = false;
 
   @override
   void initState() {
@@ -111,11 +112,18 @@ class _ElviraAppState extends State<ElviraApp> {
     return Consumer<UsuarioProvider>(
       builder: (context, usuarioProvider, _) {
         final escala = usuarioProvider.escalaFonte;
-        final initialRoute = usuarioProvider.loading
-            ? AppRoutes.home
-            : usuarioProvider.onboardingCompleto
-                ? AppRoutes.home
-                : AppRoutes.welcome;
+
+        if (!usuarioProvider.loading &&
+            !usuarioProvider.onboardingCompleto &&
+            !_redirectedToOnboarding) {
+          _redirectedToOnboarding = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            navigatorKey.currentState?.pushNamedAndRemoveUntil(
+              AppRoutes.welcome,
+              (route) => false,
+            );
+          });
+        }
 
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -126,7 +134,7 @@ class _ElviraAppState extends State<ElviraApp> {
             navigatorKey: navigatorKey,
             theme: _buildTheme(),
             debugShowCheckedModeBanner: false,
-            initialRoute: initialRoute,
+            initialRoute: AppRoutes.home,
             routes: AppRoutes.routes,
           ),
         );

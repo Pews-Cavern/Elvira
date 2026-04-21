@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/providers/usuario_provider.dart';
@@ -225,19 +226,21 @@ class _EmergenciaContatos extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () async {
+                        HapticFeedback.heavyImpact();
                         final uri = Uri(scheme: 'tel', path: c.telefone);
                         if (await canLaunchUrl(uri)) launchUrl(uri);
                       },
+                      icon: const Icon(Icons.call, size: 20),
+                      label: const Text('Ligar', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.red,
                         foregroundColor: Colors.white,
-                        minimumSize: const Size(80, 44),
+                        minimumSize: const Size(96, 56),
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: const Text('Ligar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                     ),
                   ],
                 ),

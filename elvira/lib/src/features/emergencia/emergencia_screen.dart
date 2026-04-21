@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/providers/contatos_provider.dart';
@@ -12,75 +13,80 @@ class EmergenciaScreen extends StatelessWidget {
   const EmergenciaScreen({super.key});
 
   Future<void> _ligar(String telefone) async {
+    HapticFeedback.heavyImpact();
     final uri = Uri(scheme: 'tel', path: telefone);
     if (await canLaunchUrl(uri)) await launchUrl(uri);
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final sosBtnSize = (screenWidth * 0.48).clamp(160.0, 200.0);
+
     return Scaffold(
       backgroundColor: AppColors.redLight,
       appBar: const ElviraAppBar(title: 'Emergência', backgroundColor: AppColors.red),
       body: Consumer<ContatosProvider>(
         builder: (_, provider, _) {
           final emergencia = provider.emergencia;
+          final primeiroContato = emergencia.isNotEmpty ? emergencia.first : null;
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                // SOS central
                 GestureDetector(
-                  onTap: emergencia.isNotEmpty ? () => _ligar(emergencia.first.telefone) : null,
+                  onTap: primeiroContato != null
+                      ? () => _ligar(primeiroContato.telefone)
+                      : () => _ligar('192'),
                   child: Container(
-                    width: 180,
-                    height: 180,
+                    width: sosBtnSize,
+                    height: sosBtnSize,
                     decoration: BoxDecoration(
                       color: AppColors.red,
                       shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(color: AppColors.red.withAlpha(100), blurRadius: 24, spreadRadius: 8)],
+                      boxShadow: [
+                        BoxShadow(color: AppColors.red.withAlpha(110), blurRadius: 28, spreadRadius: 10),
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('SOS', style: AppTextStyles.h1.copyWith(color: Colors.white, fontSize: 36)),
+                        Text('SOS', style: AppTextStyles.h1.copyWith(color: Colors.white, fontSize: 40)),
                         const SizedBox(height: 4),
-                        Text('LIGAR AGORA', style: AppTextStyles.bodySmall.copyWith(color: Colors.white, letterSpacing: 1)),
+                        Text(
+                          'LIGAR AGORA',
+                          style: AppTextStyles.bodySmall.copyWith(color: Colors.white, letterSpacing: 1.5, fontWeight: FontWeight.w700),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 Text('Precisa de ajuda?', style: AppTextStyles.h2.copyWith(color: AppColors.red)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
-                  'Toque no botão grande para acionar emergência\nou escolha um contato abaixo',
+                  'Toque no botão vermelho para pedir socorro\nou escolha um número abaixo',
                   style: AppTextStyles.body.copyWith(color: AppColors.red),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                // Contatos de emergência
                 if (emergencia.isNotEmpty)
                   ...emergencia.map((c) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: _EmergenciaTile(contato: c, onLigar: () => _ligar(c.telefone)),
-                      ))
-                else ...[
-                  // SAMU sempre visível
-                  _EmergenciaTile(
-                    contato: const Contato(nome: 'SAMU', relacao: 'emergencia', telefone: '192'),
-                    onLigar: () => _ligar('192'),
-                  ),
-                  const SizedBox(height: 10),
-                  _EmergenciaTile(
-                    contato: const Contato(nome: 'Bombeiros', relacao: 'emergencia', telefone: '193'),
-                    onLigar: () => _ligar('193'),
-                  ),
-                ],
-                const SizedBox(height: 10),
+                      )),
+                const SizedBox(height: 4),
                 _EmergenciaTile(
                   contato: const Contato(nome: 'SAMU', relacao: 'emergencia', telefone: '192'),
                   onLigar: () => _ligar('192'),
                   fixedLabel: '192',
+                ),
+                const SizedBox(height: 12),
+                _EmergenciaTile(
+                  contato: const Contato(nome: 'Bombeiros', relacao: 'emergencia', telefone: '193'),
+                  onLigar: () => _ligar('193'),
+                  fixedLabel: '193',
                 ),
               ],
             ),
@@ -101,15 +107,16 @@ class _EmergenciaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.redMedium, width: 1.5),
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(10), blurRadius: 4, offset: const Offset(0, 2))],
       ),
       child: Row(
         children: [
-          ContatoAvatar(contato: contato, radius: 26),
+          ContatoAvatar(contato: contato, radius: 30),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -125,13 +132,14 @@ class _EmergenciaTile extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.red,
               foregroundColor: Colors.white,
-              minimumSize: const Size(80, 48),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              minimumSize: const Size(88, 56),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              elevation: 2,
             ),
             child: fixedLabel != null
-                ? Text(fixedLabel!, style: AppTextStyles.bodyBold.copyWith(color: Colors.white))
-                : const Icon(Icons.call, size: 24),
+                ? Text(fixedLabel!, style: AppTextStyles.bodyBold.copyWith(color: Colors.white, fontSize: 20))
+                : const Icon(Icons.call, size: 28),
           ),
         ],
       ),

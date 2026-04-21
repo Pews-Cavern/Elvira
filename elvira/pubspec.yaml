@@ -69,6 +69,10 @@ flutter:
   assets:
     - assets/images/
     - assets/images/personagens/elvira/
+    - assets/images/personagens/nelson/
+    - assets/images/personagens/paulo/
+    - assets/images/vida_real/
+    - assets/images/backgrounds/
     - assets/fonts/
     - assets/fonts/numbers/
     - assets/icons/

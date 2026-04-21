@@ -39,7 +39,6 @@ class OnboardingScaffold extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Progress
               Text(
                 'Passo $step de $totalSteps',
                 style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
@@ -50,31 +49,41 @@ class OnboardingScaffold extends StatelessWidget {
                 backgroundColor: AppColors.blueLight,
                 valueColor: const AlwaysStoppedAnimation(AppColors.primary),
                 borderRadius: BorderRadius.circular(8),
-                minHeight: 8,
+                minHeight: 10,
               ),
-              const SizedBox(height: 32),
-              Text(emoji, style: const TextStyle(fontSize: 48)),
-              const SizedBox(height: 16),
+              const SizedBox(height: 28),
+              Text(emoji, style: const TextStyle(fontSize: 52)),
+              const SizedBox(height: 12),
               Text(titulo, style: AppTextStyles.h2),
               if (subtitulo != null) ...[
                 const SizedBox(height: 8),
                 Text(subtitulo!, style: AppTextStyles.body.copyWith(color: AppColors.textSecondary)),
               ],
-              const SizedBox(height: 32),
-              Expanded(child: content),
+              const SizedBox(height: 24),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: content,
+                ),
+              ),
+              const SizedBox(height: 16),
               ElviraButton(
                 label: labelContinuar,
                 onPressed: continuarHabilitado ? onContinuar : null,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               if (onVoltar != null)
-                Center(
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
                   child: TextButton(
                     onPressed: onVoltar,
-                    child: Text('Voltar', style: AppTextStyles.body.copyWith(color: AppColors.textDisabled)),
+                    child: Text(
+                      '← Voltar',
+                      style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                    ),
                   ),
                 ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
             ],
           ),
         ),

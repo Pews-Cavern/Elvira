@@ -47,17 +47,17 @@ class AppTextStyles {
   static TextStyle dialDisplay = base(size: 34, weight: FontWeight.w700);
 
   // Labels de ícones no launcher
-  static TextStyle appLabel = base(size: 16, weight: FontWeight.w600);
+  static TextStyle appLabel = base(size: 20, weight: FontWeight.w700);
 
   // Horário de remédio
   static TextStyle medicTime = base(size: 22, weight: FontWeight.w700, color: AppColors.primary);
   static TextStyle medicName = base(size: 20, weight: FontWeight.w700);
-  static TextStyle medicDetail = base(size: 17, weight: FontWeight.w400, color: AppColors.textSecondary);
+  static TextStyle medicDetail = base(size: 18, weight: FontWeight.w400, color: AppColors.textSecondary);
 
   // Contato
   static TextStyle contactName = base(size: 20, weight: FontWeight.w700);
-  static TextStyle contactRelation = base(size: 16, weight: FontWeight.w500, color: AppColors.textSecondary);
-  static TextStyle contactPhone = base(size: 16, weight: FontWeight.w400, color: AppColors.textSecondary);
+  static TextStyle contactRelation = base(size: 18, weight: FontWeight.w500, color: AppColors.textSecondary);
+  static TextStyle contactPhone = base(size: 18, weight: FontWeight.w500, color: AppColors.textSecondary);
 
   // Identidade
   static TextStyle idName = base(size: 26, weight: FontWeight.w700);
