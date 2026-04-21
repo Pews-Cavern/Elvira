@@ -33,7 +33,7 @@ dependencies:
   permission_handler: ^12.0.0
 
   # Contatos reais do dispositivo
-  contacts_service: ^0.6.3
+  flutter_contacts: ^1.1.9
 
   # Comunicação com WhatsApp (via intents) e etc
   url_launcher: ^6.2.5
@@ -59,7 +59,10 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/Elvira.png"
 flutter:
   uses-material-design: true
 

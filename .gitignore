@@ -1,0 +1,2 @@
+# Ignore Android keystore properties
+/elvira/android/key.properties
