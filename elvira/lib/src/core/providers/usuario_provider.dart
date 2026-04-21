@@ -36,7 +36,8 @@ class UsuarioProvider extends ChangeNotifier {
   }
 
   Future<bool> verificarPin(String pin) async {
-    return _usuario?.pinCuidador == pin;
+    final pinAtual = _usuario?.pinCuidador ?? '0000';
+    return pinAtual == pin;
   }
 
   Future<void> definirPin(String pin) async {

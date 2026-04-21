@@ -121,6 +121,7 @@ class CuidadorHomeScreen extends StatelessWidget {
                     _GridBtn(emoji: '🪪', titulo: 'Identidade', sub: 'Dados, sangue, alergias', route: AppRoutes.cuidadorIdentidade),
                     _GridBtn(emoji: '📊', titulo: 'Relatórios', sub: 'Histórico de doses e uso', route: AppRoutes.cuidadorRelatorios),
                     _GridBtn(emoji: '⚙️', titulo: 'Configurações', sub: 'PIN, fonte, acessibilidade', route: AppRoutes.cuidadorConfiguracoes),
+                    _GridBtn(emoji: '🕊️', titulo: 'Sobre', sub: 'Memorial e créditos', route: AppRoutes.sobre),
                   ],
                 ),
                 const SizedBox(height: 20),

@@ -23,6 +23,7 @@ import '../../features/cuidador/relatorios/relatorios_screen.dart';
 import '../../features/cuidador/configuracoes/configuracoes_screen.dart';
 import '../../features/institucional/sobre_screen.dart';
 import '../../features/institucional/privacidade_screen.dart';
+import '../../features/institucional/memorial_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -54,6 +55,7 @@ class AppRoutes {
 
   static const sobre = '/sobre';
   static const privacidade = '/privacidade';
+  static const memorial = '/memorial';
 
   static Map<String, WidgetBuilder> get routes => {
         welcome: (_) => const WelcomeScreen(),
@@ -80,5 +82,6 @@ class AppRoutes {
         cuidadorConfiguracoes: (_) => const ConfiguracoesScreen(),
         sobre: (_) => const SobreScreen(),
         privacidade: (_) => const PrivacidadeScreen(),
+        memorial: (_) => const MemorialScreen(),
       };
 }
