@@ -1,6 +1,6 @@
 name: elvira
 description: "Launcher acessível para idosos com suporte offline e assistente pessoal."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -12,19 +12,22 @@ dependencies:
 
   # UI e Acessibilidade
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.1.0
+  google_fonts: ^8.0.2
   flutter_launcher_icons: ^0.14.3
   flutter_svg: ^2.0.10+1
 
   # Local Database
-  sqflite: ^2.3.2
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0
+  sqlite3_flutter_libs: ^0.5.0
+  path: ^1.9.0
   path_provider: ^2.1.2
 
-  # TTS (Voz Offline) erro de nuget
+  # TTS (Voz Offline) erro de nurget
   #flutter_tts: ^3.8.3
 
   # Notificações Locais
-  flutter_local_notifications: ^19.0.0
+  flutter_local_notifications: ^21.0.0
 
   # Permissões
   permission_handler: ^12.0.0
@@ -45,14 +48,17 @@ dependencies:
   intl: ^0.20.2
   shared_preferences: ^2.2.2
 
-  connectivity_plus: ^5.0.2
-  battery_plus: ^3.0.4
+  connectivity_plus: ^7.1.1
+  battery_plus: ^7.0.0
+
+  # Alarme real (dispara com app fechado)
+  alarm: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
@@ -60,10 +66,10 @@ flutter:
   assets:
     - assets/images/
     - assets/images/personagens/elvira/
-    - assets/audio/
     - assets/fonts/
     - assets/fonts/numbers/
     - assets/icons/
+    - assets/sounds/
 
 #  fonts:
 #    - family: Sora
