@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/elvira_button.dart';
+import '../../../services/call_service.dart';
 
 class ConfiguracoesScreen extends StatefulWidget {
   const ConfiguracoesScreen({super.key});
@@ -18,11 +19,18 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   final _pinNovoCtrl = TextEditingController();
   final _pinConfCtrl = TextEditingController();
   double _escala = 1.0;
+  bool? _isDefaultDialer;
 
   @override
   void initState() {
     super.initState();
     _escala = context.read<UsuarioProvider>().escalaFonte;
+    _checkDefaultDialer();
+  }
+
+  Future<void> _checkDefaultDialer() async {
+    final v = await CallService.instance.isDefaultDialer();
+    if (mounted) setState(() => _isDefaultDialer = v);
   }
 
   @override
@@ -73,6 +81,52 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ─── Tela de chamada ──────────────────────────────
+            Text('Tela de chamada', style: AppTextStyles.h3),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.blueLight),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    _isDefaultDialer == true
+                        ? Icons.check_circle_rounded
+                        : Icons.info_outline_rounded,
+                    color: _isDefaultDialer == true
+                        ? AppColors.green
+                        : AppColors.amber,
+                    size: 28,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      _isDefaultDialer == true
+                          ? 'Tela simplificada ativa. O Elvira mostra só Viva-voz e Encerrar durante as ligações.'
+                          : 'Para usar a tela simplificada de chamadas, defina o Elvira como app de telefone padrão.',
+                      style: AppTextStyles.bodySmall
+                          .copyWith(color: AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_isDefaultDialer == false) ...[
+              const SizedBox(height: 12),
+              ElviraButton(
+                label: 'Definir como telefone padrão',
+                onPressed: () async {
+                  await CallService.instance.requestDefaultDialer();
+                  await Future.delayed(const Duration(milliseconds: 800));
+                  await _checkDefaultDialer();
+                },
+              ),
+            ],
+            const SizedBox(height: 28),
             // Tamanho de fonte
             Text('Tamanho do texto', style: AppTextStyles.h3),
             const SizedBox(height: 8),

@@ -82,7 +82,7 @@ class SobreScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
-                'Versão 1.0.0 • Elvira App © 2026',
+                'Versão 0.0.5 • Elvira App © 2026',
                 style: AppTextStyles.body.copyWith(
                   fontSize: 20,
                   color: AppColors.textSecondary,

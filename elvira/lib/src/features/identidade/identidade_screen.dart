@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../../services/call_service.dart';
 import '../../core/providers/usuario_provider.dart';
 import '../../core/providers/contatos_provider.dart';
 import '../../core/models/usuario.dart';
@@ -229,8 +230,8 @@ class _EmergenciaContatos extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () async {
                         HapticFeedback.heavyImpact();
-                        final uri = Uri(scheme: 'tel', path: c.telefone);
-                        if (await canLaunchUrl(uri)) launchUrl(uri);
+                        await CallService.instance.setCallerInfo(c.nome, c.telefone);
+                        await FlutterPhoneDirectCaller.callNumber(c.telefone);
                       },
                       icon: const Icon(Icons.call, size: 20),
                       label: const Text('Ligar', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),

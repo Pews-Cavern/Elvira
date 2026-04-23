@@ -24,6 +24,7 @@ import '../../features/cuidador/configuracoes/configuracoes_screen.dart';
 import '../../features/institucional/sobre_screen.dart';
 import '../../features/institucional/privacidade_screen.dart';
 import '../../features/institucional/memorial_screen.dart';
+import '../../features/ligacao/ligacao_ativa_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -53,6 +54,8 @@ class AppRoutes {
   static const cuidadorRelatorios = '/cuidador/relatorios';
   static const cuidadorConfiguracoes = '/cuidador/configuracoes';
 
+  static const ligacaoAtiva = '/ligacao/ativa';
+
   static const sobre = '/sobre';
   static const privacidade = '/privacidade';
   static const memorial = '/memorial';
@@ -80,6 +83,15 @@ class AppRoutes {
         cuidadorIdentidade: (_) => const IdentidadeFormScreen(),
         cuidadorRelatorios: (_) => const RelatoriosScreen(),
         cuidadorConfiguracoes: (_) => const ConfiguracoesScreen(),
+        ligacaoAtiva: (ctx) {
+          final args =
+              ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;
+          return LigacaoAtivaScreen(
+            nome: args['nome'] as String? ?? '',
+            numero: args['numero'] as String? ?? '',
+            estadoInicial: args['estado'] as String? ?? 'dialing',
+          );
+        },
         sobre: (_) => const SobreScreen(),
         privacidade: (_) => const PrivacidadeScreen(),
         memorial: (_) => const MemorialScreen(),

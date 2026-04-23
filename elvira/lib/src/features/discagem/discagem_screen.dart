@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../../services/call_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/elvira_app_bar.dart';
@@ -50,8 +51,8 @@ class _DiscagemScreenState extends State<DiscagemScreen> {
   Future<void> _ligar() async {
     if (_numero.isEmpty) return;
     HapticFeedback.heavyImpact();
-    final uri = Uri(scheme: 'tel', path: _numero);
-    if (await canLaunchUrl(uri)) await launchUrl(uri);
+    await CallService.instance.setCallerInfo(_numero, _numero);
+    await FlutterPhoneDirectCaller.callNumber(_numero);
   }
 
   String get _numeroFormatado {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import '../../services/call_service.dart';
 import '../../core/providers/contatos_provider.dart';
 import '../../core/models/contato.dart';
 import '../../core/theme/app_colors.dart';
@@ -12,10 +13,10 @@ import '../../core/widgets/contato_avatar.dart';
 class ContatosScreen extends StatelessWidget {
   const ContatosScreen({super.key});
 
-  Future<void> _ligar(String telefone) async {
+  Future<void> _ligar(String nome, String telefone) async {
     HapticFeedback.heavyImpact();
-    final uri = Uri(scheme: 'tel', path: telefone);
-    if (await canLaunchUrl(uri)) await launchUrl(uri);
+    await CallService.instance.setCallerInfo(nome, telefone);
+    await FlutterPhoneDirectCaller.callNumber(telefone);
   }
 
   @override
@@ -55,7 +56,7 @@ class ContatosScreen extends StatelessWidget {
             separatorBuilder: (_, _) => const SizedBox(height: 12),
             itemBuilder: (_, i) => _ContatoTile(
               contato: provider.contatos[i],
-              onLigar: () => _ligar(provider.contatos[i].telefone),
+              onLigar: () => _ligar(provider.contatos[i].nome, provider.contatos[i].telefone),
             ),
           );
         },

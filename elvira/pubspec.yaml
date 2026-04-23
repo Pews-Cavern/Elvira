@@ -1,7 +1,7 @@
 name: elvira
 description: "Launcher acessível para idosos com suporte offline e assistente pessoal."
 publish_to: "none"
-version: 1.0.0+1
+version: 0.0.5
 
 environment:
   sdk: ^3.7.2
@@ -37,6 +37,9 @@ dependencies:
 
   # Comunicação com WhatsApp (via intents) e etc
   url_launcher: ^6.2.5
+
+  # Ligação direta sem abrir o discador nativo
+  flutter_phone_direct_caller: ^2.1.1
 
   # Controle de Estado (opcional)
   provider: ^6.1.2

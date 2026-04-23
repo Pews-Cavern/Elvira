@@ -14,6 +14,7 @@ import 'src/core/providers/contatos_provider.dart';
 import 'src/core/providers/medicamentos_provider.dart';
 import 'src/core/providers/dose_provider.dart';
 import 'src/core/routes/app_routes.dart';
+import 'src/services/call_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -58,12 +59,16 @@ class ElviraApp extends StatefulWidget {
 
 class _ElviraAppState extends State<ElviraApp> {
   StreamSubscription<AlarmSet>? _alarmSub;
+  StreamSubscription? _callSub;
   Set<int> _idsAntes = {};
   bool _redirectedToOnboarding = false;
+  bool _showingCallScreen = false;
 
   @override
   void initState() {
     super.initState();
+    CallService.instance.init();
+    _callSub = CallService.instance.events.listen(_onCallEvent);
     _alarmSub = Alarm.ringing.listen((alarmSet) {
       for (final alarm in alarmSet.alarms) {
         if (!_idsAntes.contains(alarm.id)) {
@@ -74,8 +79,26 @@ class _ElviraAppState extends State<ElviraApp> {
     });
   }
 
+  void _onCallEvent(Map<String, dynamic> e) {
+    final event = e['event'] as String?;
+    if (event == 'callAdded' && !_showingCallScreen) {
+      _showingCallScreen = true;
+      navigatorKey.currentState
+          ?.pushNamed(
+            AppRoutes.ligacaoAtiva,
+            arguments: {
+              'nome': e['name'] ?? '',
+              'numero': e['number'] ?? '',
+              'estado': e['state'] ?? 'dialing',
+            },
+          )
+          .then((_) => _showingCallScreen = false);
+    }
+  }
+
   @override
   void dispose() {
+    _callSub?.cancel();
     _alarmSub?.cancel();
     super.dispose();
   }
