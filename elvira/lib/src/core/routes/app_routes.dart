@@ -25,6 +25,8 @@ import '../../features/institucional/sobre_screen.dart';
 import '../../features/institucional/privacidade_screen.dart';
 import '../../features/institucional/memorial_screen.dart';
 import '../../features/ligacao/ligacao_ativa_screen.dart';
+import '../../features/camera/camera_screen.dart';
+import '../../features/camera/galeria_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -55,6 +57,9 @@ class AppRoutes {
   static const cuidadorConfiguracoes = '/cuidador/configuracoes';
 
   static const ligacaoAtiva = '/ligacao/ativa';
+
+  static const camera = '/camera';
+  static const galeria = '/galeria';
 
   static const sobre = '/sobre';
   static const privacidade = '/privacidade';
@@ -92,6 +97,8 @@ class AppRoutes {
             estadoInicial: args['estado'] as String? ?? 'dialing',
           );
         },
+        camera: (_) => const CameraScreen(),
+        galeria: (_) => const GaleriaScreen(),
         sobre: (_) => const SobreScreen(),
         privacidade: (_) => const PrivacidadeScreen(),
         memorial: (_) => const MemorialScreen(),
