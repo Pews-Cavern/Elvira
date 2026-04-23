@@ -24,7 +24,8 @@ class _MemorialScreenState extends State<MemorialScreen> {
     ),
     _Slide(
       foto: 'assets/images/vida_real/Elvira_&_Nelson_&_Paulo_Eduardo.png',
-      legenda: "Domingas \"Elvira\" Fiorese Geronasso,\nNelson Geronasso e Paulo Eduardo Konopka",
+      legenda:
+          "Domingas \"Elvira\" Fiorese Geronasso,\nNelson Geronasso e seu primeiro bisneto Paulo Eduardo Konopka",
       data: "04/06/2009",
     ),
     _Slide(
@@ -33,28 +34,40 @@ class _MemorialScreenState extends State<MemorialScreen> {
     ),
     _Slide(
       foto: 'assets/images/vida_real/Elvira_&_Maria_Eduarda.png',
-      legenda: "Elvira e Maria Eduarda",
+      legenda:
+          "Domingas \"Elvira\" Fiorese Geronasso e Maria Eduarda Konopka (Segunda Bisneta)",
     ),
-    _Slide(
-      icone: '🕊️',
-      texto: "Dona Elvira faleceu em 05/06/2019,\ncom 89 anos,\napós sofrer um ataque vascular cerebral.",
-    ),
-    _Slide(
-      icone: '🕊️',
-      texto: "Seu Nelson Geronasso faleceu em 17/10/2023,\ncom 92 anos,\napós contrair uma infecção urinária.",
-    ),
+
     _Slide(
       foto: 'assets/images/vida_real/Elvira_&_Paulo_Eduardo.png',
       legenda: "Dona Elvira e seu bisneto Paulo Eduardo Konopka",
       data: "28/11/2019",
     ),
     _Slide(
-      icone: '❤️',
-      texto: "Este projeto foi feito em homenagem\na ambos os meus bisavós —\nem especial à Vó Elvira,\nque passou seus últimos anos\ntentando aprender a mexer no celular comigo.\n\n— Paulo Eduardo Konopka",
+      icone: '🕊️',
+      texto:
+          "Dona Elvira faleceu em 05/08/2019,\ncom 89 anos,\napós sofrer um ataque vascular cerebral.",
     ),
     _Slide(
-      icone: '🙏',
-      texto: "Obrigado a todos que utilizarem este aplicativo.\nQue a memória deles\ncontinue viva em cada toque na tela.",
+      foto: 'assets/images/vida_real/Nelson_&_Familia.png',
+      legenda: "Nelson Geronasso e Familia",
+      data: "02/04/2021",
+    ),
+    _Slide(
+      icone: '🕊️',
+      texto:
+          "Seu Nelson Geronasso faleceu em 17/10/2023,\ncom 92 anos,\napós contrair uma infecção urinária.",
+    ),
+    _Slide(
+      icone: '❤️',
+      foto: 'assets/images/vida_real/Elvira_&_Nelson_&_Paulo_Eduardo.png',
+      texto:
+          "Este projeto foi feito em homenagem\na ambos os meus bisavós -\nem especial à Vó Elvira,\nque passou seus últimos anos\ntentando aprender a mexer no celular comigo.\n\n- Paulo Eduardo Konopka",
+    ),
+    _Slide(
+      foto: 'assets/icons/Elvira_Neson.png',
+      texto:
+          "Obrigado a todos que utilizarem este aplicativo.\nQue a memória deles\ncontinue viva em cada toque na tela.",
       encerramento: true,
     ),
   ];
@@ -62,7 +75,10 @@ class _MemorialScreenState extends State<MemorialScreen> {
   void _avancar() {
     HapticFeedback.lightImpact();
     if (_pagina < _slides.length - 1) {
-      _controller.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+      _controller.nextPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
     } else {
       Navigator.pop(context);
     }
@@ -91,13 +107,20 @@ class _MemorialScreenState extends State<MemorialScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: Colors.white54, size: 28),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white54,
+                      size: 28,
+                    ),
                     tooltip: 'Fechar',
                   ),
                   const Spacer(),
                   Text(
                     '${_pagina + 1} / ${_slides.length}',
-                    style: AppTextStyles.body.copyWith(color: Colors.white38, fontSize: 16),
+                    style: AppTextStyles.body.copyWith(
+                      color: Colors.white38,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
@@ -109,7 +132,9 @@ class _MemorialScreenState extends State<MemorialScreen> {
                 controller: _controller,
                 onPageChanged: (i) => setState(() => _pagina = i),
                 itemCount: _slides.length,
-                itemBuilder: (_, i) => _SlideView(slide: _slides[i], fundoCard: _fundoCard),
+                itemBuilder:
+                    (_, i) =>
+                        _SlideView(slide: _slides[i], fundoCard: _fundoCard),
               ),
             ),
 
@@ -143,9 +168,14 @@ class _MemorialScreenState extends State<MemorialScreen> {
                 child: ElevatedButton(
                   onPressed: _avancar,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: slide.encerramento ? Colors.white : const Color(0xFF5B4BD5),
+                    backgroundColor:
+                        slide.encerramento
+                            ? Colors.white
+                            : const Color(0xFF5B4BD5),
                     foregroundColor: slide.encerramento ? _fundo : Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                     elevation: 0,
                   ),
                   child: Text(
@@ -188,9 +218,14 @@ class _SlideView extends StatelessWidget {
                 child: Image.asset(
                   slide.foto!,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => const Center(
-                    child: Icon(Icons.image_not_supported, color: Colors.white30, size: 48),
-                  ),
+                  errorBuilder:
+                      (_, __, ___) => const Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.white30,
+                          size: 48,
+                        ),
+                      ),
                 ),
               ),
             )
@@ -198,7 +233,10 @@ class _SlideView extends StatelessWidget {
             SizedBox(
               height: screenHeight * 0.18,
               child: Center(
-                child: Text(slide.icone ?? '💛', style: const TextStyle(fontSize: 72)),
+                child: Text(
+                  slide.icone ?? '💛',
+                  style: const TextStyle(fontSize: 72),
+                ),
               ),
             ),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/status_bar_widget.dart';
@@ -35,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final spacing = 12.0;
+                      const spacing = 12.0;
                       final tileWidth = (constraints.maxWidth - spacing) / 2;
                       final tileHeight = tileWidth * 0.88;
                       return GridView.count(
@@ -43,13 +44,32 @@ class HomeScreen extends StatelessWidget {
                         mainAxisSpacing: spacing,
                         crossAxisSpacing: spacing,
                         childAspectRatio: tileWidth / tileHeight,
-                        children: const [
-                          _AppTile(emoji: '📞', label: 'Ligar', route: AppRoutes.discagem, color: Color(0xFFDCEEFB)),
-                          _AppTile(emoji: '💊', label: 'Remédios', route: AppRoutes.remedios, color: Color(0xFFD9F4EA)),
-                          _AppTile(emoji: '👥', label: 'Contatos', route: AppRoutes.contatos, color: Color(0xFFDCEEFB)),
-                          _AppTile(emoji: '🪪', label: 'Identidade', route: AppRoutes.identidade, color: Color(0xFFFFF0CC)),
-                          _AppTile(emoji: '🔔', label: 'Avisos', route: AppRoutes.notificacoes, color: Color(0xFFF0E5F8)),
-                          _AppTile(emoji: '⚙️', label: 'Cuidador', route: AppRoutes.cuidadorPin, color: Color(0xFFDCEEFB)),
+                        children: [
+                          const _AppTile(emoji: '📞', label: 'Ligar', route: AppRoutes.discagem, color: Color(0xFFDCEEFB)),
+                          const _AppTile(emoji: '💊', label: 'Remédios', route: AppRoutes.remedios, color: Color(0xFFD9F4EA)),
+                          const _AppTile(emoji: '👥', label: 'Contatos', route: AppRoutes.contatos, color: Color(0xFFDCEEFB)),
+                          const _AppTile(emoji: '🪪', label: 'Identidade', route: AppRoutes.identidade, color: Color(0xFFFFF0CC)),
+                          const _AppTile(emoji: '🔔', label: 'Avisos', route: AppRoutes.notificacoes, color: Color(0xFFF0E5F8)),
+                          _AppTile(
+                            emoji: '📷',
+                            label: 'Câmera',
+                            color: const Color(0xFFFFE5CC),
+                            onTap: () async {
+                              HapticFeedback.lightImpact();
+                              final uri = Uri.parse(
+                                'intent://capture/#Intent;action=android.media.action.IMAGE_CAPTURE;end',
+                              );
+                              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Não foi possível abrir a câmera')),
+                                  );
+                                }
+                              }
+                            },
+                          ),
+                          const _AppTile(emoji: 'ℹ️', label: 'Sobre', route: AppRoutes.sobre, color: Color(0xFFE5F4F0)),
+                          const _AppTile(emoji: '⚙️', label: 'Cuidador', route: AppRoutes.cuidadorPin, color: Color(0xFFDCEEFB)),
                         ],
                       );
                     },
@@ -87,14 +107,16 @@ class HomeScreen extends StatelessWidget {
 class _AppTile extends StatelessWidget {
   final String emoji;
   final String label;
-  final String route;
+  final String? route;
   final Color color;
+  final VoidCallback? onTap;
 
   const _AppTile({
     required this.emoji,
     required this.label,
-    required this.route,
+    this.route,
     required this.color,
+    this.onTap,
   });
 
   @override
@@ -104,10 +126,13 @@ class _AppTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {
-          HapticFeedback.lightImpact();
-          Navigator.pushNamed(context, route);
-        },
+        onTap: onTap ??
+            (route != null
+                ? () {
+                    HapticFeedback.lightImpact();
+                    Navigator.pushNamed(context, route!);
+                  }
+                : null),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
