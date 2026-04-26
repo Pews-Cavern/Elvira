@@ -5,6 +5,8 @@ class Medicamento {
   final String unidade;
   final String? instrucaoUso;
   final String? fotoPath;
+  final String? dataInicio;
+  final String? dataFim;
   final bool ativo;
 
   const Medicamento({
@@ -14,6 +16,8 @@ class Medicamento {
     this.unidade = 'comprimido',
     this.instrucaoUso,
     this.fotoPath,
+    this.dataInicio,
+    this.dataFim,
     this.ativo = true,
   });
 
@@ -24,6 +28,8 @@ class Medicamento {
         'unidade': unidade,
         'instrucao_uso': instrucaoUso,
         'foto_path': fotoPath,
+        'data_inicio': dataInicio,
+        'data_fim': dataFim,
         'ativo': ativo ? 1 : 0,
       };
 
@@ -34,6 +40,8 @@ class Medicamento {
         unidade: m['unidade'] as String? ?? 'comprimido',
         instrucaoUso: m['instrucao_uso'] as String?,
         fotoPath: m['foto_path'] as String?,
+        dataInicio: m['data_inicio'] as String?,
+        dataFim: m['data_fim'] as String?,
         ativo: (m['ativo'] as int?) != 0,
       );
 
@@ -44,6 +52,8 @@ class Medicamento {
     String? unidade,
     String? instrucaoUso,
     String? fotoPath,
+    String? dataInicio,
+    String? dataFim,
     bool? ativo,
   }) =>
       Medicamento(
@@ -53,6 +63,8 @@ class Medicamento {
         unidade: unidade ?? this.unidade,
         instrucaoUso: instrucaoUso ?? this.instrucaoUso,
         fotoPath: fotoPath ?? this.fotoPath,
+        dataInicio: dataInicio ?? this.dataInicio,
+        dataFim: dataFim ?? this.dataFim,
         ativo: ativo ?? this.ativo,
       );
 }

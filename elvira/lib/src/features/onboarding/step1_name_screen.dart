@@ -51,6 +51,7 @@ class _Step1NameScreenState extends State<Step1NameScreen> {
           textCapitalization: TextCapitalization.words,
           style: const TextStyle(fontSize: 20),
           decoration: const InputDecoration(hintText: 'Seu nome aqui'),
+          scrollPadding: const EdgeInsets.only(bottom: 150),
           onSubmitted: (_) => _continuar(),
         ),
       ),

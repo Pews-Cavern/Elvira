@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:alarm/alarm.dart';
 import '../../core/providers/dose_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -16,6 +17,7 @@ class AlarmeFullscreen extends StatelessWidget {
     final instrucao = args?['instrucao'] as String? ?? '';
     final hora = args?['hora'] as String? ?? '';
     final registroId = args?['registro_id'] as int?;
+    final alarmId = args?['alarm_id'] as int?;
 
     return Scaffold(
       backgroundColor: AppColors.primary,
@@ -91,6 +93,10 @@ class AlarmeFullscreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         HapticFeedback.mediumImpact();
+                        await Alarm.stopAll();
+                        if (alarmId != null) {
+                          await Alarm.stop(alarmId);
+                        }
                         if (registroId != null) {
                           await context.read<DoseProvider>().marcarTomado(registroId);
                         }
@@ -112,6 +118,10 @@ class AlarmeFullscreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         HapticFeedback.lightImpact();
+                        await Alarm.stopAll();
+                        if (alarmId != null) {
+                          await Alarm.stop(alarmId);
+                        }
                         if (registroId != null) {
                           await context.read<DoseProvider>().adiarDose(registroId);
                         }

@@ -114,7 +114,7 @@ class CuidadorHomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 1.4,
+                  childAspectRatio: 1.1,
                   children: const [
                     _GridBtn(emoji: '💊', titulo: 'Medicamentos', sub: 'Doses, horários e remédios', route: AppRoutes.cuidadorMedicamentos),
                     _GridBtn(emoji: '👥', titulo: 'Contatos', sub: 'Família, médicos, emergência', route: AppRoutes.cuidadorContatos),
@@ -201,8 +201,8 @@ class _GridBtn extends StatelessWidget {
             children: [
               Text(emoji, style: const TextStyle(fontSize: 28)),
               const SizedBox(height: 6),
-              Text(titulo, style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary)),
-              Text(sub, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary), maxLines: 2),
+              Text(titulo, style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(sub, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary), maxLines: 2, overflow: TextOverflow.ellipsis),
             ],
           ),
         ),

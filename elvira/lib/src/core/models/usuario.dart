@@ -8,6 +8,7 @@ class Usuario {
   final String? alergias;
   final String? condicoesSaude;
   final String? pinCuidador;
+  final String? planoSaude;
   final double tamanhoFonteBase;
   final bool onboardingCompleto;
 
@@ -21,6 +22,7 @@ class Usuario {
     this.alergias,
     this.condicoesSaude,
     this.pinCuidador,
+    this.planoSaude,
     this.tamanhoFonteBase = 1.0,
     this.onboardingCompleto = false,
   });
@@ -35,6 +37,7 @@ class Usuario {
         'alergias': alergias,
         'condicoes_saude': condicoesSaude,
         'pin_cuidador': pinCuidador,
+        'plano_saude': planoSaude,
         'tamanho_fonte_base': tamanhoFonteBase,
         'onboarding_completo': onboardingCompleto ? 1 : 0,
       };
@@ -49,6 +52,7 @@ class Usuario {
         alergias: m['alergias'] as String?,
         condicoesSaude: m['condicoes_saude'] as String?,
         pinCuidador: m['pin_cuidador'] as String?,
+        planoSaude: m['plano_saude'] as String?,
         tamanhoFonteBase: (m['tamanho_fonte_base'] as num?)?.toDouble() ?? 1.0,
         onboardingCompleto: (m['onboarding_completo'] as int?) == 1,
       );
@@ -63,6 +67,7 @@ class Usuario {
     String? alergias,
     String? condicoesSaude,
     String? pinCuidador,
+    String? planoSaude,
     double? tamanhoFonteBase,
     bool? onboardingCompleto,
   }) =>
@@ -76,6 +81,7 @@ class Usuario {
         alergias: alergias ?? this.alergias,
         condicoesSaude: condicoesSaude ?? this.condicoesSaude,
         pinCuidador: pinCuidador ?? this.pinCuidador,
+        planoSaude: planoSaude ?? this.planoSaude,
         tamanhoFonteBase: tamanhoFonteBase ?? this.tamanhoFonteBase,
         onboardingCompleto: onboardingCompleto ?? this.onboardingCompleto,
       );
