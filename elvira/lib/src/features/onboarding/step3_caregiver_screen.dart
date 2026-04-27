@@ -86,6 +86,7 @@ class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
                   hintText: '• • • •',
                   counterText: '',
                 ),
+                scrollPadding: const EdgeInsets.only(bottom: 120),
                 onChanged: (_) => setState(() {}),
               ),
             ),

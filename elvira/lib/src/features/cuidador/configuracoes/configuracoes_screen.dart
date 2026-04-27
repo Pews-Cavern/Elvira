@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:alarm/alarm.dart';
 import '../../../core/providers/usuario_provider.dart';
+import '../../../core/services/prefs_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
@@ -20,12 +22,49 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   final _pinConfCtrl = TextEditingController();
   double _escala = 1.0;
   bool? _isDefaultDialer;
+  SomAlarme? _somAtual;
 
   @override
   void initState() {
     super.initState();
     _escala = context.read<UsuarioProvider>().escalaFonte;
     _checkDefaultDialer();
+    _carregarSom();
+  }
+
+  Future<void> _carregarSom() async {
+    final som = await PrefsService.instance.getSomAlarme();
+    if (mounted) setState(() => _somAtual = som);
+  }
+
+  Future<void> _salvarSom(SomAlarme som) async {
+    await PrefsService.instance.setSomAlarme(som.id);
+    setState(() => _somAtual = som);
+    if (!mounted) return;
+    // Preview: toca 2 segundos do novo som
+    await Alarm.set(
+      alarmSettings: AlarmSettings(
+        id: 99999,
+        dateTime: DateTime.now().add(const Duration(seconds: 1)),
+        assetAudioPath: som.assetPath,
+        loopAudio: false,
+        vibrate: false,
+        warningNotificationOnKill: false,
+        androidFullScreenIntent: false,
+        volumeSettings: VolumeSettings.fixed(volume: 0.8),
+        notificationSettings: const NotificationSettings(
+          title: 'Elvira',
+          body: 'Testando som...',
+        ),
+      ),
+    );
+    await Future.delayed(const Duration(seconds: 3));
+    await Alarm.stop(99999);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Som salvo: ${som.nome}', style: AppTextStyles.body)),
+      );
+    }
   }
 
   Future<void> _checkDefaultDialer() async {
@@ -126,6 +165,58 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
                 },
               ),
             ],
+            const SizedBox(height: 28),
+            // ─── Som do Alarme ────────────────────────────────
+            Text('Som do alarme de remédio', style: AppTextStyles.h3),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.blueLight),
+              ),
+              child: Column(
+                children: PrefsService.sonsDisponiveis.map((som) {
+                  final selecionado = _somAtual?.id == som.id;
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _salvarSom(som),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selecionado ? AppColors.blueXLight : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Radio<String>(
+                            value: som.id,
+                            groupValue: _somAtual?.id,
+                            activeColor: AppColors.primary,
+                            onChanged: (v) => _salvarSom(som),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(som.nome, style: AppTextStyles.body),
+                                if (selecionado)
+                                  Text('Toque para ouvir preview', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+                              ],
+                            ),
+                          ),
+                          if (selecionado)
+                            const Icon(Icons.volume_up, color: AppColors.primary, size: 20),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
             const SizedBox(height: 28),
             // Tamanho de fonte
             Text('Tamanho do texto', style: AppTextStyles.h3),

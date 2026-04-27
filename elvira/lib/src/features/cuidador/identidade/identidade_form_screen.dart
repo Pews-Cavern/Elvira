@@ -19,8 +19,11 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
   final _nomeCtrl = TextEditingController();
   final _dataNascCtrl = TextEditingController();
   final _tipoSangCtrl = TextEditingController();
-  final _alergiasCtrl = TextEditingController();
-  final _condicoesCtrl = TextEditingController();
+  final _planoSaudeCtrl = TextEditingController();
+  
+  List<String> _alergias = [];
+  List<String> _condicoes = [];
+
   bool _salvando = false;
 
   static const _tiposSanguineos = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -34,8 +37,15 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
         _nomeCtrl.text = u.nome;
         _dataNascCtrl.text = u.dataNascimento ?? '';
         _tipoSangCtrl.text = u.tipoSanguineo ?? '';
-        _alergiasCtrl.text = u.alergias ?? '';
-        _condicoesCtrl.text = u.condicoesSaude ?? '';
+        _planoSaudeCtrl.text = u.planoSaude ?? '';
+        
+        if (u.alergias != null && u.alergias!.isNotEmpty) {
+          _alergias = u.alergias!.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+        }
+        if (u.condicoesSaude != null && u.condicoesSaude!.isNotEmpty) {
+          _condicoes = u.condicoesSaude!.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+        }
+        setState(() {});
       }
     });
   }
@@ -45,8 +55,7 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
     _nomeCtrl.dispose();
     _dataNascCtrl.dispose();
     _tipoSangCtrl.dispose();
-    _alergiasCtrl.dispose();
-    _condicoesCtrl.dispose();
+    _planoSaudeCtrl.dispose();
     super.dispose();
   }
 
@@ -61,8 +70,9 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
       genero: atual?.genero ?? 'nao_informado',
       dataNascimento: _dataNascCtrl.text.trim().isEmpty ? null : _dataNascCtrl.text.trim(),
       tipoSanguineo: _tipoSangCtrl.text.trim().isEmpty ? null : _tipoSangCtrl.text.trim(),
-      alergias: _alergiasCtrl.text.trim().isEmpty ? null : _alergiasCtrl.text.trim(),
-      condicoesSaude: _condicoesCtrl.text.trim().isEmpty ? null : _condicoesCtrl.text.trim(),
+      planoSaude: _planoSaudeCtrl.text.trim().isEmpty ? null : _planoSaudeCtrl.text.trim(),
+      alergias: _alergias.isEmpty ? null : _alergias.join(','),
+      condicoesSaude: _condicoes.isEmpty ? null : _condicoes.join(','),
       pinCuidador: atual?.pinCuidador,
       tamanhoFonteBase: atual?.tamanhoFonteBase ?? 1.0,
       onboardingCompleto: atual?.onboardingCompleto ?? true,
@@ -83,11 +93,68 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
     }
   }
 
+  Future<void> _adicionarItemLista(String titulo, List<String> lista) async {
+    final ctrl = TextEditingController();
+    final res = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Adicionar $titulo', style: AppTextStyles.h3),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          textCapitalization: TextCapitalization.sentences,
+          decoration: InputDecoration(hintText: 'Digite aqui...'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
+            child: const Text('Adicionar'),
+          ),
+        ],
+      ),
+    );
+
+    if (res != null && res.isNotEmpty && !lista.contains(res)) {
+      setState(() => lista.add(res));
+    }
+  }
+
+  Widget _buildChipsList(String titulo, List<String> lista) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(titulo, style: AppTextStyles.bodyBold.copyWith(color: AppColors.textSecondary)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            ...lista.map((item) => Chip(
+                  label: Text(item, style: AppTextStyles.bodySmall),
+                  backgroundColor: AppColors.blueLight,
+                  deleteIcon: const Icon(Icons.close, size: 18),
+                  onDeleted: () => setState(() => lista.remove(item)),
+                )),
+            ActionChip(
+              label: const Text('+ Adicionar'),
+              backgroundColor: Colors.white,
+              side: const BorderSide(color: AppColors.primary),
+              labelStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.primary),
+              onPressed: () => _adicionarItemLista(titulo, lista),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const ElviraAppBar(title: 'Dados Pessoais'),
+      appBar: const ElviraAppBar(title: 'Dados Pessoais e Médicos'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -95,6 +162,8 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Identidade', style: AppTextStyles.h2.copyWith(color: AppColors.primary)),
+              const SizedBox(height: 16),
               _campo('Nome completo', _nomeCtrl, required: true),
               const SizedBox(height: 14),
               TextFormField(
@@ -107,7 +176,9 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
                 ),
                 onTap: _selecionarData,
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 24),
+              Text('Informações Médicas', style: AppTextStyles.h2.copyWith(color: AppColors.primary)),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _tipoSangCtrl.text.isEmpty ? null : _tipoSangCtrl.text,
                 decoration: const InputDecoration(labelText: 'Tipo sanguíneo'),
@@ -116,9 +187,10 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
                 onChanged: (v) => setState(() => _tipoSangCtrl.text = v ?? ''),
               ),
               const SizedBox(height: 14),
-              _campo('Alergias', _alergiasCtrl, hint: 'Ex: Penicilina, Dipirona'),
-              const SizedBox(height: 14),
-              _campo('Condições de saúde', _condicoesCtrl, maxLines: 3, hint: 'Ex: Hipertensão, Diabetes tipo 2'),
+              _campo('Plano de Saúde', _planoSaudeCtrl, hint: 'Ex: Unimed, SulAmérica'),
+              const SizedBox(height: 20),
+              _buildChipsList('Alergias', _alergias),
+              _buildChipsList('Condições de saúde', _condicoes),
               const SizedBox(height: 28),
               ElviraButton(label: 'Salvar dados', onPressed: _salvando ? null : _salvar),
             ],
@@ -128,13 +200,13 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
     );
   }
 
-  Widget _campo(String label, TextEditingController ctrl, {bool required = false, int maxLines = 1, String? hint}) {
+  Widget _campo(String label, TextEditingController ctrl, {bool required = false, String? hint}) {
     return TextFormField(
       controller: ctrl,
       style: AppTextStyles.body,
-      maxLines: maxLines,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: label, hintText: hint),
+      scrollPadding: const EdgeInsets.only(bottom: 80),
       validator: required ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null : null,
     );
   }

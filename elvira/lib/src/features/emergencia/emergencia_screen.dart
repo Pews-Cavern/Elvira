@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:sms_advanced/sms_advanced.dart';
+
 import '../../services/call_service.dart';
 import '../../core/providers/contatos_provider.dart';
 import '../../core/models/contato.dart';
@@ -10,13 +13,67 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/elvira_app_bar.dart';
 import '../../core/widgets/contato_avatar.dart';
 
-class EmergenciaScreen extends StatelessWidget {
+class EmergenciaScreen extends StatefulWidget {
   const EmergenciaScreen({super.key});
+
+  @override
+  State<EmergenciaScreen> createState() => _EmergenciaScreenState();
+}
+
+class _EmergenciaScreenState extends State<EmergenciaScreen> {
+  Timer? _sosTimer;
+  bool _isPressingSOS = false;
 
   Future<void> _ligar(String nome, String telefone) async {
     HapticFeedback.heavyImpact();
     await CallService.instance.setCallerInfo(nome, telefone);
     await FlutterPhoneDirectCaller.callNumber(telefone);
+  }
+
+  void _startSosTimer(List<Contato> emergencia, Contato? primeiroContato) {
+    setState(() => _isPressingSOS = true);
+    HapticFeedback.mediumImpact();
+    
+    _sosTimer = Timer(const Duration(seconds: 3), () async {
+      await _triggerSos(emergencia, primeiroContato);
+    });
+  }
+
+  void _cancelSosTimer() {
+    if (_sosTimer != null && _sosTimer!.isActive) {
+      _sosTimer!.cancel();
+      setState(() => _isPressingSOS = false);
+    }
+  }
+
+  Future<void> _triggerSos(List<Contato> emergencia, Contato? primeiroContato) async {
+    setState(() => _isPressingSOS = false);
+    HapticFeedback.heavyImpact();
+
+    final telefoneLigar = primeiroContato?.telefone ?? '192';
+    final nomeLigar = primeiroContato?.nome ?? 'SAMU';
+
+    if (emergencia.isNotEmpty) {
+      try {
+        final sender = SmsSender();
+        const msgText = 'Preciso de ajuda imediata !\nmenssagem enviada pelo app Elvira';
+        for (var c in emergencia) {
+          if (c.telefone.isNotEmpty) {
+            sender.sendSms(SmsMessage(c.telefone, msgText));
+          }
+        }
+      } catch (e) {
+        debugPrint('Erro ao enviar SMS: $e');
+      }
+    }
+
+    await _ligar(nomeLigar, telefoneLigar);
+  }
+
+  @override
+  void dispose() {
+    _sosTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -37,17 +94,22 @@ class EmergenciaScreen extends StatelessWidget {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: primeiroContato != null
-                      ? () => _ligar(primeiroContato.nome, primeiroContato.telefone)
-                      : () => _ligar('SAMU', '192'),
-                  child: Container(
-                    width: sosBtnSize,
-                    height: sosBtnSize,
+                  onTapDown: (_) => _startSosTimer(emergencia, primeiroContato),
+                  onTapUp: (_) => _cancelSosTimer(),
+                  onTapCancel: () => _cancelSosTimer(),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: _isPressingSOS ? sosBtnSize * 0.95 : sosBtnSize,
+                    height: _isPressingSOS ? sosBtnSize * 0.95 : sosBtnSize,
                     decoration: BoxDecoration(
-                      color: AppColors.red,
+                      color: _isPressingSOS ? AppColors.redMedium : AppColors.red,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(color: AppColors.red.withAlpha(110), blurRadius: 28, spreadRadius: 10),
+                        BoxShadow(
+                          color: AppColors.red.withAlpha(_isPressingSOS ? 50 : 110),
+                          blurRadius: _isPressingSOS ? 15 : 28,
+                          spreadRadius: _isPressingSOS ? 5 : 10,
+                        ),
                       ],
                     ),
                     child: Column(
@@ -56,7 +118,7 @@ class EmergenciaScreen extends StatelessWidget {
                         Text('SOS', style: AppTextStyles.h1.copyWith(color: Colors.white, fontSize: 40)),
                         const SizedBox(height: 4),
                         Text(
-                          'LIGAR AGORA',
+                          _isPressingSOS ? 'SEGURE...' : 'SEGURE 3 SEG',
                           style: AppTextStyles.bodySmall.copyWith(color: Colors.white, letterSpacing: 1.5, fontWeight: FontWeight.w700),
                         ),
                       ],
@@ -67,7 +129,7 @@ class EmergenciaScreen extends StatelessWidget {
                 Text('Precisa de ajuda?', style: AppTextStyles.h2.copyWith(color: AppColors.red)),
                 const SizedBox(height: 6),
                 Text(
-                  'Toque no botão vermelho para pedir socorro\nou escolha um número abaixo',
+                  'Segure o botão vermelho para pedir socorro\nou escolha um número abaixo',
                   style: AppTextStyles.body.copyWith(color: AppColors.red),
                   textAlign: TextAlign.center,
                 ),

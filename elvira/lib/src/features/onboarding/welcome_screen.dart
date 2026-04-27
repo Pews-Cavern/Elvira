@@ -1,10 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
+
+  Future<void> _pedirPermissoesEVamosComecar(BuildContext context) async {
+    final aceitou = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Text(
+          'Permissões Necessárias',
+          style: AppTextStyles.h2.copyWith(color: AppColors.primary),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          'Para que a Elvira funcione corretamente (como o botão SOS e os alarmes de remédios), precisamos de permissões para fazer ligações, enviar SMS, acessar contatos e enviar notificações.',
+          style: AppTextStyles.body,
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.green,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            ),
+            child: Text('Entendi', style: AppTextStyles.button),
+          ),
+        ],
+      ),
+    );
+
+    if (aceitou == true) {
+      await [
+        Permission.sms,
+        Permission.phone,
+        Permission.contacts,
+        Permission.notification,
+      ].request();
+      
+      if (context.mounted) {
+        Navigator.pushNamed(context, AppRoutes.step1);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +95,7 @@ class WelcomeScreen extends StatelessWidget {
                     width: double.infinity,
                     height: 72,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.step1),
+                      onPressed: () => _pedirPermissoesEVamosComecar(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.green,
                         foregroundColor: Colors.white,

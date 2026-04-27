@@ -34,7 +34,7 @@ class OnboardingScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,12 +60,8 @@ class OnboardingScaffold extends StatelessWidget {
                 Text(subtitulo!, style: AppTextStyles.body.copyWith(color: AppColors.textSecondary)),
               ],
               const SizedBox(height: 24),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: content,
-                ),
-              ),
-              const SizedBox(height: 16),
+              content,
+              const SizedBox(height: 32),
               ElviraButton(
                 label: labelContinuar,
                 onPressed: continuarHabilitado ? onContinuar : null,

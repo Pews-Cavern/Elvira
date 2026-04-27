@@ -1,16 +1,17 @@
 import 'package:alarm/alarm.dart';
 import '../models/dose_medicamento.dart';
 import '../models/medicamento.dart';
+import 'notification_service.dart';
+import 'prefs_service.dart';
 
 class AlarmService {
   AlarmService._();
 
-  // null = som padrão de alarme do dispositivo (não precisa de asset)
-  static const String? _audioPath = null;
 
   static final _volumeSettings = VolumeSettings.fade(
-    volume: 0.8,
+    volume: 1.0,
     fadeDuration: const Duration(seconds: 3),
+    volumeEnforced: true,
   );
 
   /// Agenda (ou reagenda) o alarme de uma dose para o próximo disparo válido.
@@ -26,7 +27,7 @@ class AlarmService {
       alarmSettings: AlarmSettings(
         id: dose.id!,
         dateTime: horario,
-        assetAudioPath: _audioPath,
+        assetAudioPath: (await PrefsService.instance.getSomAlarme()).assetPath,
         volumeSettings: _volumeSettings,
         loopAudio: true,
         vibrate: true,
@@ -40,16 +41,26 @@ class AlarmService {
         ),
       ),
     );
+
+    // Agendar notificação silenciosa de 15 minutos antes
+    await NotificationService.instance.agendarPreNotificacao(
+      id: dose.id!,
+      horarioDose: horario,
+      nomeRemedio: med.nome,
+      dosagem: '${med.dosagem} ${med.unidade}',
+    );
   }
 
   /// Cancela o alarme de uma dose específica.
   static Future<void> cancelarDose(int doseId) async {
     await Alarm.stop(doseId);
+    await NotificationService.instance.cancelar(doseId);
   }
 
   /// Cancela todos os alarmes agendados.
   static Future<void> cancelarTodos() async {
     await Alarm.stopAll();
+    await NotificationService.instance.cancelarTodas();
   }
 
   /// Agenda todos os alarmes de um medicamento de uma vez.

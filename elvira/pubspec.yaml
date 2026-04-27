@@ -52,13 +52,17 @@ dependencies:
 
   # Outras utilidades
   intl: ^0.20.2
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.5.5
 
   connectivity_plus: ^7.1.1
   battery_plus: ^7.0.0
 
   # Alarme real (dispara com app fechado)
   alarm: ^5.2.1
+  sms_advanced: ^1.1.0
+  timezone: ^0.11.0
+  font_awesome_flutter: ^11.0.0
+  android_intent_plus: ^6.0.0
 
 dev_dependencies:
   flutter_test:

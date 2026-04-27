@@ -15,6 +15,7 @@ import 'src/core/providers/medicamentos_provider.dart';
 import 'src/core/providers/dose_provider.dart';
 import 'src/core/routes/app_routes.dart';
 import 'src/services/call_service.dart';
+import 'src/core/services/notification_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -36,6 +37,7 @@ void main() async {
   await initializeDateFormatting('pt_BR', null);
   await DatabaseHelper.instance.database;
   await Alarm.init();
+  await NotificationService.instance.init();
 
   runApp(
     MultiProvider(
@@ -77,6 +79,21 @@ class _ElviraAppState extends State<ElviraApp> {
       }
       _idsAntes = alarmSet.alarms.map((a) => a.id).toSet();
     });
+    // Verificar se há alarme tocando quando o app é iniciado
+    WidgetsBinding.instance.addPostFrameCallback((_) => _verificarAlarmeAtivo());
+  }
+
+  /// Chamado no startup para detectar alarmes que tocaram enquanto o app estava fechado.
+  Future<void> _verificarAlarmeAtivo() async {
+    final isRinging = await Alarm.isRinging();
+    if (!isRinging) return;
+    final alarms = await Alarm.getAlarms();
+    for (final alarm in alarms) {
+      if (await Alarm.isRinging(alarm.id)) {
+        _onAlarmeDisparou(alarm);
+        break;
+      }
+    }
   }
 
   void _onCallEvent(Map<String, dynamic> e) {
@@ -126,6 +143,7 @@ class _ElviraAppState extends State<ElviraApp> {
         'instrucao': '',
         'hora': hora,
         'registro_id': registro?.id,
+        'alarm_id': alarm.id,
       },
     );
   }

@@ -20,7 +20,7 @@ class MedicamentosListScreen extends StatelessWidget {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
-        label: Text('Novo', style: AppTextStyles.button),
+        label: Text('Novo', style: AppTextStyles.button.copyWith(color: Colors.white)),
       ),
       body: Consumer<MedicamentosProvider>(
         builder: (_, provider, _) {
@@ -36,7 +36,8 @@ class MedicamentosListScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, AppRoutes.cuidadorMedicamentoForm),
-                    child: Text('Adicionar primeiro', style: AppTextStyles.button),
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                    child: Text('Adicionar primeiro', style: AppTextStyles.button.copyWith(color: Colors.white)),
                   ),
                 ],
               ),
