@@ -72,44 +72,44 @@ class AppRoutes {
   static const memorial = '/memorial';
 
   static Map<String, WidgetBuilder> get routes => {
-        welcome: (_) => const WelcomeScreen(),
-        step1: (_) => const Step1NameScreen(),
-        step2: (_) => const Step2GenderScreen(),
-        step3: (_) => const Step3CaregiverScreen(),
-        step4: (_) => const Step4AccessibilityScreen(),
-        home: (_) => const HomeScreen(),
-        discagem: (_) => const DiscagemScreen(),
-        contatos: (_) => const ContatosScreen(),
-        remedios: (_) => const RemediosHojeScreen(),
-        consultas: (_) => const ConsultasHojeScreen(),
-        alarme: (_) => const AlarmeFullscreen(),
-        identidade: (_) => const IdentidadeScreen(),
-        emergencia: (_) => const EmergenciaScreen(),
-        notificacoes: (_) => const NotificacoesScreen(),
-        cuidadorPin: (_) => const PinLoginScreen(),
-        cuidadorHome: (_) => const CuidadorHomeScreen(),
-        cuidadorMedicamentos: (_) => const MedicamentosListScreen(),
-        cuidadorMedicamentoForm: (_) => const MedicamentoFormScreen(),
-        cuidadorConsultas: (_) => const ConsultasListScreen(),
-        cuidadorConsultaForm: (_) => const ConsultaFormScreen(),
-        cuidadorContatos: (_) => const ContatosAdminScreen(),
-        cuidadorContatoForm: (_) => const ContatoFormScreen(),
-        cuidadorIdentidade: (_) => const IdentidadeFormScreen(),
-        cuidadorRelatorios: (_) => const RelatoriosScreen(),
-        cuidadorConfiguracoes: (_) => const ConfiguracoesScreen(),
-        ligacaoAtiva: (ctx) {
-          final args =
-              ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;
-          return LigacaoAtivaScreen(
-            nome: args['nome'] as String? ?? '',
-            numero: args['numero'] as String? ?? '',
-            estadoInicial: args['estado'] as String? ?? 'dialing',
-          );
-        },
-        camera: (_) => const CameraScreen(),
-        galeria: (_) => const GaleriaScreen(),
-        sobre: (_) => const SobreScreen(),
-        privacidade: (_) => const PrivacidadeScreen(),
-        memorial: (_) => const MemorialScreen(),
-      };
+    welcome: (_) => const WelcomeScreen(),
+    step1: (_) => const Step1NameScreen(),
+    step2: (_) => const Step2GenderScreen(),
+    step3: (_) => const Step3CaregiverScreen(),
+    step4: (_) => const Step4AccessibilityScreen(),
+    home: (_) => const HomeScreen(),
+    discagem: (_) => const DiscagemScreen(),
+    contatos: (_) => const ContatosScreen(),
+    remedios: (_) => const RemediosHojeScreen(),
+    consultas: (_) => const ConsultasHojeScreen(),
+    alarme: (_) => const AlarmeFullscreen(),
+    identidade: (_) => const IdentidadeScreen(),
+    emergencia: (_) => const EmergenciaScreen(),
+    notificacoes: (_) => const NotificacoesScreen(),
+    cuidadorPin: (_) => const PinLoginScreen(),
+    cuidadorHome: (_) => const CuidadorHomeScreen(),
+    cuidadorMedicamentos: (_) => const MedicamentosListScreen(),
+    cuidadorMedicamentoForm: (_) => const MedicamentoFormScreen(),
+    cuidadorConsultas: (_) => const ConsultasListScreen(),
+    cuidadorConsultaForm: (_) => const ConsultaFormScreen(),
+    cuidadorContatos: (_) => const ContatosAdminScreen(),
+    cuidadorContatoForm: (_) => const ContatoFormScreen(),
+    cuidadorIdentidade: (_) => const IdentidadeFormScreen(),
+    cuidadorRelatorios: (_) => const RelatoriosScreen(),
+    cuidadorConfiguracoes: (_) => const ConfiguracoesScreen(),
+    ligacaoAtiva: (ctx) {
+      final args =
+          ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;
+      return LigacaoAtivaScreen(
+        nome: args['nome'] as String? ?? '',
+        numero: args['numero'] as String? ?? '',
+        estadoInicial: args['estado'] as String? ?? 'dialing',
+      );
+    },
+    camera: (_) => const CameraScreen(),
+    galeria: (_) => const GaleriaScreen(),
+    sobre: (_) => const SobreScreen(),
+    privacidade: (_) => const PrivacidadeScreen(),
+    memorial: (_) => const MemorialScreen(),
+  };
 }

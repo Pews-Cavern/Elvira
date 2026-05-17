@@ -32,11 +32,17 @@ class ConsultasHojeScreen extends StatelessWidget {
                   children: [
                     const Text('🩺', style: TextStyle(fontSize: 72)),
                     const SizedBox(height: 20),
-                    Text('Nenhuma consulta agendada', style: AppTextStyles.h3, textAlign: TextAlign.center),
+                    Text(
+                      'Nenhuma consulta agendada',
+                      style: AppTextStyles.h3,
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       'As consultas cadastradas pelo cuidador aparecerão aqui.',
-                      style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -49,7 +55,8 @@ class ConsultasHojeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: consultas.length,
             separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (_, index) => _ConsultaTile(consulta: consultas[index]),
+            itemBuilder:
+                (_, index) => _ConsultaTile(consulta: consultas[index]),
           );
         },
       ),
@@ -66,7 +73,9 @@ class _ConsultaTile extends StatelessWidget {
     final url = consulta.mapsUrl as String?;
     if (url == null || url.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Esta consulta não tem link de Maps cadastrado.')),
+        const SnackBar(
+          content: Text('Esta consulta não tem link de Maps cadastrado.'),
+        ),
       );
       return;
     }
@@ -84,7 +93,10 @@ class _ConsultaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = DateFormat("d 'de' MMMM yyyy", 'pt_BR').format(consulta.dateTime as DateTime);
+    final data = DateFormat(
+      "d 'de' MMMM yyyy",
+      'pt_BR',
+    ).format(consulta.dateTime as DateTime);
     final hora = DateFormat('HH:mm').format(consulta.dateTime as DateTime);
 
     return Container(
@@ -106,20 +118,33 @@ class _ConsultaTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(consulta.hospitalName as String, style: AppTextStyles.bodyBold.copyWith(fontSize: 20)),
+                    Text(
+                      consulta.hospitalName as String,
+                      style: AppTextStyles.bodyBold.copyWith(fontSize: 20),
+                    ),
                     const SizedBox(height: 4),
-                    Text('$data • $hora', style: AppTextStyles.body.copyWith(color: AppColors.textSecondary)),
+                    Text(
+                      '$data • $hora',
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       'Aviso com antecedência de ${consulta.lembreteMinutos ~/ 60}h',
-                      style: AppTextStyles.bodySmall.copyWith(color: AppColors.amber),
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.amber,
+                      ),
                     ),
-                    if (consulta.notes != null && consulta.notes!.trim().isNotEmpty)
+                    if (consulta.notes != null &&
+                        consulta.notes!.trim().isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
                         child: Text(
                           consulta.notes!,
-                          style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                       ),
                   ],
@@ -134,10 +159,15 @@ class _ConsultaTile extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: () => _abrirMaps(context),
               icon: const Icon(Icons.map_outlined),
-              label: Text('Abrir Maps', style: AppTextStyles.body.copyWith(color: AppColors.primary)),
+              label: Text(
+                'Abrir Maps',
+                style: AppTextStyles.body.copyWith(color: AppColors.primary),
+              ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.primary, width: 1.5),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
             ),
           ),

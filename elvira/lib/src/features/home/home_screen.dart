@@ -11,7 +11,6 @@ import '../../core/routes/app_routes.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -28,7 +27,10 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 16,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(20),
@@ -48,15 +50,60 @@ class HomeScreen extends StatelessWidget {
                         crossAxisSpacing: spacing,
                         childAspectRatio: tileWidth / tileHeight,
                         children: [
-                          const _AppTile(emoji: '📞', label: 'Ligar', route: AppRoutes.discagem, color: Color(0xFFDCEEFB)),
-                          const _AppTile(emoji: '💊', label: 'Remédios', route: AppRoutes.remedios, color: Color(0xFFD9F4EA)),
-                          const _AppTile(emoji: '🩺', label: 'Consultas', route: AppRoutes.consultas, color: Color(0xFFE8F2FF)),
-                          const _AppTile(emoji: '👥', label: 'Contatos', route: AppRoutes.contatos, color: Color(0xFFDCEEFB)),
-                          const _AppTile(emoji: '🪪', label: 'Identidade', route: AppRoutes.identidade, color: Color(0xFFFFF0CC)),
-                          const _AppTile(emoji: '🔔', label: 'Avisos', route: AppRoutes.notificacoes, color: Color(0xFFF0E5F8)),
-                          const _AppTile(emoji: '📷', label: 'Câmera', route: AppRoutes.camera, color: Color(0xFFFFE5CC)),
-                          const _AppTile(emoji: 'ℹ️', label: 'Sobre', route: AppRoutes.sobre, color: Color(0xFFE5F4F0)),
-                          const _AppTile(emoji: '⚙️', label: 'Cuidador', route: AppRoutes.cuidadorPin, color: Color(0xFFDCEEFB)),
+                          const _AppTile(
+                            emoji: '📞',
+                            label: 'Ligar',
+                            route: AppRoutes.discagem,
+                            color: Color(0xFFDCEEFB),
+                          ),
+                          const _AppTile(
+                            emoji: '💊',
+                            label: 'Remédios',
+                            route: AppRoutes.remedios,
+                            color: Color(0xFFD9F4EA),
+                          ),
+                          const _AppTile(
+                            emoji: '🩺',
+                            label: 'Consultas',
+                            route: AppRoutes.consultas,
+                            color: Color(0xFFE8F2FF),
+                          ),
+                          const _AppTile(
+                            emoji: '👥',
+                            label: 'Contatos',
+                            route: AppRoutes.contatos,
+                            color: Color(0xFFDCEEFB),
+                          ),
+                          const _AppTile(
+                            emoji: '🪪',
+                            label: 'Identidade',
+                            route: AppRoutes.identidade,
+                            color: Color(0xFFFFF0CC),
+                          ),
+                          const _AppTile(
+                            emoji: '🔔',
+                            label: 'Avisos',
+                            route: AppRoutes.notificacoes,
+                            color: Color(0xFFF0E5F8),
+                          ),
+                          const _AppTile(
+                            emoji: '📷',
+                            label: 'Câmera',
+                            route: AppRoutes.camera,
+                            color: Color(0xFFFFE5CC),
+                          ),
+                          const _AppTile(
+                            emoji: 'ℹ️',
+                            label: 'Sobre',
+                            route: AppRoutes.sobre,
+                            color: Color(0xFFE5F4F0),
+                          ),
+                          const _AppTile(
+                            emoji: '⚙️',
+                            label: 'Cuidador',
+                            route: AppRoutes.cuidadorPin,
+                            color: Color(0xFFDCEEFB),
+                          ),
                           _AppTile(
                             emoji: '',
                             label: 'WhatsApp',
@@ -77,7 +124,9 @@ class HomeScreen extends StatelessWidget {
                               } catch (_) {
                                 // WhatsApp não instalado → abre Play Store
                                 await launchUrl(
-                                  Uri.parse('https://play.google.com/store/apps/details?id=com.whatsapp'),
+                                  Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=com.whatsapp',
+                                  ),
                                   mode: LaunchMode.externalApplication,
                                 );
                               }
@@ -87,12 +136,17 @@ class HomeScreen extends StatelessWidget {
                             emoji: '',
                             label: 'Pesquisa por Voz',
                             color: const Color(0xFFF0E5F8),
-                            customIcon: const Icon(Icons.mic_rounded, size: 52, color: Color(0xFF9C27B0)),
+                            customIcon: const Icon(
+                              Icons.mic_rounded,
+                              size: 52,
+                              color: Color(0xFF9C27B0),
+                            ),
                             onTap: () async {
                               // Dispara o Google Voice Search diretamente (Ok Google)
                               const intent = AndroidIntent(
                                 action: 'android.speech.action.WEB_SEARCH',
-                                package: 'com.google.android.googlequicksearchbox',
+                                package:
+                                    'com.google.android.googlequicksearchbox',
                               );
                               try {
                                 await intent.launch();
@@ -124,7 +178,9 @@ class HomeScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
                       elevation: 4,
                     ),
                   ),
@@ -175,24 +231,30 @@ class _AppTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         clipBehavior: Clip.hardEdge,
         child: InkWell(
-          onTap: onTap ??
+          onTap:
+              onTap ??
               (route != null
                   ? () {
-                      HapticFeedback.lightImpact();
-                      Navigator.pushNamed(context, route!);
-                    }
+                    HapticFeedback.lightImpact();
+                    Navigator.pushNamed(context, route!);
+                  }
                   : null),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (customIcon != null)
-              customIcon!
-            else
-              Text(emoji, style: const TextStyle(fontSize: 48)),
-            const SizedBox(height: 10),
-            Text(label, style: AppTextStyles.appLabel.copyWith(color: AppColors.primary)),
-          ],
-        ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (customIcon != null)
+                customIcon!
+              else
+                Text(emoji, style: const TextStyle(fontSize: 48)),
+              const SizedBox(height: 10),
+              Text(
+                label,
+                style: AppTextStyles.appLabel.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

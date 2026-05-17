@@ -115,14 +115,30 @@ class DatabaseHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      try { await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;'); } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;');
+      } catch (_) {}
+      try {
+        await db.execute(
+          'ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;',
+        );
+      } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;');
+      } catch (_) {}
     }
     if (oldVersion < 3) {
-      try { await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;'); } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;');
+      } catch (_) {}
+      try {
+        await db.execute(
+          'ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;',
+        );
+      } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;');
+      } catch (_) {}
     }
     if (oldVersion < 4) {
       try {
@@ -140,7 +156,9 @@ class DatabaseHelper {
     }
     if (oldVersion < 5) {
       try {
-        await db.execute('ALTER TABLE consulta_medica ADD COLUMN lembrete_minutos INTEGER NOT NULL DEFAULT 60;');
+        await db.execute(
+          'ALTER TABLE consulta_medica ADD COLUMN lembrete_minutos INTEGER NOT NULL DEFAULT 60;',
+        );
       } catch (_) {}
     }
   }

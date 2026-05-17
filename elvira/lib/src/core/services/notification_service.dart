@@ -72,7 +72,9 @@ class NotificationService {
     required int antecedenciaMinutos,
     String? notes,
   }) async {
-    final dataNotificacao = horarioConsulta.subtract(Duration(minutes: antecedenciaMinutos));
+    final dataNotificacao = horarioConsulta.subtract(
+      Duration(minutes: antecedenciaMinutos),
+    );
 
     if (dataNotificacao.isBefore(DateTime.now())) {
       return;
@@ -87,13 +89,17 @@ class NotificationService {
     );
     const details = NotificationDetails(android: androidDetails);
 
-    final mensagem = notes == null || notes.trim().isEmpty
-        ? 'Prepare-se para a consulta em $hospitalName.'
-        : 'Prepare-se para a consulta em $hospitalName. Observação: ${notes.trim()}';
+    final mensagem =
+        notes == null || notes.trim().isEmpty
+            ? 'Prepare-se para a consulta em $hospitalName.'
+            : 'Prepare-se para a consulta em $hospitalName. Observação: ${notes.trim()}';
 
     await _plugin.zonedSchedule(
       id: id,
-      title: antecedenciaMinutos >= 120 ? 'Consulta em 2 horas' : 'Consulta em 1 hora',
+      title:
+          antecedenciaMinutos >= 120
+              ? 'Consulta em 2 horas'
+              : 'Consulta em 1 hora',
       body: mensagem,
       scheduledDate: tz.TZDateTime.from(dataNotificacao, tz.local),
       notificationDetails: details,

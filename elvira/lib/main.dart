@@ -31,10 +31,12 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
   await initializeDateFormatting('pt_BR', null);
   await DatabaseHelper.instance.database;
@@ -83,7 +85,9 @@ class _ElviraAppState extends State<ElviraApp> {
       _idsAntes = alarmSet.alarms.map((a) => a.id).toSet();
     });
     // Verificar se há alarme tocando quando o app é iniciado
-    WidgetsBinding.instance.addPostFrameCallback((_) => _verificarAlarmeAtivo());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _verificarAlarmeAtivo(),
+    );
   }
 
   /// Chamado no startup para detectar alarmes que tocaram enquanto o app estava fechado.
@@ -125,8 +129,12 @@ class _ElviraAppState extends State<ElviraApp> {
 
   void _onAlarmeDisparou(AlarmSettings alarm) {
     final doseProvider = navigatorKey.currentContext?.read<DoseProvider>();
-    final medProvider = navigatorKey.currentContext?.read<MedicamentosProvider>();
-    final registro = doseProvider?.registrosHoje.where((r) => r.doseId == alarm.id).firstOrNull;
+    final medProvider =
+        navigatorKey.currentContext?.read<MedicamentosProvider>();
+    final registro =
+        doseProvider?.registrosHoje
+            .where((r) => r.doseId == alarm.id)
+            .firstOrNull;
     Medicamento? medicamento;
     if (medProvider != null) {
       for (final med in medProvider.medicamentos) {
@@ -141,10 +149,14 @@ class _ElviraAppState extends State<ElviraApp> {
     final titulo = alarm.notificationSettings.title;
     final isConsulta = titulo.contains('Consulta');
     final partes = alarm.notificationSettings.body.split(' — ');
-    final nome = partes.isNotEmpty ? partes[0] : (isConsulta ? 'Consulta médica' : 'Remédio');
+    final nome =
+        partes.isNotEmpty
+            ? partes[0]
+            : (isConsulta ? 'Consulta médica' : 'Remédio');
     final detalhe = partes.length > 1 ? partes[1] : '';
 
-    final hora = '${alarm.dateTime.hour.toString().padLeft(2, '0')}:${alarm.dateTime.minute.toString().padLeft(2, '0')}';
+    final hora =
+        '${alarm.dateTime.hour.toString().padLeft(2, '0')}:${alarm.dateTime.minute.toString().padLeft(2, '0')}';
 
     navigatorKey.currentState?.pushNamedAndRemoveUntil(
       AppRoutes.alarme,
@@ -181,9 +193,9 @@ class _ElviraAppState extends State<ElviraApp> {
         }
 
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(escala),
-          ),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(escala)),
           child: MaterialApp(
             title: 'Elvira',
             navigatorKey: navigatorKey,
@@ -232,7 +244,9 @@ class _ElviraAppState extends State<ElviraApp> {
           minimumSize: const Size.fromHeight(64),
           backgroundColor: const Color(0xFF0C447C),
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           textStyle: const TextStyle(
             fontFamily: 'Nunito',
             fontSize: 20,
@@ -243,7 +257,10 @@ class _ElviraAppState extends State<ElviraApp> {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 18,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: Color(0xFFB5D4F4)),

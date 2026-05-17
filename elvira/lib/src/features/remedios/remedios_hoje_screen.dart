@@ -34,7 +34,8 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
       appBar: const ElviraAppBar(title: 'Meus Remédios'),
       body: Consumer2<DoseProvider, MedicamentosProvider>(
         builder: (_, doseProvider, medProvider, _) {
-          if (doseProvider.loading) return const Center(child: CircularProgressIndicator());
+          if (doseProvider.loading)
+            return const Center(child: CircularProgressIndicator());
 
           final registros = doseProvider.registrosHoje;
           if (registros.isEmpty) {
@@ -46,11 +47,17 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
                   children: [
                     const Text('💊', style: TextStyle(fontSize: 72)),
                     const SizedBox(height: 20),
-                    Text('Nenhum remédio hoje', style: AppTextStyles.h3, textAlign: TextAlign.center),
+                    Text(
+                      'Nenhum remédio hoje',
+                      style: AppTextStyles.h3,
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       'Você está em dia! 🎉',
-                      style: AppTextStyles.body.copyWith(color: AppColors.green),
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.green,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -69,9 +76,10 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
               return _DoseTile(
                 registro: reg,
                 nomeRemedio: med?.nome ?? 'Remédio',
-                dosagemRemedio: med != null ? '${med.dosagem} ${med.unidade}' : '',
+                dosagemRemedio:
+                    med != null ? '${med.dosagem} ${med.unidade}' : '',
                 instrucao: med?.instrucaoUso,
-                  fotoPath: med?.fotoPath,
+                fotoPath: med?.fotoPath,
                 onTomado: () {
                   HapticFeedback.mediumImpact();
                   context.read<DoseProvider>().marcarTomado(reg.id!);
@@ -165,12 +173,7 @@ class _DoseTile extends StatelessWidget {
     if (path != null && path.isNotEmpty && File(path).existsSync()) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.file(
-          File(path),
-          width: 58,
-          height: 58,
-          fit: BoxFit.cover,
-        ),
+        child: Image.file(File(path), width: 58, height: 58, fit: BoxFit.cover),
       );
     }
 
@@ -180,7 +183,9 @@ class _DoseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hora = DateFormat('HH:mm').format(registro.dataHoraPrevista);
-    final jaFinalizado = registro.status == StatusDose.tomado || registro.status == StatusDose.pulado;
+    final jaFinalizado =
+        registro.status == StatusDose.tomado ||
+        registro.status == StatusDose.pulado;
 
     return Container(
       decoration: BoxDecoration(
@@ -198,7 +203,13 @@ class _DoseTile extends StatelessWidget {
               const SizedBox(width: 10),
               Text(_statusIcon, style: const TextStyle(fontSize: 22)),
               const SizedBox(width: 6),
-              Text(_statusLabel, style: AppTextStyles.body.copyWith(color: _borderColor, fontWeight: FontWeight.w600)),
+              Text(
+                _statusLabel,
+                style: AppTextStyles.body.copyWith(
+                  color: _borderColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -233,11 +244,16 @@ class _DoseTile extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: onTomado,
                     icon: const Text('✅', style: TextStyle(fontSize: 22)),
-                    label: Text('Já tomei', style: AppTextStyles.button.copyWith(color: Colors.white)),
+                    label: Text(
+                      'Já tomei',
+                      style: AppTextStyles.button.copyWith(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.green,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -249,11 +265,18 @@ class _DoseTile extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: onAdiar,
                       icon: const Text('⏰', style: TextStyle(fontSize: 20)),
-                      label: Text('Lembrar daqui 15 min', style: AppTextStyles.button.copyWith(color: Colors.white)),
+                      label: Text(
+                        'Lembrar daqui 15 min',
+                        style: AppTextStyles.button.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.amber,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                     ),
                   ),

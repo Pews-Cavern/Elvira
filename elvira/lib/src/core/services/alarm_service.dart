@@ -8,7 +8,6 @@ import 'prefs_service.dart';
 class AlarmService {
   AlarmService._();
 
-
   static final _volumeSettings = VolumeSettings.fade(
     volume: 1.0,
     fadeDuration: const Duration(seconds: 3),
@@ -16,10 +15,7 @@ class AlarmService {
   );
 
   /// Agenda (ou reagenda) o alarme de uma dose para o próximo disparo válido.
-  static Future<void> agendarDose(
-    DoseMedicamento dose,
-    Medicamento med,
-  ) async {
+  static Future<void> agendarDose(DoseMedicamento dose, Medicamento med) async {
     if (!dose.ativo) return;
     final horario = _proximoDisparo(dose);
     if (horario == null) return;
@@ -56,7 +52,9 @@ class AlarmService {
   static Future<void> agendarConsulta(ConsultaMedica consulta) async {
     if (consulta.id == null) return;
 
-    final horarioAlarme = consulta.dateTime.subtract(Duration(minutes: consulta.lembreteMinutos));
+    final horarioAlarme = consulta.dateTime.subtract(
+      Duration(minutes: consulta.lembreteMinutos),
+    );
     if (horarioAlarme.isBefore(DateTime.now())) return;
 
     await Alarm.set(

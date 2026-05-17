@@ -83,7 +83,10 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
   Future<void> _selecionarHora() async {
     final t = await showTimePicker(
       context: context,
-      initialTime: _dateTime != null ? TimeOfDay(hour: _dateTime!.hour, minute: _dateTime!.minute) : TimeOfDay.now(),
+      initialTime:
+          _dateTime != null
+              ? TimeOfDay(hour: _dateTime!.hour, minute: _dateTime!.minute)
+              : TimeOfDay.now(),
     );
     if (t != null) {
       final base = _dateTime ?? DateTime.now();
@@ -98,7 +101,9 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_dateTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione a data e o horário da consulta.')),
+        const SnackBar(
+          content: Text('Selecione a data e o horário da consulta.'),
+        ),
       );
       return;
     }
@@ -124,9 +129,9 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar consulta: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro ao salvar consulta: $e')));
         setState(() => _salvando = false);
       }
     }
@@ -136,7 +141,9 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: ElviraAppBar(title: _editando != null ? 'Editar Consulta' : 'Nova Consulta'),
+      appBar: ElviraAppBar(
+        title: _editando != null ? 'Editar Consulta' : 'Nova Consulta',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -153,9 +160,12 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
                       controller: _dateCtrl,
                       readOnly: true,
                       style: AppTextStyles.body,
-                      decoration: const InputDecoration(labelText: 'Data da consulta'),
+                      decoration: const InputDecoration(
+                        labelText: 'Data da consulta',
+                      ),
                       onTap: _selecionarData,
-                      validator: (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
+                      validator:
+                          (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -166,7 +176,8 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
                       style: AppTextStyles.body,
                       decoration: const InputDecoration(labelText: 'Horário'),
                       onTap: _selecionarHora,
-                      validator: (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
+                      validator:
+                          (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
                     ),
                   ),
                 ],
@@ -174,13 +185,16 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
               const SizedBox(height: 14),
               DropdownButtonFormField<int>(
                 value: _lembreteMinutos,
-                decoration: const InputDecoration(labelText: 'Avisar com antecedência'),
+                decoration: const InputDecoration(
+                  labelText: 'Avisar com antecedência',
+                ),
                 style: AppTextStyles.body,
                 items: const [
                   DropdownMenuItem(value: 60, child: Text('1 hora antes')),
                   DropdownMenuItem(value: 120, child: Text('2 horas antes')),
                 ],
-                onChanged: (value) => setState(() => _lembreteMinutos = value ?? 60),
+                onChanged:
+                    (value) => setState(() => _lembreteMinutos = value ?? 60),
               ),
               const SizedBox(height: 14),
               _campo('Link do Maps / GPS (opcional)', _mapsCtrl),
@@ -202,7 +216,10 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
               ),
               const SizedBox(height: 20),
               ElviraButton(
-                label: _editando != null ? 'Salvar alterações' : 'Adicionar consulta',
+                label:
+                    _editando != null
+                        ? 'Salvar alterações'
+                        : 'Adicionar consulta',
                 onPressed: _salvando ? null : _salvar,
               ),
             ],
@@ -224,11 +241,16 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
       maxLines: maxLines,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: label),
-      validator: required ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null : null,
+      validator:
+          required
+              ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null
+              : null,
     );
   }
 
-  String _formatDate(DateTime dt) => '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
+  String _formatDate(DateTime dt) =>
+      '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
 
-  String _formatTime(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  String _formatTime(DateTime dt) =>
+      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 }
