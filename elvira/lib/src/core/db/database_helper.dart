@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 3;
+  static const _dbVersion = 4;
 
   Database? _db;
 
@@ -100,6 +100,16 @@ class DatabaseHelper {
         data_hora TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE consulta_medica (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        hospital_name TEXT NOT NULL,
+        date_time TEXT NOT NULL,
+        maps_url TEXT,
+        notes TEXT
+      )
+    ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -112,6 +122,19 @@ class DatabaseHelper {
       try { await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;'); } catch (_) {}
       try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;'); } catch (_) {}
       try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;'); } catch (_) {}
+    }
+    if (oldVersion < 4) {
+      try {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS consulta_medica (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hospital_name TEXT NOT NULL,
+            date_time TEXT NOT NULL,
+            maps_url TEXT,
+            notes TEXT
+          )
+        ''');
+      } catch (_) {}
     }
   }
 }
