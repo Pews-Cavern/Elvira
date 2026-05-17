@@ -8,6 +8,7 @@ import '../../features/home/home_screen.dart';
 import '../../features/discagem/discagem_screen.dart';
 import '../../features/contatos/contatos_screen.dart';
 import '../../features/remedios/remedios_hoje_screen.dart';
+import '../../features/consultas/consultas_hoje_screen.dart';
 import '../../features/remedios/alarme_fullscreen.dart';
 import '../../features/identidade/identidade_screen.dart';
 import '../../features/emergencia/emergencia_screen.dart';
@@ -16,6 +17,8 @@ import '../../features/cuidador/pin_login_screen.dart';
 import '../../features/cuidador/cuidador_home_screen.dart';
 import '../../features/cuidador/medicamentos/medicamentos_list_screen.dart';
 import '../../features/cuidador/medicamentos/medicamento_form_screen.dart';
+import '../../features/cuidador/consultas/consultas_list_screen.dart';
+import '../../features/cuidador/consultas/consulta_form_screen.dart';
 import '../../features/cuidador/contatos/contatos_admin_screen.dart';
 import '../../features/cuidador/contatos/contato_form_screen.dart';
 import '../../features/cuidador/identidade/identidade_form_screen.dart';
@@ -41,6 +44,7 @@ class AppRoutes {
   static const discagem = '/discagem';
   static const contatos = '/contatos';
   static const remedios = '/remedios';
+  static const consultas = '/consultas';
   static const alarme = '/alarme';
   static const identidade = '/identidade';
   static const emergencia = '/emergencia';
@@ -50,6 +54,8 @@ class AppRoutes {
   static const cuidadorHome = '/cuidador/home';
   static const cuidadorMedicamentos = '/cuidador/medicamentos';
   static const cuidadorMedicamentoForm = '/cuidador/medicamentos/form';
+  static const cuidadorConsultas = '/cuidador/consultas';
+  static const cuidadorConsultaForm = '/cuidador/consultas/form';
   static const cuidadorContatos = '/cuidador/contatos';
   static const cuidadorContatoForm = '/cuidador/contatos/form';
   static const cuidadorIdentidade = '/cuidador/identidade';
@@ -75,6 +81,7 @@ class AppRoutes {
         discagem: (_) => const DiscagemScreen(),
         contatos: (_) => const ContatosScreen(),
         remedios: (_) => const RemediosHojeScreen(),
+        consultas: (_) => const ConsultasHojeScreen(),
         alarme: (_) => const AlarmeFullscreen(),
         identidade: (_) => const IdentidadeScreen(),
         emergencia: (_) => const EmergenciaScreen(),
@@ -83,6 +90,8 @@ class AppRoutes {
         cuidadorHome: (_) => const CuidadorHomeScreen(),
         cuidadorMedicamentos: (_) => const MedicamentosListScreen(),
         cuidadorMedicamentoForm: (_) => const MedicamentoFormScreen(),
+        cuidadorConsultas: (_) => const ConsultasListScreen(),
+        cuidadorConsultaForm: (_) => const ConsultaFormScreen(),
         cuidadorContatos: (_) => const ContatosAdminScreen(),
         cuidadorContatoForm: (_) => const ContatoFormScreen(),
         cuidadorIdentidade: (_) => const IdentidadeFormScreen(),

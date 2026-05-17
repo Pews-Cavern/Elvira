@@ -1,4 +1,5 @@
 import 'package:alarm/alarm.dart';
+import '../models/consulta_medica.dart';
 import '../models/dose_medicamento.dart';
 import '../models/medicamento.dart';
 import 'notification_service.dart';
@@ -51,10 +52,42 @@ class AlarmService {
     );
   }
 
+  /// Agenda o alarme sonoro de consulta no horário de antecedência configurado.
+  static Future<void> agendarConsulta(ConsultaMedica consulta) async {
+    if (consulta.id == null) return;
+
+    final horarioAlarme = consulta.dateTime.subtract(Duration(minutes: consulta.lembreteMinutos));
+    if (horarioAlarme.isBefore(DateTime.now())) return;
+
+    await Alarm.set(
+      alarmSettings: AlarmSettings(
+        id: consulta.id!,
+        dateTime: horarioAlarme,
+        assetAudioPath: (await PrefsService.instance.getSomAlarme()).assetPath,
+        volumeSettings: _volumeSettings,
+        loopAudio: true,
+        vibrate: true,
+        warningNotificationOnKill: true,
+        androidFullScreenIntent: true,
+        notificationSettings: NotificationSettings(
+          title: '🩺 Hora da Consulta',
+          body: '${consulta.hospitalName} — ${consulta.notes ?? ''}',
+          stopButton: 'OK',
+          icon: 'notification_icon',
+        ),
+      ),
+    );
+  }
+
   /// Cancela o alarme de uma dose específica.
   static Future<void> cancelarDose(int doseId) async {
     await Alarm.stop(doseId);
     await NotificationService.instance.cancelar(doseId);
+  }
+
+  /// Cancela o alarme de uma consulta específica.
+  static Future<void> cancelarConsulta(int consultaId) async {
+    await Alarm.stop(consultaId);
   }
 
   /// Cancela todos os alarmes agendados.

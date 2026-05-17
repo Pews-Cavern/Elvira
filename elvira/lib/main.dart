@@ -9,9 +9,11 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'src/core/db/database_helper.dart';
+import 'src/core/models/medicamento.dart';
 import 'src/core/providers/usuario_provider.dart';
 import 'src/core/providers/contatos_provider.dart';
 import 'src/core/providers/medicamentos_provider.dart';
+import 'src/core/providers/consultas_provider.dart';
 import 'src/core/providers/dose_provider.dart';
 import 'src/core/routes/app_routes.dart';
 import 'src/services/call_service.dart';
@@ -45,6 +47,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UsuarioProvider()..init()),
         ChangeNotifierProvider(create: (_) => ContatosProvider()..init()),
         ChangeNotifierProvider(create: (_) => MedicamentosProvider()..init()),
+        ChangeNotifierProvider(create: (_) => ConsultasProvider()..init()),
         ChangeNotifierProvider(create: (_) => DoseProvider()..init()),
       ],
       child: const ElviraApp(),
@@ -122,28 +125,39 @@ class _ElviraAppState extends State<ElviraApp> {
 
   void _onAlarmeDisparou(AlarmSettings alarm) {
     final doseProvider = navigatorKey.currentContext?.read<DoseProvider>();
+    final medProvider = navigatorKey.currentContext?.read<MedicamentosProvider>();
+    final registro = doseProvider?.registrosHoje.where((r) => r.doseId == alarm.id).firstOrNull;
+    Medicamento? medicamento;
+    if (medProvider != null) {
+      for (final med in medProvider.medicamentos) {
+        final doses = medProvider.dosesDoMedicamento(med.id!);
+        if (doses.any((d) => d.id == alarm.id)) {
+          medicamento = med;
+          break;
+        }
+      }
+    }
 
-    final registro = doseProvider?.registrosHoje
-        .where((r) => r.doseId == alarm.id)
-        .firstOrNull;
-
+    final titulo = alarm.notificationSettings.title;
+    final isConsulta = titulo.contains('Consulta');
     final partes = alarm.notificationSettings.body.split(' — ');
-    final nomeRemedio = partes.isNotEmpty ? partes[0] : 'Remédio';
-    final dosagem = partes.length > 1 ? partes[1] : '';
+    final nome = partes.isNotEmpty ? partes[0] : (isConsulta ? 'Consulta médica' : 'Remédio');
+    final detalhe = partes.length > 1 ? partes[1] : '';
 
-    final hora =
-        '${alarm.dateTime.hour.toString().padLeft(2, '0')}:${alarm.dateTime.minute.toString().padLeft(2, '0')}';
+    final hora = '${alarm.dateTime.hour.toString().padLeft(2, '0')}:${alarm.dateTime.minute.toString().padLeft(2, '0')}';
 
     navigatorKey.currentState?.pushNamedAndRemoveUntil(
       AppRoutes.alarme,
       (route) => route.settings.name == AppRoutes.home,
       arguments: {
-        'nome': nomeRemedio,
-        'dosagem': dosagem,
+        'tipo': isConsulta ? 'consulta' : 'remedio',
+        'nome': nome,
+        'dosagem': detalhe,
         'instrucao': '',
         'hora': hora,
         'registro_id': registro?.id,
         'alarm_id': alarm.id,
+        'foto_path': medicamento?.fotoPath,
       },
     );
   }

@@ -114,9 +114,10 @@ class CuidadorHomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 1.1,
+                  childAspectRatio: 0.92,
                   children: const [
                     _GridBtn(emoji: '💊', titulo: 'Medicamentos', sub: 'Doses, horários e remédios', route: AppRoutes.cuidadorMedicamentos),
+                    _GridBtn(emoji: '🩺', titulo: 'Consultas', sub: 'Hospitais, horários e avisos', route: AppRoutes.cuidadorConsultas),
                     _GridBtn(emoji: '👥', titulo: 'Contatos', sub: 'Família, médicos, emergência', route: AppRoutes.cuidadorContatos),
                     _GridBtn(emoji: '🪪', titulo: 'Identidade', sub: 'Dados, sangue, alergias', route: AppRoutes.cuidadorIdentidade),
                     _GridBtn(emoji: '📊', titulo: 'Relatórios', sub: 'Histórico de doses e uso', route: AppRoutes.cuidadorRelatorios),
@@ -194,15 +195,26 @@ class _GridBtn extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, route),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 28)),
-              const SizedBox(height: 6),
-              Text(titulo, style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
-              Text(sub, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary), maxLines: 2, overflow: TextOverflow.ellipsis),
+              Text(emoji, style: const TextStyle(fontSize: 30)),
+              const SizedBox(height: 8),
+              Text(
+                titulo,
+                style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                sub,
+                style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

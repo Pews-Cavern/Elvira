@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +71,7 @@ class _RemediosHojeScreenState extends State<RemediosHojeScreen> {
                 nomeRemedio: med?.nome ?? 'Remédio',
                 dosagemRemedio: med != null ? '${med.dosagem} ${med.unidade}' : '',
                 instrucao: med?.instrucaoUso,
+                  fotoPath: med?.fotoPath,
                 onTomado: () {
                   HapticFeedback.mediumImpact();
                   context.read<DoseProvider>().marcarTomado(reg.id!);
@@ -91,6 +94,7 @@ class _DoseTile extends StatelessWidget {
   final String nomeRemedio;
   final String dosagemRemedio;
   final String? instrucao;
+  final String? fotoPath;
   final VoidCallback onTomado;
   final VoidCallback onAdiar;
 
@@ -99,6 +103,7 @@ class _DoseTile extends StatelessWidget {
     required this.nomeRemedio,
     required this.dosagemRemedio,
     this.instrucao,
+    this.fotoPath,
     required this.onTomado,
     required this.onAdiar,
   });
@@ -155,6 +160,23 @@ class _DoseTile extends StatelessWidget {
     }
   }
 
+  Widget _buildFotoOuIcon() {
+    final path = fotoPath;
+    if (path != null && path.isNotEmpty && File(path).existsSync()) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.file(
+          File(path),
+          width: 58,
+          height: 58,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+
+    return const Text('💊', style: TextStyle(fontSize: 32));
+  }
+
   @override
   Widget build(BuildContext context) {
     final hora = DateFormat('HH:mm').format(registro.dataHoraPrevista);
@@ -183,7 +205,7 @@ class _DoseTile extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('💊', style: TextStyle(fontSize: 32)),
+              _buildFotoOuIcon(),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

@@ -20,6 +20,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   bool _semPermissao = false;
   bool _semCamera = false;
   File? _ultimaFoto;
+  bool _retornarFoto = false;
 
   @override
   void initState() {
@@ -27,6 +28,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     WidgetsBinding.instance.addObserver(this);
     _inicializar();
     _carregarUltimaFoto();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Map<String, dynamic>) {
+      _retornarFoto = args['retornarFoto'] as bool? ?? false;
+    }
   }
 
   @override
@@ -88,7 +98,11 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     try {
       final xfile = await ctrl.takePicture();
       final salva = await FotoService.salvar(xfile.path);
-      if (mounted) setState(() { _ultimaFoto = salva; _capturando = false; });
+      if (!mounted) return;
+      setState(() { _ultimaFoto = salva; _capturando = false; });
+      if (_retornarFoto) {
+        Navigator.pop(context, salva.path);
+      }
     } catch (_) {
       if (mounted) setState(() => _capturando = false);
     }

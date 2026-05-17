@@ -4,6 +4,7 @@ class ConsultaMedica {
   final DateTime dateTime;
   final String? mapsUrl;
   final String? notes;
+  final int lembreteMinutos;
 
   const ConsultaMedica({
     this.id,
@@ -11,6 +12,7 @@ class ConsultaMedica {
     required this.dateTime,
     this.mapsUrl,
     this.notes,
+    this.lembreteMinutos = 60,
   });
 
   Map<String, dynamic> toMap() => {
@@ -19,6 +21,7 @@ class ConsultaMedica {
         'date_time': dateTime.toIso8601String(),
         'maps_url': mapsUrl,
         'notes': notes,
+        'lembrete_minutos': lembreteMinutos,
       };
 
   factory ConsultaMedica.fromMap(Map<String, dynamic> m) => ConsultaMedica(
@@ -27,6 +30,7 @@ class ConsultaMedica {
         dateTime: DateTime.parse(m['date_time'] as String),
         mapsUrl: m['maps_url'] as String?,
         notes: m['notes'] as String?,
+        lembreteMinutos: m['lembrete_minutos'] as int? ?? 60,
       );
 
   ConsultaMedica copyWith({
@@ -35,6 +39,7 @@ class ConsultaMedica {
     DateTime? dateTime,
     String? mapsUrl,
     String? notes,
+    int? lembreteMinutos,
   }) =>
       ConsultaMedica(
         id: id ?? this.id,
@@ -42,5 +47,6 @@ class ConsultaMedica {
         dateTime: dateTime ?? this.dateTime,
         mapsUrl: mapsUrl ?? this.mapsUrl,
         notes: notes ?? this.notes,
+        lembreteMinutos: lembreteMinutos ?? this.lembreteMinutos,
       );
 }

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/medicamentos_provider.dart';
 import '../../../core/models/medicamento.dart';
 import '../../../core/models/dose_medicamento.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
@@ -26,6 +29,7 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
 
   String _unidade = 'comprimido';
   final List<TimeOfDay> _horarios = [];
+  String? _fotoPath;
 
   Medicamento? _editando;
   bool _salvando = false;
@@ -47,6 +51,7 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
         _instrucaoCtrl.text = args.instrucaoUso ?? '';
         _dataInicioCtrl.text = args.dataInicio ?? DateTime.now().toIso8601String().substring(0, 10);
         _dataFimCtrl.text = args.dataFim ?? '';
+        _fotoPath = args.fotoPath;
         _unidade = args.unidade;
         final provider = Provider.of<MedicamentosProvider>(context, listen: false);
         final doses = provider.dosesDoMedicamento(args.id!);
@@ -139,6 +144,7 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
       dosagem: _dosagemCtrl.text.trim(),
       unidade: _unidade,
       instrucaoUso: _instrucaoCtrl.text.trim().isEmpty ? null : _instrucaoCtrl.text.trim(),
+      fotoPath: _fotoPath,
       dataInicio: _dataInicioCtrl.text.trim().isEmpty ? null : _dataInicioCtrl.text.trim(),
       dataFim: _dataFimCtrl.text.trim().isEmpty ? null : _dataFimCtrl.text.trim(),
     );
@@ -197,6 +203,10 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
               ),
               const SizedBox(height: 14),
               _campo('Instrução de uso (opcional)', _instrucaoCtrl, maxLines: 2),
+              const SizedBox(height: 14),
+              Text('Foto do remédio', style: AppTextStyles.h3),
+              const SizedBox(height: 10),
+              _buildFotoSection(),
               const SizedBox(height: 24),
               
               Text('Duração do Tratamento', style: AppTextStyles.h3),
@@ -306,6 +316,78 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildFotoSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 180,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.blueLight, width: 1.5),
+          ),
+          child: _fotoPath != null && File(_fotoPath!).existsSync()
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.file(File(_fotoPath!), fit: BoxFit.cover),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.photo_camera_outlined, size: 44, color: AppColors.textSecondary.withOpacity(0.7)),
+                      const SizedBox(height: 10),
+                      Text('Sem foto cadastrada', style: AppTextStyles.body.copyWith(color: AppColors.textSecondary)),
+                    ],
+                  ),
+                ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _selecionarFoto,
+                icon: const Icon(Icons.camera_alt_outlined),
+                label: const Text('Tirar foto'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 52),
+                  side: const BorderSide(color: AppColors.primary, width: 1.5),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+            if (_fotoPath != null) ...[
+              const SizedBox(width: 10),
+              OutlinedButton(
+                onPressed: () => setState(() => _fotoPath = null),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(56, 52),
+                  side: const BorderSide(color: AppColors.red, width: 1.5),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Icon(Icons.delete_outline, color: AppColors.red),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future<void> _selecionarFoto() async {
+    final caminho = await Navigator.pushNamed(
+      context,
+      AppRoutes.camera,
+      arguments: {'retornarFoto': true},
+    );
+    if (caminho is String && caminho.isNotEmpty && mounted) {
+      setState(() => _fotoPath = caminho);
+    }
   }
 
   Widget _campo(String label, TextEditingController ctrl, {bool required = false, int maxLines = 1, TextInputType? keyboardType}) {

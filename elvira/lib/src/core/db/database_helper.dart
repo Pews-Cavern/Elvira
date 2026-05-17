@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 4;
+  static const _dbVersion = 5;
 
   Database? _db;
 
@@ -107,7 +107,8 @@ class DatabaseHelper {
         hospital_name TEXT NOT NULL,
         date_time TEXT NOT NULL,
         maps_url TEXT,
-        notes TEXT
+        notes TEXT,
+        lembrete_minutos INTEGER NOT NULL DEFAULT 60
       )
     ''');
   }
@@ -131,9 +132,15 @@ class DatabaseHelper {
             hospital_name TEXT NOT NULL,
             date_time TEXT NOT NULL,
             maps_url TEXT,
-            notes TEXT
+            notes TEXT,
+            lembrete_minutos INTEGER NOT NULL DEFAULT 60
           )
         ''');
+      } catch (_) {}
+    }
+    if (oldVersion < 5) {
+      try {
+        await db.execute('ALTER TABLE consulta_medica ADD COLUMN lembrete_minutos INTEGER NOT NULL DEFAULT 60;');
       } catch (_) {}
     }
   }
