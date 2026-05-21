@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 5;
+  static const _dbVersion = 7;
 
   Database? _db;
 
@@ -51,7 +51,9 @@ class DatabaseHelper {
         nome TEXT NOT NULL,
         relacao TEXT NOT NULL,
         telefone TEXT NOT NULL,
+        foto_path TEXT,
         eh_emergencia INTEGER NOT NULL DEFAULT 0,
+        eh_favorito INTEGER NOT NULL DEFAULT 0,
         ordem_exibicao INTEGER NOT NULL DEFAULT 0
       )
     ''');
@@ -158,6 +160,20 @@ class DatabaseHelper {
       try {
         await db.execute(
           'ALTER TABLE consulta_medica ADD COLUMN lembrete_minutos INTEGER NOT NULL DEFAULT 60;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 6) {
+      try {
+        await db.execute(
+          'ALTER TABLE contato ADD COLUMN foto_path TEXT;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 7) {
+      try {
+        await db.execute(
+          'ALTER TABLE contato ADD COLUMN eh_favorito INTEGER NOT NULL DEFAULT 0;',
         );
       } catch (_) {}
     }

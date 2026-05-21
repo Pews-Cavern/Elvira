@@ -3,7 +3,9 @@ class Contato {
   final String nome;
   final String relacao;
   final String telefone;
+  final String? fotoPath;
   final bool ehEmergencia;
+  final bool ehFavorito;
   final int ordemExibicao;
 
   const Contato({
@@ -11,12 +13,14 @@ class Contato {
     required this.nome,
     required this.relacao,
     required this.telefone,
+    this.fotoPath,
     this.ehEmergencia = false,
+    this.ehFavorito = false,
     this.ordemExibicao = 0,
   });
 
-  // familiar | medico | cuidador | emergencia
-  static const List<String> relacoes = ['familiar', 'medico', 'cuidador', 'emergencia'];
+  // '' (nenhum) | familiar | medico | cuidador | emergencia
+  static const List<String> relacoes = ['', 'familiar', 'medico', 'cuidador', 'emergencia'];
 
   static String relacaoLabel(String relacao) {
     switch (relacao) {
@@ -28,8 +32,10 @@ class Contato {
         return 'Cuidador(a)';
       case 'emergencia':
         return 'Emergência';
+      case '':
+        return 'Sem definição';
       default:
-        return relacao;
+        return relacao.isEmpty ? 'Sem definição' : relacao;
     }
   }
 
@@ -46,7 +52,9 @@ class Contato {
         'nome': nome,
         'relacao': relacao,
         'telefone': telefone,
+        'foto_path': fotoPath,
         'eh_emergencia': ehEmergencia ? 1 : 0,
+        'eh_favorito': ehFavorito ? 1 : 0,
         'ordem_exibicao': ordemExibicao,
       };
 
@@ -55,7 +63,9 @@ class Contato {
         nome: m['nome'] as String,
         relacao: m['relacao'] as String,
         telefone: m['telefone'] as String,
+        fotoPath: m['foto_path'] as String?,
         ehEmergencia: (m['eh_emergencia'] as int?) == 1,
+        ehFavorito: (m['eh_favorito'] as int?) == 1,
         ordemExibicao: m['ordem_exibicao'] as int? ?? 0,
       );
 
@@ -64,7 +74,9 @@ class Contato {
     String? nome,
     String? relacao,
     String? telefone,
+    String? fotoPath,
     bool? ehEmergencia,
+    bool? ehFavorito,
     int? ordemExibicao,
   }) =>
       Contato(
@@ -72,7 +84,9 @@ class Contato {
         nome: nome ?? this.nome,
         relacao: relacao ?? this.relacao,
         telefone: telefone ?? this.telefone,
+        fotoPath: fotoPath ?? this.fotoPath,
         ehEmergencia: ehEmergencia ?? this.ehEmergencia,
+        ehFavorito: ehFavorito ?? this.ehFavorito,
         ordemExibicao: ordemExibicao ?? this.ordemExibicao,
       );
 }
