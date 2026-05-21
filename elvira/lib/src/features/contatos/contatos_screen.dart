@@ -88,9 +88,20 @@ class _ContatoTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(contato.nome, style: AppTextStyles.contactName),
-                const SizedBox(height: 2),
-                Text(Contato.relacaoLabel(contato.relacao), style: AppTextStyles.contactRelation),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(contato.nome, style: AppTextStyles.contactName),
+                    ),
+                    if (contato.ehFavorito)
+                      const Icon(Icons.star, color: Colors.amber, size: 22),
+                  ],
+                ),
+                if (contato.relacao.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(Contato.relacaoLabel(contato.relacao), style: AppTextStyles.contactRelation),
+                  ),
                 const SizedBox(height: 2),
                 Text(contato.telefone, style: AppTextStyles.contactPhone),
               ],

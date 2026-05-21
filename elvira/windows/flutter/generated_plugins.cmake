@@ -6,7 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   battery_plus
   connectivity_plus
-  flutter_volume_controller
+  file_selector_windows
   permission_handler_windows
   sqlite3_flutter_libs
   url_launcher_windows

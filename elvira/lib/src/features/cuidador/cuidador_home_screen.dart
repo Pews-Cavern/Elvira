@@ -24,9 +24,15 @@ class CuidadorHomeScreen extends StatelessWidget {
       body: Consumer2<UsuarioProvider, DoseProvider>(
         builder: (_, usuProvider, doseProvider, _) {
           final usuario = usuProvider.usuario;
-          final dataHoje = DateFormat("d 'de' MMMM yyyy", 'pt_BR').format(DateTime.now());
+          final dataHoje = DateFormat(
+            "d 'de' MMMM yyyy",
+            'pt_BR',
+          ).format(DateTime.now());
           final perdidas = doseProvider.perdidas;
-          final tomadas = doseProvider.registrosHoje.where((r) => r.status.name == 'tomado').length;
+          final tomadas =
+              doseProvider.registrosHoje
+                  .where((r) => r.status.name == 'tomado')
+                  .length;
           final total = doseProvider.registrosHoje.length;
 
           return SingleChildScrollView(
@@ -48,15 +54,27 @@ class CuidadorHomeScreen extends StatelessWidget {
                         backgroundColor: AppColors.blueLight,
                         child: Text(
                           usuario?.nome.substring(0, 2).toUpperCase() ?? 'EL',
-                          style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary),
+                          style: AppTextStyles.bodyBold.copyWith(
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 14),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(usuario?.nome ?? 'Usuário', style: AppTextStyles.h3.copyWith(color: Colors.white)),
-                          Text(dataHoje, style: AppTextStyles.bodySmall.copyWith(color: Colors.white70)),
+                          Text(
+                            usuario?.nome ?? 'Usuário',
+                            style: AppTextStyles.h3.copyWith(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            dataHoje,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: Colors.white70,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -74,39 +92,85 @@ class CuidadorHomeScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.warning_amber_rounded, color: AppColors.amber, size: 28),
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          color: AppColors.amber,
+                          size: 28,
+                        ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Dose perdida hoje', style: AppTextStyles.bodyBold.copyWith(color: AppColors.red)),
-                              Text('${perdidas.length} dose(s) não registrada(s)', style: AppTextStyles.body.copyWith(color: AppColors.textSecondary)),
+                              Text(
+                                'Dose perdida hoje',
+                                style: AppTextStyles.bodyBold.copyWith(
+                                  color: AppColors.red,
+                                ),
+                              ),
+                              Text(
+                                '${perdidas.length} dose(s) não registrada(s)',
+                                style: AppTextStyles.body.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(20)),
-                          child: Text('${perdidas.length} alerta', style: AppTextStyles.bodySmall.copyWith(color: Colors.white)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.red,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '${perdidas.length} alerta',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 const SizedBox(height: 16),
                 // Resumo
-                Text('RESUMO DE HOJE', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary, letterSpacing: 1)),
+                Text(
+                  'RESUMO DE HOJE',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    letterSpacing: 1,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    _ResumoCard(valor: '$tomadas / $total', label: 'Remédios tomados', color: AppColors.green),
+                    _ResumoCard(
+                      valor: '$tomadas / $total',
+                      label: 'Remédios tomados',
+                      color: AppColors.green,
+                    ),
                     const SizedBox(width: 10),
-                    _ResumoCard(valor: '${perdidas.length}', label: 'Dose${perdidas.length == 1 ? '' : 's'} perdida${perdidas.length == 1 ? '' : 's'}', color: AppColors.red),
+                    _ResumoCard(
+                      valor: '${perdidas.length}',
+                      label:
+                          'Dose${perdidas.length == 1 ? '' : 's'} perdida${perdidas.length == 1 ? '' : 's'}',
+                      color: AppColors.red,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 // Grid de gerenciamento
-                Text('CONFIGURAR', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary, letterSpacing: 1)),
+                Text(
+                  'CONFIGURAR',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    letterSpacing: 1,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 GridView.count(
                   crossAxisCount: 2,
@@ -114,14 +178,50 @@ class CuidadorHomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 1.1,
+                  childAspectRatio: 0.92,
                   children: const [
-                    _GridBtn(emoji: '💊', titulo: 'Medicamentos', sub: 'Doses, horários e remédios', route: AppRoutes.cuidadorMedicamentos),
-                    _GridBtn(emoji: '👥', titulo: 'Contatos', sub: 'Família, médicos, emergência', route: AppRoutes.cuidadorContatos),
-                    _GridBtn(emoji: '🪪', titulo: 'Identidade', sub: 'Dados, sangue, alergias', route: AppRoutes.cuidadorIdentidade),
-                    _GridBtn(emoji: '📊', titulo: 'Relatórios', sub: 'Histórico de doses e uso', route: AppRoutes.cuidadorRelatorios),
-                    _GridBtn(emoji: '⚙️', titulo: 'Configurações', sub: 'PIN, fonte, acessibilidade', route: AppRoutes.cuidadorConfiguracoes),
-                    _GridBtn(emoji: '🕊️', titulo: 'Sobre', sub: 'Memorial e créditos', route: AppRoutes.sobre),
+                    _GridBtn(
+                      emoji: '💊',
+                      titulo: 'Medicamentos',
+                      sub: 'Doses, horários e remédios',
+                      route: AppRoutes.cuidadorMedicamentos,
+                    ),
+                    _GridBtn(
+                      emoji: '🩺',
+                      titulo: 'Consultas',
+                      sub: 'Hospitais, horários e avisos',
+                      route: AppRoutes.cuidadorConsultas,
+                    ),
+                    _GridBtn(
+                      emoji: '👥',
+                      titulo: 'Contatos',
+                      sub: 'Família, médicos, emergência',
+                      route: AppRoutes.cuidadorContatos,
+                    ),
+                    _GridBtn(
+                      emoji: '🪪',
+                      titulo: 'Identidade',
+                      sub: 'Dados, sangue, alergias',
+                      route: AppRoutes.cuidadorIdentidade,
+                    ),
+                    _GridBtn(
+                      emoji: '📊',
+                      titulo: 'Relatórios',
+                      sub: 'Histórico de doses e uso',
+                      route: AppRoutes.cuidadorRelatorios,
+                    ),
+                    _GridBtn(
+                      emoji: '⚙️',
+                      titulo: 'Configurações',
+                      sub: 'PIN, fonte, acessibilidade',
+                      route: AppRoutes.cuidadorConfiguracoes,
+                    ),
+                    _GridBtn(
+                      emoji: '🕊️',
+                      titulo: 'Sobre',
+                      sub: 'Memorial e créditos',
+                      route: AppRoutes.sobre,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -129,12 +229,26 @@ class CuidadorHomeScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton.icon(
-                    onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.home),
+                    onPressed:
+                        () => Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.home,
+                        ),
                     icon: const Icon(Icons.lock_outline),
-                    label: Text('Sair da área do cuidador', style: AppTextStyles.body.copyWith(color: AppColors.primary)),
+                    label: Text(
+                      'Sair da área do cuidador',
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AppColors.blueLight, width: 2),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      side: const BorderSide(
+                        color: AppColors.blueLight,
+                        width: 2,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -152,7 +266,11 @@ class _ResumoCard extends StatelessWidget {
   final String valor;
   final String label;
   final Color color;
-  const _ResumoCard({required this.valor, required this.label, required this.color});
+  const _ResumoCard({
+    required this.valor,
+    required this.label,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +287,12 @@ class _ResumoCard extends StatelessWidget {
           children: [
             Text(valor, style: AppTextStyles.h2.copyWith(color: color)),
             const SizedBox(height: 4),
-            Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+            Text(
+              label,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
         ),
       ),
@@ -182,7 +305,12 @@ class _GridBtn extends StatelessWidget {
   final String titulo;
   final String sub;
   final String route;
-  const _GridBtn({required this.emoji, required this.titulo, required this.sub, required this.route});
+  const _GridBtn({
+    required this.emoji,
+    required this.titulo,
+    required this.sub,
+    required this.route,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -194,15 +322,30 @@ class _GridBtn extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, route),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 28)),
-              const SizedBox(height: 6),
-              Text(titulo, style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
-              Text(sub, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary), maxLines: 2, overflow: TextOverflow.ellipsis),
+              Text(emoji, style: const TextStyle(fontSize: 30)),
+              const SizedBox(height: 8),
+              Text(
+                titulo,
+                style: AppTextStyles.bodyBold.copyWith(
+                  color: AppColors.primary,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                sub,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

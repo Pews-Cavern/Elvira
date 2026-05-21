@@ -1,5 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_contacts/flutter_contacts.dart' as fc;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import '../../../core/providers/contatos_provider.dart';
 import '../../../core/models/contato.dart';
 import '../../../core/theme/app_colors.dart';
@@ -18,8 +23,10 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nomeCtrl = TextEditingController();
   final _telefoneCtrl = TextEditingController();
-  String _relacao = 'familiar';
+  String _relacao = '';
   bool _ehEmergencia = false;
+  bool _ehFavorito = false;
+  String? _fotoPath;
   Contato? _editando;
   bool _salvando = false;
 
@@ -34,6 +41,8 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
         _telefoneCtrl.text = args.telefone;
         _relacao = args.relacao;
         _ehEmergencia = args.ehEmergencia;
+        _ehFavorito = args.ehFavorito;
+        _fotoPath = args.fotoPath;
       }
     }
   }
@@ -45,6 +54,49 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
     super.dispose();
   }
 
+  Future<void> _importarAgenda() async {
+    final granted = await fc.FlutterContacts.requestPermission();
+    if (!granted) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Permissão de contatos negada.')),
+        );
+      }
+      return;
+    }
+    
+    final contatoAgenda = await fc.FlutterContacts.openExternalPick();
+    if (contatoAgenda != null) {
+      final fullContact = await fc.FlutterContacts.getContact(contatoAgenda.id);
+      if (fullContact != null) {
+        setState(() {
+          _nomeCtrl.text = fullContact.displayName;
+          if (fullContact.phones.isNotEmpty) {
+            _telefoneCtrl.text = fullContact.phones.first.number;
+          }
+        });
+        if (fullContact.photo != null && fullContact.photo!.isNotEmpty) {
+          final dir = await getApplicationDocumentsDirectory();
+          final photoFile = File(p.join(dir.path, 'contato_${DateTime.now().millisecondsSinceEpoch}.png'));
+          await photoFile.writeAsBytes(fullContact.photo!);
+          setState(() {
+            _fotoPath = photoFile.path;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> _escolherFoto() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _fotoPath = pickedFile.path;
+      });
+    }
+  }
+
   Future<void> _salvar() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _salvando = true);
@@ -54,6 +106,8 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
       telefone: _telefoneCtrl.text.trim(),
       relacao: _relacao,
       ehEmergencia: _ehEmergencia,
+      ehFavorito: _ehFavorito,
+      fotoPath: _fotoPath,
       ordemExibicao: _editando?.ordemExibicao ?? 0,
     );
     final provider = context.read<ContatosProvider>();
@@ -77,6 +131,30 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: GestureDetector(
+                  onTap: _escolherFoto,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColors.blueLight,
+                    backgroundImage: (_fotoPath != null && File(_fotoPath!).existsSync())
+                        ? FileImage(File(_fotoPath!))
+                        : null,
+                    child: (_fotoPath == null)
+                        ? const Icon(Icons.camera_alt, size: 40, color: AppColors.primary)
+                        : null,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: TextButton.icon(
+                  onPressed: _importarAgenda,
+                  icon: const Icon(Icons.contact_phone, color: AppColors.primary),
+                  label: Text('Importar da Agenda', style: AppTextStyles.bodyBold.copyWith(color: AppColors.primary)),
+                ),
+              ),
+              const SizedBox(height: 14),
               TextFormField(
                 controller: _nomeCtrl,
                 style: AppTextStyles.body,
@@ -102,6 +180,16 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
                   child: Text(Contato.relacaoLabel(r)),
                 )).toList(),
                 onChanged: (v) => setState(() => _relacao = v!),
+              ),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                value: _ehFavorito,
+                onChanged: (v) => setState(() => _ehFavorito = v),
+                title: Text('Contato favorito', style: AppTextStyles.body),
+                subtitle: Text('Aparecerá primeiro na lista de contatos', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+                activeThumbColor: Colors.amber,
+                tileColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               const SizedBox(height: 16),
               SwitchListTile(
