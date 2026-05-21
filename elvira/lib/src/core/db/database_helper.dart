@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 3;
+  static const _dbVersion = 7;
 
   Database? _db;
 
@@ -51,7 +51,9 @@ class DatabaseHelper {
         nome TEXT NOT NULL,
         relacao TEXT NOT NULL,
         telefone TEXT NOT NULL,
+        foto_path TEXT,
         eh_emergencia INTEGER NOT NULL DEFAULT 0,
+        eh_favorito INTEGER NOT NULL DEFAULT 0,
         ordem_exibicao INTEGER NOT NULL DEFAULT 0
       )
     ''');
@@ -100,18 +102,80 @@ class DatabaseHelper {
         data_hora TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE consulta_medica (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        hospital_name TEXT NOT NULL,
+        date_time TEXT NOT NULL,
+        maps_url TEXT,
+        notes TEXT,
+        lembrete_minutos INTEGER NOT NULL DEFAULT 60
+      )
+    ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      try { await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;'); } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;');
+      } catch (_) {}
+      try {
+        await db.execute(
+          'ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;',
+        );
+      } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;');
+      } catch (_) {}
     }
     if (oldVersion < 3) {
-      try { await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;'); } catch (_) {}
-      try { await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;'); } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE usuario ADD COLUMN plano_saude TEXT;');
+      } catch (_) {}
+      try {
+        await db.execute(
+          'ALTER TABLE medicamento ADD COLUMN data_inicio TEXT;',
+        );
+      } catch (_) {}
+      try {
+        await db.execute('ALTER TABLE medicamento ADD COLUMN data_fim TEXT;');
+      } catch (_) {}
+    }
+    if (oldVersion < 4) {
+      try {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS consulta_medica (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hospital_name TEXT NOT NULL,
+            date_time TEXT NOT NULL,
+            maps_url TEXT,
+            notes TEXT,
+            lembrete_minutos INTEGER NOT NULL DEFAULT 60
+          )
+        ''');
+      } catch (_) {}
+    }
+    if (oldVersion < 5) {
+      try {
+        await db.execute(
+          'ALTER TABLE consulta_medica ADD COLUMN lembrete_minutos INTEGER NOT NULL DEFAULT 60;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 6) {
+      try {
+        await db.execute(
+          'ALTER TABLE contato ADD COLUMN foto_path TEXT;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 7) {
+      try {
+        await db.execute(
+          'ALTER TABLE contato ADD COLUMN eh_favorito INTEGER NOT NULL DEFAULT 0;',
+        );
+      } catch (_) {}
     }
   }
 }

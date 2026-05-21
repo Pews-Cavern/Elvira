@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/medicamentos_provider.dart';
 import '../../../core/models/medicamento.dart';
 import '../../../core/models/dose_medicamento.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
@@ -20,17 +23,28 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   final _nomeCtrl = TextEditingController();
   final _dosagemCtrl = TextEditingController();
   final _instrucaoCtrl = TextEditingController();
-  final _dataInicioCtrl = TextEditingController(text: DateTime.now().toIso8601String().substring(0, 10));
+  final _dataInicioCtrl = TextEditingController(
+    text: DateTime.now().toIso8601String().substring(0, 10),
+  );
   final _dataFimCtrl = TextEditingController();
   final _intervaloCtrl = TextEditingController();
 
   String _unidade = 'comprimido';
   final List<TimeOfDay> _horarios = [];
+  String? _fotoPath;
 
   Medicamento? _editando;
   bool _salvando = false;
 
-  static const _unidades = ['comprimido', 'cápsula', 'ml', 'UI', 'gota', 'mg', 'g'];
+  static const _unidades = [
+    'comprimido',
+    'cápsula',
+    'ml',
+    'UI',
+    'gota',
+    'mg',
+    'g',
+  ];
 
   bool _isInit = false;
 
@@ -45,14 +59,22 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
         _nomeCtrl.text = args.nome;
         _dosagemCtrl.text = args.dosagem;
         _instrucaoCtrl.text = args.instrucaoUso ?? '';
-        _dataInicioCtrl.text = args.dataInicio ?? DateTime.now().toIso8601String().substring(0, 10);
+        _dataInicioCtrl.text =
+            args.dataInicio ??
+            DateTime.now().toIso8601String().substring(0, 10);
         _dataFimCtrl.text = args.dataFim ?? '';
+        _fotoPath = args.fotoPath;
         _unidade = args.unidade;
-        final provider = Provider.of<MedicamentosProvider>(context, listen: false);
+        final provider = Provider.of<MedicamentosProvider>(
+          context,
+          listen: false,
+        );
         final doses = provider.dosesDoMedicamento(args.id!);
         for (final d in doses) {
           final partes = d.horario.split(':');
-          _horarios.add(TimeOfDay(hour: int.parse(partes[0]), minute: int.parse(partes[1])));
+          _horarios.add(
+            TimeOfDay(hour: int.parse(partes[0]), minute: int.parse(partes[1])),
+          );
         }
       }
     }
@@ -82,11 +104,16 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   }
 
   Future<void> _adicionarHorario() async {
-    final t = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
     if (t != null && !_horarios.contains(t)) {
       setState(() {
         _horarios.add(t);
-        _horarios.sort((a, b) => (a.hour * 60 + a.minute).compareTo(b.hour * 60 + b.minute));
+        _horarios.sort(
+          (a, b) => (a.hour * 60 + a.minute).compareTo(b.hour * 60 + b.minute),
+        );
       });
     }
   }
@@ -94,14 +121,24 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   void _gerarHorariosAutomaticos() {
     if (_horarios.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Adicione o horário da primeira dose para o app preencher os demais', style: AppTextStyles.bodySmall)),
+        SnackBar(
+          content: Text(
+            'Adicione o horário da primeira dose para o app preencher os demais',
+            style: AppTextStyles.bodySmall,
+          ),
+        ),
       );
       return;
     }
     final int? intervalo = int.tryParse(_intervaloCtrl.text);
     if (intervalo == null || intervalo <= 0 || intervalo > 24) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Digite um intervalo válido (ex: 8)', style: AppTextStyles.bodySmall)),
+        SnackBar(
+          content: Text(
+            'Digite um intervalo válido (ex: 8)',
+            style: AppTextStyles.bodySmall,
+          ),
+        ),
       );
       return;
     }
@@ -118,7 +155,9 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     }
 
     setState(() {
-      _horarios.sort((a, b) => (a.hour * 60 + a.minute).compareTo(b.hour * 60 + b.minute));
+      _horarios.sort(
+        (a, b) => (a.hour * 60 + a.minute).compareTo(b.hour * 60 + b.minute),
+      );
       _intervaloCtrl.clear();
     });
     FocusScope.of(context).unfocus();
@@ -128,7 +167,12 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_horarios.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Adicione ao menos 1 horário', style: AppTextStyles.body)),
+        SnackBar(
+          content: Text(
+            'Adicione ao menos 1 horário',
+            style: AppTextStyles.body,
+          ),
+        ),
       );
       return;
     }
@@ -138,14 +182,28 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
       nome: _nomeCtrl.text.trim(),
       dosagem: _dosagemCtrl.text.trim(),
       unidade: _unidade,
-      instrucaoUso: _instrucaoCtrl.text.trim().isEmpty ? null : _instrucaoCtrl.text.trim(),
-      dataInicio: _dataInicioCtrl.text.trim().isEmpty ? null : _dataInicioCtrl.text.trim(),
-      dataFim: _dataFimCtrl.text.trim().isEmpty ? null : _dataFimCtrl.text.trim(),
+      instrucaoUso:
+          _instrucaoCtrl.text.trim().isEmpty
+              ? null
+              : _instrucaoCtrl.text.trim(),
+      fotoPath: _fotoPath,
+      dataInicio:
+          _dataInicioCtrl.text.trim().isEmpty
+              ? null
+              : _dataInicioCtrl.text.trim(),
+      dataFim:
+          _dataFimCtrl.text.trim().isEmpty ? null : _dataFimCtrl.text.trim(),
     );
-    final doses = _horarios.map((h) => DoseMedicamento(
-          medicamentoId: _editando?.id ?? 0,
-          horario: '${h.hour.toString().padLeft(2, '0')}:${h.minute.toString().padLeft(2, '0')}',
-        )).toList();
+    final doses =
+        _horarios
+            .map(
+              (h) => DoseMedicamento(
+                medicamentoId: _editando?.id ?? 0,
+                horario:
+                    '${h.hour.toString().padLeft(2, '0')}:${h.minute.toString().padLeft(2, '0')}',
+              ),
+            )
+            .toList();
 
     try {
       final provider = context.read<MedicamentosProvider>();
@@ -169,7 +227,9 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: ElviraAppBar(title: _editando != null ? 'Editar Medicamento' : 'Novo Medicamento'),
+      appBar: ElviraAppBar(
+        title: _editando != null ? 'Editar Medicamento' : 'Novo Medicamento',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -181,7 +241,14 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
               const SizedBox(height: 14),
               Row(
                 children: [
-                  Expanded(child: _campo('Dosagem', _dosagemCtrl, required: true, keyboardType: TextInputType.text)),
+                  Expanded(
+                    child: _campo(
+                      'Dosagem',
+                      _dosagemCtrl,
+                      required: true,
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: DropdownButtonFormField<String>(
@@ -189,16 +256,30 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                       initialValue: _unidade,
                       decoration: const InputDecoration(labelText: 'Unidade'),
                       style: AppTextStyles.body,
-                      items: _unidades.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
+                      items:
+                          _unidades
+                              .map(
+                                (u) =>
+                                    DropdownMenuItem(value: u, child: Text(u)),
+                              )
+                              .toList(),
                       onChanged: (v) => setState(() => _unidade = v!),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 14),
-              _campo('Instrução de uso (opcional)', _instrucaoCtrl, maxLines: 2),
+              _campo(
+                'Instrução de uso (opcional)',
+                _instrucaoCtrl,
+                maxLines: 2,
+              ),
+              const SizedBox(height: 14),
+              Text('Foto do remédio', style: AppTextStyles.h3),
+              const SizedBox(height: 10),
+              _buildFotoSection(),
               const SizedBox(height: 24),
-              
+
               Text('Duração do Tratamento', style: AppTextStyles.h3),
               const SizedBox(height: 10),
               Row(
@@ -208,9 +289,12 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                       controller: _dataInicioCtrl,
                       readOnly: true,
                       style: AppTextStyles.body,
-                      decoration: const InputDecoration(labelText: 'Início (Obrigatório)'),
+                      decoration: const InputDecoration(
+                        labelText: 'Início (Obrigatório)',
+                      ),
                       onTap: () => _selecionarData(_dataInicioCtrl),
-                      validator: (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
+                      validator:
+                          (v) => (v?.isEmpty ?? true) ? 'Obrigatório' : null,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -219,7 +303,9 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                       controller: _dataFimCtrl,
                       readOnly: true,
                       style: AppTextStyles.body,
-                      decoration: const InputDecoration(labelText: 'Fim (Opcional)'),
+                      decoration: const InputDecoration(
+                        labelText: 'Fim (Opcional)',
+                      ),
                       onTap: () => _selecionarData(_dataFimCtrl),
                     ),
                   ),
@@ -229,9 +315,14 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
               const SizedBox(height: 24),
               Text('Horários', style: AppTextStyles.h3),
               const SizedBox(height: 4),
-              Text('Adicione as horas ou digite um intervalo para calcular automático.', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+              Text(
+                'Adicione as horas ou digite um intervalo para calcular automático.',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
               const SizedBox(height: 14),
-              
+
               Row(
                 children: [
                   Expanded(
@@ -250,55 +341,83 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                     onPressed: _gerarHorariosAutomaticos,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      minimumSize: const Size(0, 52), // Override global infinity width
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      minimumSize: const Size(
+                        0,
+                        52,
+                      ), // Override global infinity width
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text('Gerar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      'Gerar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
 
-              ..._horarios.asMap().entries.map((e) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.blueLight),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.access_time, color: AppColors.primary),
-                          const SizedBox(width: 10),
-                          Text(
-                            '${e.value.hour.toString().padLeft(2, '0')}:${e.value.minute.toString().padLeft(2, '0')}',
-                            style: AppTextStyles.medicTime,
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: AppColors.red),
-                            onPressed: () => setState(() => _horarios.removeAt(e.key)),
-                          ),
-                        ],
-                      ),
+              ..._horarios.asMap().entries.map(
+                (e) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
-                  )),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.blueLight),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.access_time, color: AppColors.primary),
+                        const SizedBox(width: 10),
+                        Text(
+                          '${e.value.hour.toString().padLeft(2, '0')}:${e.value.minute.toString().padLeft(2, '0')}',
+                          style: AppTextStyles.medicTime,
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: AppColors.red),
+                          onPressed:
+                              () => setState(() => _horarios.removeAt(e.key)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               OutlinedButton.icon(
                 onPressed: _adicionarHorario,
                 icon: const Icon(Icons.add),
-                label: Text('Adicionar horário manual', style: AppTextStyles.body.copyWith(color: AppColors.primary)),
+                label: Text(
+                  'Adicionar horário manual',
+                  style: AppTextStyles.body.copyWith(color: AppColors.primary),
+                ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 52),
                   side: const BorderSide(color: AppColors.primary, width: 1.5),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
               ElviraButton(
-                label: _editando != null ? 'Salvar alterações' : 'Adicionar medicamento',
+                label:
+                    _editando != null
+                        ? 'Salvar alterações'
+                        : 'Adicionar medicamento',
                 onPressed: _salvando ? null : _salvar,
               ),
             ],
@@ -308,7 +427,99 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     );
   }
 
-  Widget _campo(String label, TextEditingController ctrl, {bool required = false, int maxLines = 1, TextInputType? keyboardType}) {
+  Widget _buildFotoSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 180,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.blueLight, width: 1.5),
+          ),
+          child:
+              _fotoPath != null && File(_fotoPath!).existsSync()
+                  ? ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.file(File(_fotoPath!), fit: BoxFit.cover),
+                  )
+                  : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.photo_camera_outlined,
+                          size: 44,
+                          color: AppColors.textSecondary.withOpacity(0.7),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Sem foto cadastrada',
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _selecionarFoto,
+                icon: const Icon(Icons.camera_alt_outlined),
+                label: const Text('Tirar foto'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 52),
+                  side: const BorderSide(color: AppColors.primary, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            if (_fotoPath != null) ...[
+              const SizedBox(width: 10),
+              OutlinedButton(
+                onPressed: () => setState(() => _fotoPath = null),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(56, 52),
+                  side: const BorderSide(color: AppColors.red, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Icon(Icons.delete_outline, color: AppColors.red),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future<void> _selecionarFoto() async {
+    final caminho = await Navigator.pushNamed(
+      context,
+      AppRoutes.camera,
+      arguments: {'retornarFoto': true},
+    );
+    if (caminho is String && caminho.isNotEmpty && mounted) {
+      setState(() => _fotoPath = caminho);
+    }
+  }
+
+  Widget _campo(
+    String label,
+    TextEditingController ctrl, {
+    bool required = false,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
     return TextFormField(
       controller: ctrl,
       style: AppTextStyles.body,
@@ -317,7 +528,10 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: label),
       scrollPadding: const EdgeInsets.only(bottom: 80),
-      validator: required ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null : null,
+      validator:
+          required
+              ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null
+              : null,
     );
   }
 }

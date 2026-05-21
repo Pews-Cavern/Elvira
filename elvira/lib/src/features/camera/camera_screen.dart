@@ -13,13 +13,15 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver {
+class _CameraScreenState extends State<CameraScreen>
+    with WidgetsBindingObserver {
   CameraController? _controller;
   bool _inicializando = true;
   bool _capturando = false;
   bool _semPermissao = false;
   bool _semCamera = false;
   File? _ultimaFoto;
+  bool _retornarFoto = false;
 
   @override
   void initState() {
@@ -27,6 +29,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     WidgetsBinding.instance.addObserver(this);
     _inicializar();
     _carregarUltimaFoto();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Map<String, dynamic>) {
+      _retornarFoto = args['retornarFoto'] as bool? ?? false;
+    }
   }
 
   @override
@@ -49,30 +60,53 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   }
 
   Future<void> _inicializar() async {
-    setState(() { _inicializando = true; _semPermissao = false; _semCamera = false; });
+    setState(() {
+      _inicializando = true;
+      _semPermissao = false;
+      _semCamera = false;
+    });
 
     final status = await Permission.camera.request();
     if (!status.isGranted) {
-      setState(() { _semPermissao = true; _inicializando = false; });
+      setState(() {
+        _semPermissao = true;
+        _inicializando = false;
+      });
       return;
     }
 
     final cameras = await availableCameras();
     if (cameras.isEmpty) {
-      setState(() { _semCamera = true; _inicializando = false; });
+      setState(() {
+        _semCamera = true;
+        _inicializando = false;
+      });
       return;
     }
 
-    final ctrl = CameraController(cameras.first, ResolutionPreset.high, enableAudio: false);
+    final ctrl = CameraController(
+      cameras.first,
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
     try {
       await ctrl.initialize();
     } catch (_) {
-      setState(() { _semCamera = true; _inicializando = false; });
+      setState(() {
+        _semCamera = true;
+        _inicializando = false;
+      });
       return;
     }
 
-    if (!mounted) { ctrl.dispose(); return; }
-    setState(() { _controller = ctrl; _inicializando = false; });
+    if (!mounted) {
+      ctrl.dispose();
+      return;
+    }
+    setState(() {
+      _controller = ctrl;
+      _inicializando = false;
+    });
   }
 
   Future<void> _carregarUltimaFoto() async {
@@ -88,15 +122,24 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     try {
       final xfile = await ctrl.takePicture();
       final salva = await FotoService.salvar(xfile.path);
-      if (mounted) setState(() { _ultimaFoto = salva; _capturando = false; });
+      if (!mounted) return;
+      setState(() {
+        _ultimaFoto = salva;
+        _capturando = false;
+      });
+      if (_retornarFoto) {
+        Navigator.pop(context, salva.path);
+      }
     } catch (_) {
       if (mounted) setState(() => _capturando = false);
     }
   }
 
   void _abrirGaleria() {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const GaleriaScreen()))
-        .then((_) => _carregarUltimaFoto());
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const GaleriaScreen()),
+    ).then((_) => _carregarUltimaFoto());
   }
 
   @override
@@ -116,13 +159,16 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   Widget _buildPreview() {
     if (_inicializando) {
-      return const Center(child: CircularProgressIndicator(color: Colors.white));
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      );
     }
     if (_semPermissao) {
       return _MsgCentral(
         icon: Icons.no_photography_outlined,
         titulo: 'Permissão negada',
-        subtitulo: 'Permita o acesso à câmera nas configurações do dispositivo.',
+        subtitulo:
+            'Permita o acesso à câmera nas configurações do dispositivo.',
         botaoLabel: 'Abrir configurações',
         onBotao: openAppSettings,
       );
@@ -139,11 +185,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   Widget _buildTopBar(BuildContext context) {
     return Positioned(
-      top: 0, left: 0, right: 0,
+      top: 0,
+      left: 0,
+      right: 0,
       child: Container(
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top + 4,
-          left: 4, right: 16, bottom: 12,
+          left: 4,
+          right: 16,
+          bottom: 12,
         ),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -156,12 +206,20 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           children: [
             IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 26),
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 26,
+              ),
             ),
             const Spacer(),
             const Text(
               'Câmera',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const Spacer(),
             const SizedBox(width: 48),
@@ -173,11 +231,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   Widget _buildBottomBar(BuildContext context) {
     return Positioned(
-      bottom: 0, left: 0, right: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: Container(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 28,
-          top: 28, left: 28, right: 28,
+          top: 28,
+          left: 28,
+          right: 28,
         ),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -194,18 +256,28 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
             GestureDetector(
               onTap: _abrirGaleria,
               child: Container(
-                width: 68, height: 68,
+                width: 68,
+                height: 68,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.white70, width: 2),
                   color: Colors.white12,
-                  image: _ultimaFoto != null
-                      ? DecorationImage(image: FileImage(_ultimaFoto!), fit: BoxFit.cover)
-                      : null,
+                  image:
+                      _ultimaFoto != null
+                          ? DecorationImage(
+                            image: FileImage(_ultimaFoto!),
+                            fit: BoxFit.cover,
+                          )
+                          : null,
                 ),
-                child: _ultimaFoto == null
-                    ? const Icon(Icons.photo_library_outlined, color: Colors.white70, size: 30)
-                    : null,
+                child:
+                    _ultimaFoto == null
+                        ? const Icon(
+                          Icons.photo_library_outlined,
+                          color: Colors.white70,
+                          size: 30,
+                        )
+                        : null,
               ),
             ),
 
@@ -214,20 +286,26 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
               onTap: (_capturando || _controller == null) ? null : _capturar,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 100),
-                width: 84, height: 84,
+                width: 84,
+                height: 84,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 4),
                   color: _capturando ? Colors.white38 : Colors.white,
                 ),
-                child: _capturando
-                    ? const Center(
-                        child: SizedBox(
-                          width: 36, height: 36,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
-                        ),
-                      )
-                    : null,
+                child:
+                    _capturando
+                        ? const Center(
+                          child: SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        )
+                        : null,
               ),
             ),
 
@@ -265,9 +343,21 @@ class _MsgCentral extends StatelessWidget {
           children: [
             Icon(icon, color: Colors.white38, size: 72),
             const SizedBox(height: 20),
-            Text(titulo, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            Text(
+              titulo,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 10),
-            Text(subtitulo, style: const TextStyle(color: Colors.white60, fontSize: 16), textAlign: TextAlign.center),
+            Text(
+              subtitulo,
+              style: const TextStyle(color: Colors.white60, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
             if (botaoLabel != null) ...[
               const SizedBox(height: 28),
               ElevatedButton(

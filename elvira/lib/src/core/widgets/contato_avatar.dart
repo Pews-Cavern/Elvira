@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
@@ -26,6 +27,16 @@ class ContatoAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (contato.fotoPath != null && contato.fotoPath!.isNotEmpty) {
+      final file = File(contato.fotoPath!);
+      if (file.existsSync()) {
+        return CircleAvatar(
+          radius: radius,
+          backgroundColor: _color,
+          backgroundImage: FileImage(file),
+        );
+      }
+    }
     return CircleAvatar(
       radius: radius,
       backgroundColor: _color,

@@ -63,6 +63,7 @@ dependencies:
   timezone: ^0.11.0
   font_awesome_flutter: ^11.0.0
   android_intent_plus: ^6.0.0
+  image_picker: ^1.2.2
 
 dev_dependencies:
   flutter_test:
