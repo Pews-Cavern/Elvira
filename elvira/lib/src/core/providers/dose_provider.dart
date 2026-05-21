@@ -3,6 +3,7 @@ import 'package:alarm/alarm.dart';
 import '../models/registro_dose.dart';
 import '../db/daos/registro_dose_dao.dart';
 import '../db/daos/medicamento_dao.dart';
+import '../services/prefs_service.dart';
 
 class DoseProvider extends ChangeNotifier {
   final _registroDao = RegistroDoseDao();
@@ -120,13 +121,14 @@ class DoseProvider extends ChangeNotifier {
         );
       } else {
         // Cria um novo alarme de adiamento se o original não existir mais
+        final vol = await PrefsService.instance.getVolumeCalibracao();
         await Alarm.set(
           alarmSettings: AlarmSettings(
             id: registro.doseId,
             dateTime: novoHorario,
-            assetAudioPath: null, // usa som padrão do dispositivo
+            assetAudioPath: null,
             volumeSettings: VolumeSettings.fade(
-              volume: 0.8,
+              volume: vol,
               fadeDuration: const Duration(seconds: 2),
             ),
             loopAudio: true,

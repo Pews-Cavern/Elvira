@@ -33,7 +33,7 @@ class _Step2GenderScreenState extends State<Step2GenderScreen> {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 2,
-      totalSteps: 4,
+      totalSteps: 5,
       emoji: '🙋',
       titulo: 'Como prefere ser chamado?',
       onContinuar: _continuar,

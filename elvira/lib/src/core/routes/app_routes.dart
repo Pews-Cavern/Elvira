@@ -4,6 +4,7 @@ import '../../features/onboarding/step1_name_screen.dart';
 import '../../features/onboarding/step2_gender_screen.dart';
 import '../../features/onboarding/step3_caregiver_screen.dart';
 import '../../features/onboarding/step4_accessibility_screen.dart';
+import '../../features/onboarding/step5_audio_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/discagem/discagem_screen.dart';
 import '../../features/contatos/contatos_screen.dart';
@@ -39,6 +40,7 @@ class AppRoutes {
   static const step2 = '/onboarding/step2';
   static const step3 = '/onboarding/step3';
   static const step4 = '/onboarding/step4';
+  static const step5 = '/onboarding/step5';
 
   static const home = '/home';
   static const discagem = '/discagem';

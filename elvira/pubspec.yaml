@@ -57,6 +57,12 @@ dependencies:
   connectivity_plus: ^7.1.1
   battery_plus: ^7.0.0
 
+  # Reprodução de áudio simples (calibração de volume)
+  audioplayers: ^6.1.0
+
+  # Controle de volume do sistema (calibração)
+  flutter_volume_controller: ^1.0.5
+
   # Alarme real (dispara com app fechado)
   alarm: ^5.2.1
   sms_advanced: ^1.1.0

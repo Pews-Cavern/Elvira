@@ -20,12 +20,17 @@ class AlarmService {
     final horario = _proximoDisparo(dose);
     if (horario == null) return;
 
+    final vol = await PrefsService.instance.getVolumeCalibracao();
     await Alarm.set(
       alarmSettings: AlarmSettings(
         id: dose.id!,
         dateTime: horario,
         assetAudioPath: (await PrefsService.instance.getSomAlarme()).assetPath,
-        volumeSettings: _volumeSettings,
+        volumeSettings: VolumeSettings.fade(
+          volume: vol,
+          fadeDuration: const Duration(seconds: 3),
+          volumeEnforced: true,
+        ),
         loopAudio: true,
         vibrate: true,
         warningNotificationOnKill: true,

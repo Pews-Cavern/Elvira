@@ -27,19 +27,15 @@ class _Step4AccessibilityScreenState extends State<Step4AccessibilityScreen> {
   }
 
   Future<void> _concluir() async {
-    final provider = context.read<UsuarioProvider>();
-    await provider.atualizarEscalaFonte(_escala);
-    await provider.concluirOnboarding();
-    if (mounted) {
-      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
-    }
+    await context.read<UsuarioProvider>().atualizarEscalaFonte(_escala);
+    if (mounted) Navigator.pushNamed(context, AppRoutes.step5);
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 4,
-      totalSteps: 4,
+      totalSteps: 5,
       emoji: '🔠',
       titulo: 'Ajuste o tamanho do texto',
       subtitulo: 'Toque no botão para encontrar o tamanho ideal',
