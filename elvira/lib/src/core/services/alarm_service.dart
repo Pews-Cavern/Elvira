@@ -8,12 +8,6 @@ class AlarmService {
   AlarmService._();
 
 
-  static final _volumeSettings = VolumeSettings.fade(
-    volume: 1.0,
-    fadeDuration: const Duration(seconds: 3),
-    volumeEnforced: true,
-  );
-
   /// Agenda (ou reagenda) o alarme de uma dose para o próximo disparo válido.
   static Future<void> agendarDose(
     DoseMedicamento dose,
@@ -23,12 +17,17 @@ class AlarmService {
     final horario = _proximoDisparo(dose);
     if (horario == null) return;
 
+    final vol = await PrefsService.instance.getVolumeCalibracao();
     await Alarm.set(
       alarmSettings: AlarmSettings(
         id: dose.id!,
         dateTime: horario,
         assetAudioPath: (await PrefsService.instance.getSomAlarme()).assetPath,
-        volumeSettings: _volumeSettings,
+        volumeSettings: VolumeSettings.fade(
+          volume: vol,
+          fadeDuration: const Duration(seconds: 3),
+          volumeEnforced: true,
+        ),
         loopAudio: true,
         vibrate: true,
         warningNotificationOnKill: true,

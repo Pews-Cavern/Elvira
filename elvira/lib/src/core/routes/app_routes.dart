@@ -4,6 +4,7 @@ import '../../features/onboarding/step1_name_screen.dart';
 import '../../features/onboarding/step2_gender_screen.dart';
 import '../../features/onboarding/step3_caregiver_screen.dart';
 import '../../features/onboarding/step4_accessibility_screen.dart';
+import '../../features/onboarding/step5_audio_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/discagem/discagem_screen.dart';
 import '../../features/contatos/contatos_screen.dart';
@@ -36,6 +37,7 @@ class AppRoutes {
   static const step2 = '/onboarding/step2';
   static const step3 = '/onboarding/step3';
   static const step4 = '/onboarding/step4';
+  static const step5 = '/onboarding/step5';
 
   static const home = '/home';
   static const discagem = '/discagem';
@@ -71,6 +73,7 @@ class AppRoutes {
         step2: (_) => const Step2GenderScreen(),
         step3: (_) => const Step3CaregiverScreen(),
         step4: (_) => const Step4AccessibilityScreen(),
+        step5: (_) => const Step5AudioScreen(),
         home: (_) => const HomeScreen(),
         discagem: (_) => const DiscagemScreen(),
         contatos: (_) => const ContatosScreen(),

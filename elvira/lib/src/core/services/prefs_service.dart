@@ -18,6 +18,7 @@ class PrefsService {
   static final instance = PrefsService._();
 
   static const _keySomAlarme = 'som_alarme';
+  static const _keyVolumeCalibracao = 'volume_calibracao';
 
   /// Lista de sons disponíveis para o alarme.
   static const List<SomAlarme> sonsDisponiveis = [
@@ -50,5 +51,15 @@ class PrefsService {
   Future<void> setSomAlarme(String id) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keySomAlarme, id);
+  }
+
+  Future<double> getVolumeCalibracao() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keyVolumeCalibracao) ?? 1.0;
+  }
+
+  Future<void> setVolumeCalibracao(double volume) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keyVolumeCalibracao, volume);
   }
 }

@@ -16,6 +16,7 @@ import 'src/core/providers/dose_provider.dart';
 import 'src/core/routes/app_routes.dart';
 import 'src/services/call_service.dart';
 import 'src/core/services/notification_service.dart';
+import 'src/core/services/volume_guard_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -38,6 +39,7 @@ void main() async {
   await DatabaseHelper.instance.database;
   await Alarm.init();
   await NotificationService.instance.init();
+  await VolumeGuardService.instance.init();
 
   runApp(
     MultiProvider(

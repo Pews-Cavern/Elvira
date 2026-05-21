@@ -44,7 +44,7 @@ class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 3,
-      totalSteps: 4,
+      totalSteps: 5,
       emoji: '🤝',
       titulo: 'Alguém vai te ajudar?',
       subtitulo: 'Filho, filha, cuidador ou familiar',

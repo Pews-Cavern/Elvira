@@ -36,7 +36,7 @@ class _Step1NameScreenState extends State<Step1NameScreen> {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 1,
-      totalSteps: 4,
+      totalSteps: 5,
       emoji: '👋',
       titulo: 'Qual é o seu nome?',
       subtitulo: 'Como podemos te chamar?',
