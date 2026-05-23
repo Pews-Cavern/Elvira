@@ -1,5 +1,6 @@
 class Medicamento {
   final int? id;
+  final int usuarioId;
   final String nome;
   final String dosagem;
   final String unidade;
@@ -11,6 +12,7 @@ class Medicamento {
 
   const Medicamento({
     this.id,
+    this.usuarioId = 1,
     required this.nome,
     required this.dosagem,
     this.unidade = 'comprimido',
@@ -23,6 +25,7 @@ class Medicamento {
 
   Map<String, dynamic> toMap() => {
         'id': id,
+        'usuario_id': usuarioId,
         'nome': nome,
         'dosagem': dosagem,
         'unidade': unidade,
@@ -35,6 +38,7 @@ class Medicamento {
 
   factory Medicamento.fromMap(Map<String, dynamic> m) => Medicamento(
         id: m['id'] as int?,
+        usuarioId: m['usuario_id'] as int? ?? 1,
         nome: m['nome'] as String,
         dosagem: m['dosagem'] as String,
         unidade: m['unidade'] as String? ?? 'comprimido',
@@ -47,6 +51,7 @@ class Medicamento {
 
   Medicamento copyWith({
     int? id,
+    int? usuarioId,
     String? nome,
     String? dosagem,
     String? unidade,
@@ -58,6 +63,7 @@ class Medicamento {
   }) =>
       Medicamento(
         id: id ?? this.id,
+        usuarioId: usuarioId ?? this.usuarioId,
         nome: nome ?? this.nome,
         dosagem: dosagem ?? this.dosagem,
         unidade: unidade ?? this.unidade,

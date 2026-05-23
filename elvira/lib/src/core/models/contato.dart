@@ -1,5 +1,6 @@
 class Contato {
   final int? id;
+  final int usuarioId;
   final String nome;
   final String relacao;
   final String telefone;
@@ -10,6 +11,7 @@ class Contato {
 
   const Contato({
     this.id,
+    this.usuarioId = 1,
     required this.nome,
     required this.relacao,
     required this.telefone,
@@ -49,6 +51,7 @@ class Contato {
 
   Map<String, dynamic> toMap() => {
         'id': id,
+        'usuario_id': usuarioId,
         'nome': nome,
         'relacao': relacao,
         'telefone': telefone,
@@ -60,6 +63,7 @@ class Contato {
 
   factory Contato.fromMap(Map<String, dynamic> m) => Contato(
         id: m['id'] as int?,
+        usuarioId: m['usuario_id'] as int? ?? 1,
         nome: m['nome'] as String,
         relacao: m['relacao'] as String,
         telefone: m['telefone'] as String,
@@ -71,6 +75,7 @@ class Contato {
 
   Contato copyWith({
     int? id,
+    int? usuarioId,
     String? nome,
     String? relacao,
     String? telefone,
@@ -81,6 +86,7 @@ class Contato {
   }) =>
       Contato(
         id: id ?? this.id,
+        usuarioId: usuarioId ?? this.usuarioId,
         nome: nome ?? this.nome,
         relacao: relacao ?? this.relacao,
         telefone: telefone ?? this.telefone,
