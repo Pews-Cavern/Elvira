@@ -74,6 +74,7 @@ class _IdentidadeFormScreenState extends State<IdentidadeFormScreen> {
       alergias: _alergias.isEmpty ? null : _alergias.join(','),
       condicoesSaude: _condicoes.isEmpty ? null : _condicoes.join(','),
       pinCuidador: atual?.pinCuidador,
+      temCuidador: atual?.temCuidador ?? false,
       tamanhoFonteBase: atual?.tamanhoFonteBase ?? 1.0,
       onboardingCompleto: atual?.onboardingCompleto ?? true,
     );

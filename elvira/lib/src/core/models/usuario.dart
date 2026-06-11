@@ -8,8 +8,10 @@ class Usuario {
   final String? alergias;
   final String? condicoesSaude;
   final String? pinCuidador;
+  final bool temCuidador;
   final String? planoSaude;
   final double tamanhoFonteBase;
+  final String modoDaltonico;
   final bool onboardingCompleto;
 
   const Usuario({
@@ -22,8 +24,10 @@ class Usuario {
     this.alergias,
     this.condicoesSaude,
     this.pinCuidador,
+    this.temCuidador = false,
     this.planoSaude,
     this.tamanhoFonteBase = 1.0,
+    this.modoDaltonico = 'normal',
     this.onboardingCompleto = false,
   });
 
@@ -37,8 +41,10 @@ class Usuario {
         'alergias': alergias,
         'condicoes_saude': condicoesSaude,
         'pin_cuidador': pinCuidador,
+        'tem_cuidador': temCuidador ? 1 : 0,
         'plano_saude': planoSaude,
         'tamanho_fonte_base': tamanhoFonteBase,
+        'modo_daltonico': modoDaltonico,
         'onboarding_completo': onboardingCompleto ? 1 : 0,
       };
 
@@ -52,8 +58,10 @@ class Usuario {
         alergias: m['alergias'] as String?,
         condicoesSaude: m['condicoes_saude'] as String?,
         pinCuidador: m['pin_cuidador'] as String?,
+        temCuidador: (m['tem_cuidador'] as int?) == 1,
         planoSaude: m['plano_saude'] as String?,
         tamanhoFonteBase: (m['tamanho_fonte_base'] as num?)?.toDouble() ?? 1.0,
+        modoDaltonico: m['modo_daltonico'] as String? ?? 'normal',
         onboardingCompleto: (m['onboarding_completo'] as int?) == 1,
       );
 
@@ -67,8 +75,11 @@ class Usuario {
     String? alergias,
     String? condicoesSaude,
     String? pinCuidador,
+    bool clearPinCuidador = false,
+    bool? temCuidador,
     String? planoSaude,
     double? tamanhoFonteBase,
+    String? modoDaltonico,
     bool? onboardingCompleto,
   }) =>
       Usuario(
@@ -80,9 +91,11 @@ class Usuario {
         tipoSanguineo: tipoSanguineo ?? this.tipoSanguineo,
         alergias: alergias ?? this.alergias,
         condicoesSaude: condicoesSaude ?? this.condicoesSaude,
-        pinCuidador: pinCuidador ?? this.pinCuidador,
+        pinCuidador: clearPinCuidador ? null : (pinCuidador ?? this.pinCuidador),
+        temCuidador: temCuidador ?? this.temCuidador,
         planoSaude: planoSaude ?? this.planoSaude,
         tamanhoFonteBase: tamanhoFonteBase ?? this.tamanhoFonteBase,
+        modoDaltonico: modoDaltonico ?? this.modoDaltonico,
         onboardingCompleto: onboardingCompleto ?? this.onboardingCompleto,
       );
 }

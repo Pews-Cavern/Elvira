@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/medicamentos_provider.dart';
 import '../../../core/models/medicamento.dart';
@@ -10,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/elvira_button.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 
 class MedicamentoFormScreen extends StatefulWidget {
   const MedicamentoFormScreen({super.key});
@@ -120,25 +122,19 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
 
   void _gerarHorariosAutomaticos() {
     if (_horarios.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Adicione o horário da primeira dose para o app preencher os demais',
-            style: AppTextStyles.bodySmall,
-          ),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Adicione o horário da primeira dose para o app preencher os demais',
+        type: FeedbackType.error,
       );
       return;
     }
     final int? intervalo = int.tryParse(_intervaloCtrl.text);
     if (intervalo == null || intervalo <= 0 || intervalo > 24) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Digite um intervalo válido (ex: 8)',
-            style: AppTextStyles.bodySmall,
-          ),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Digite um intervalo válido (ex: 8)',
+        type: FeedbackType.error,
       );
       return;
     }
@@ -166,13 +162,10 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
   Future<void> _salvar() async {
     if (!_formKey.currentState!.validate()) return;
     if (_horarios.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Adicione ao menos 1 horário',
-            style: AppTextStyles.body,
-          ),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Adicione ao menos 1 horário',
+        type: FeedbackType.error,
       );
       return;
     }
@@ -212,11 +205,21 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
       } else {
         await provider.adicionarMedicamento(med, doses);
       }
-      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        await showFeedbackDialog(
+          context,
+          message: _editando != null
+              ? 'Medicamento atualizado com sucesso!'
+              : 'Medicamento foi salvo!',
+        );
+        if (mounted) Navigator.pop(context);
+      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar medicamento: $e')),
+        await showFeedbackDialog(
+          context,
+          message: 'Erro ao salvar medicamento: $e',
+          type: FeedbackType.error,
         );
         setState(() => _salvando = false);
       }
@@ -246,7 +249,8 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
                       'Dosagem',
                       _dosagemCtrl,
                       required: true,
-                      keyboardType: TextInputType.text,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [_DosagemFormatter()],
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -519,12 +523,14 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
     bool required = false,
     int maxLines = 1,
     TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
       controller: ctrl,
       style: AppTextStyles.body,
       maxLines: maxLines,
       keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: label),
       scrollPadding: const EdgeInsets.only(bottom: 80),
@@ -533,5 +539,20 @@ class _MedicamentoFormScreenState extends State<MedicamentoFormScreen> {
               ? (v) => (v?.trim().isEmpty ?? true) ? 'Campo obrigatório' : null
               : null,
     );
+  }
+}
+
+class _DosagemFormatter extends TextInputFormatter {
+  static final _regex = RegExp(r'^\d*(,\d{0,1})?$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty || _regex.hasMatch(newValue.text)) {
+      return newValue;
+    }
+    return oldValue;
   }
 }

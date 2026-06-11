@@ -35,13 +35,32 @@ class UsuarioProvider extends ChangeNotifier {
     await salvar(_usuario!.copyWith(tamanhoFonteBase: escala));
   }
 
+  bool get temCuidador => _usuario?.temCuidador ?? false;
+
   Future<bool> verificarPin(String pin) async {
-    final pinAtual = _usuario?.pinCuidador ?? '0000';
+    final pinAtual = _usuario?.pinCuidador;
+    if (pinAtual == null || pinAtual.isEmpty) return false;
     return pinAtual == pin;
   }
 
   Future<void> definirPin(String pin) async {
     if (_usuario == null) return;
     await salvar(_usuario!.copyWith(pinCuidador: pin));
+  }
+
+  Future<void> definirCuidador(bool temCuidador, {String? pin}) async {
+    if (_usuario == null) return;
+    if (temCuidador) {
+      await salvar(_usuario!.copyWith(temCuidador: true, pinCuidador: pin));
+    } else {
+      await salvar(_usuario!.copyWith(temCuidador: false, clearPinCuidador: true));
+    }
+  }
+
+  String get modoDaltonico => _usuario?.modoDaltonico ?? 'normal';
+
+  Future<void> definirModoDaltonico(String modo) async {
+    if (_usuario == null) return;
+    await salvar(_usuario!.copyWith(modoDaltonico: modo));
   }
 }

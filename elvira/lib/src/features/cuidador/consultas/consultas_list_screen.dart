@@ -9,6 +9,7 @@ import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 
 class ConsultasListScreen extends StatelessWidget {
   const ConsultasListScreen({super.key});
@@ -101,18 +102,20 @@ class _ConsultaCard extends StatelessWidget {
   Future<void> _abrirMaps(BuildContext context) async {
     final url = consulta.mapsUrl;
     if (url == null || url.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Esta consulta não tem link de Maps cadastrado.'),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Esta consulta não tem link de Maps cadastrado.',
+        type: FeedbackType.error,
       );
       return;
     }
 
     final uri = Uri.tryParse(url.trim());
     if (uri == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('O link de Maps está inválido.')),
+      showFeedbackDialog(
+        context,
+        message: 'O link de Maps está inválido.',
+        type: FeedbackType.error,
       );
       return;
     }

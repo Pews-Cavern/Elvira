@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 8;
+  static const _dbVersion = 10;
 
   Database? _db;
 
@@ -39,6 +39,8 @@ class DatabaseHelper {
         alergias TEXT,
         condicoes_saude TEXT,
         pin_cuidador TEXT,
+        tem_cuidador INTEGER NOT NULL DEFAULT 0,
+        modo_daltonico TEXT NOT NULL DEFAULT 'normal',
         plano_saude TEXT,
         tamanho_fonte_base REAL NOT NULL DEFAULT 1.0,
         onboarding_completo INTEGER NOT NULL DEFAULT 0
@@ -273,6 +275,20 @@ class DatabaseHelper {
         ''');
         await db.execute('DROP TABLE log_uso');
         await db.execute('ALTER TABLE log_uso_v8 RENAME TO log_uso');
+      } catch (_) {}
+    }
+    if (oldVersion < 9) {
+      try {
+        await db.execute(
+          'ALTER TABLE usuario ADD COLUMN tem_cuidador INTEGER NOT NULL DEFAULT 0;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 10) {
+      try {
+        await db.execute(
+          "ALTER TABLE usuario ADD COLUMN modo_daltonico TEXT NOT NULL DEFAULT 'normal';",
+        );
       } catch (_) {}
     }
   }

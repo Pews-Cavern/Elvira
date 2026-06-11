@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/contato_avatar.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 import '../../../core/routes/app_routes.dart';
 
 class ContatosAdminScreen extends StatefulWidget {
@@ -24,8 +25,10 @@ class _ContatosAdminScreenState extends State<ContatosAdminScreen> {
     final granted = await fc.FlutterContacts.requestPermission();
     if (!granted) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permissão negada.')),
+        showFeedbackDialog(
+          context,
+          message: 'Permissão negada.',
+          type: FeedbackType.error,
         );
       }
       return;
@@ -58,9 +61,9 @@ class _ContatosAdminScreenState extends State<ContatosAdminScreen> {
 
         if (mounted) {
           await context.read<ContatosProvider>().adicionar(novoContato);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$nome importado com sucesso!')),
-          );
+          if (mounted) {
+            showFeedbackDialog(context, message: '$nome importado com sucesso!');
+          }
         }
       }
     }

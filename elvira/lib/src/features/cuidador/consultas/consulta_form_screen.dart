@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/elvira_button.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 
 class ConsultaFormScreen extends StatefulWidget {
   const ConsultaFormScreen({super.key});
@@ -100,10 +101,10 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
   Future<void> _salvar() async {
     if (!_formKey.currentState!.validate()) return;
     if (_dateTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selecione a data e o horário da consulta.'),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Selecione a data e o horário da consulta.',
+        type: FeedbackType.error,
       );
       return;
     }
@@ -126,12 +127,22 @@ class _ConsultaFormScreenState extends State<ConsultaFormScreen> {
       } else {
         await provider.adicionarConsulta(consulta);
       }
-      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        await showFeedbackDialog(
+          context,
+          message: _editando != null
+              ? 'Consulta atualizada com sucesso!'
+              : 'Consulta adicionada com sucesso!',
+        );
+        if (mounted) Navigator.pop(context);
+      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
+        await showFeedbackDialog(
           context,
-        ).showSnackBar(SnackBar(content: Text('Erro ao salvar consulta: $e')));
+          message: 'Erro ao salvar consulta: $e',
+          type: FeedbackType.error,
+        );
         setState(() => _salvando = false);
       }
     }
