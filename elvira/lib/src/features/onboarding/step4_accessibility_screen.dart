@@ -41,7 +41,7 @@ class _Step4AccessibilityScreenState extends State<Step4AccessibilityScreen> {
       subtitulo: 'Toque no botão para encontrar o tamanho ideal',
       onContinuar: _concluir,
       onVoltar: () => Navigator.pop(context),
-      labelContinuar: 'Pronto! Entrar no app',
+      labelContinuar: 'Continuar →',
       content: Column(
         children: [
           const SizedBox(height: 16),

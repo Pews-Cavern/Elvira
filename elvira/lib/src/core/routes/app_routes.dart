@@ -79,6 +79,7 @@ class AppRoutes {
     step2: (_) => const Step2GenderScreen(),
     step3: (_) => const Step3CaregiverScreen(),
     step4: (_) => const Step4AccessibilityScreen(),
+    step5: (_) => const Step5AudioScreen(),
     home: (_) => const HomeScreen(),
     discagem: (_) => const DiscagemScreen(),
     contatos: (_) => const ContatosScreen(),

@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 7;
+  static const _dbVersion = 10;
 
   Database? _db;
 
@@ -39,6 +39,8 @@ class DatabaseHelper {
         alergias TEXT,
         condicoes_saude TEXT,
         pin_cuidador TEXT,
+        tem_cuidador INTEGER NOT NULL DEFAULT 0,
+        modo_daltonico TEXT NOT NULL DEFAULT 'normal',
         plano_saude TEXT,
         tamanho_fonte_base REAL NOT NULL DEFAULT 1.0,
         onboarding_completo INTEGER NOT NULL DEFAULT 0
@@ -48,19 +50,22 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE contato (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL DEFAULT 1,
         nome TEXT NOT NULL,
         relacao TEXT NOT NULL,
         telefone TEXT NOT NULL,
         foto_path TEXT,
         eh_emergencia INTEGER NOT NULL DEFAULT 0,
         eh_favorito INTEGER NOT NULL DEFAULT 0,
-        ordem_exibicao INTEGER NOT NULL DEFAULT 0
+        ordem_exibicao INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
       )
     ''');
 
     await db.execute('''
       CREATE TABLE medicamento (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL DEFAULT 1,
         nome TEXT NOT NULL,
         dosagem TEXT NOT NULL,
         unidade TEXT NOT NULL DEFAULT 'comprimido',
@@ -68,7 +73,8 @@ class DatabaseHelper {
         foto_path TEXT,
         data_inicio TEXT,
         data_fim TEXT,
-        ativo INTEGER NOT NULL DEFAULT 1
+        ativo INTEGER NOT NULL DEFAULT 1,
+        FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
       )
     ''');
 
@@ -97,20 +103,24 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE log_uso (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL DEFAULT 1,
         tipo TEXT NOT NULL,
         detalhe TEXT NOT NULL,
-        data_hora TEXT NOT NULL
+        data_hora TEXT NOT NULL,
+        FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
       )
     ''');
 
     await db.execute('''
       CREATE TABLE consulta_medica (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL DEFAULT 1,
         hospital_name TEXT NOT NULL,
         date_time TEXT NOT NULL,
         maps_url TEXT,
         notes TEXT,
-        lembrete_minutos INTEGER NOT NULL DEFAULT 60
+        lembrete_minutos INTEGER NOT NULL DEFAULT 60,
+        FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
       )
     ''');
   }
@@ -174,6 +184,110 @@ class DatabaseHelper {
       try {
         await db.execute(
           'ALTER TABLE contato ADD COLUMN eh_favorito INTEGER NOT NULL DEFAULT 0;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 8) {
+      // Adiciona usuario_id FK em contato, medicamento, consulta_medica e log_uso.
+      // SQLite não permite ALTER TABLE para adicionar FK, então recria as tabelas.
+      try {
+        await db.execute('''
+          CREATE TABLE contato_v8 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL DEFAULT 1,
+            nome TEXT NOT NULL,
+            relacao TEXT NOT NULL,
+            telefone TEXT NOT NULL,
+            foto_path TEXT,
+            eh_emergencia INTEGER NOT NULL DEFAULT 0,
+            eh_favorito INTEGER NOT NULL DEFAULT 0,
+            ordem_exibicao INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO contato_v8 (id, usuario_id, nome, relacao, telefone, foto_path, eh_emergencia, eh_favorito, ordem_exibicao)
+          SELECT id, 1, nome, relacao, telefone, foto_path, eh_emergencia, eh_favorito, ordem_exibicao FROM contato
+        ''');
+        await db.execute('DROP TABLE contato');
+        await db.execute('ALTER TABLE contato_v8 RENAME TO contato');
+      } catch (_) {}
+
+      try {
+        await db.execute('''
+          CREATE TABLE medicamento_v8 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL DEFAULT 1,
+            nome TEXT NOT NULL,
+            dosagem TEXT NOT NULL,
+            unidade TEXT NOT NULL DEFAULT 'comprimido',
+            instrucao_uso TEXT,
+            foto_path TEXT,
+            data_inicio TEXT,
+            data_fim TEXT,
+            ativo INTEGER NOT NULL DEFAULT 1,
+            FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO medicamento_v8 (id, usuario_id, nome, dosagem, unidade, instrucao_uso, foto_path, data_inicio, data_fim, ativo)
+          SELECT id, 1, nome, dosagem, unidade, instrucao_uso, foto_path, data_inicio, data_fim, ativo FROM medicamento
+        ''');
+        await db.execute('DROP TABLE medicamento');
+        await db.execute('ALTER TABLE medicamento_v8 RENAME TO medicamento');
+      } catch (_) {}
+
+      try {
+        await db.execute('''
+          CREATE TABLE consulta_medica_v8 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL DEFAULT 1,
+            hospital_name TEXT NOT NULL,
+            date_time TEXT NOT NULL,
+            maps_url TEXT,
+            notes TEXT,
+            lembrete_minutos INTEGER NOT NULL DEFAULT 60,
+            FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO consulta_medica_v8 (id, usuario_id, hospital_name, date_time, maps_url, notes, lembrete_minutos)
+          SELECT id, 1, hospital_name, date_time, maps_url, notes, lembrete_minutos FROM consulta_medica
+        ''');
+        await db.execute('DROP TABLE consulta_medica');
+        await db.execute('ALTER TABLE consulta_medica_v8 RENAME TO consulta_medica');
+      } catch (_) {}
+
+      try {
+        await db.execute('''
+          CREATE TABLE log_uso_v8 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL DEFAULT 1,
+            tipo TEXT NOT NULL,
+            detalhe TEXT NOT NULL,
+            data_hora TEXT NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO log_uso_v8 (id, usuario_id, tipo, detalhe, data_hora)
+          SELECT id, 1, tipo, detalhe, data_hora FROM log_uso
+        ''');
+        await db.execute('DROP TABLE log_uso');
+        await db.execute('ALTER TABLE log_uso_v8 RENAME TO log_uso');
+      } catch (_) {}
+    }
+    if (oldVersion < 9) {
+      try {
+        await db.execute(
+          'ALTER TABLE usuario ADD COLUMN tem_cuidador INTEGER NOT NULL DEFAULT 0;',
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 10) {
+      try {
+        await db.execute(
+          "ALTER TABLE usuario ADD COLUMN modo_daltonico TEXT NOT NULL DEFAULT 'normal';",
         );
       } catch (_) {}
     }

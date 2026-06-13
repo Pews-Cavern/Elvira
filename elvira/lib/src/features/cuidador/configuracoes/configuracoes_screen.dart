@@ -15,8 +15,10 @@ import '../../../core/services/prefs_service.dart';
 import '../../../core/services/volume_guard_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/theme/colorblind_filters.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/elvira_button.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 import '../../../services/call_service.dart';
 
 class ConfiguracoesScreen extends StatefulWidget {
@@ -78,9 +80,7 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
     await Future.delayed(const Duration(seconds: 3));
     await Alarm.stop(99999);
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Som salvo: ${som.nome}', style: AppTextStyles.body)),
-      );
+      showFeedbackDialog(context, message: 'Som salvo: ${som.nome}');
     }
   }
 
@@ -231,13 +231,9 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
 
     await _carregarVolume();
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Volume calibrado: ${(_volumeCalibracao * 100).round()}%',
-            style: AppTextStyles.body,
-          ),
-        ),
+      showFeedbackDialog(
+        context,
+        message: 'Volume calibrado: ${(_volumeCalibracao * 100).round()}%',
       );
     }
   }
@@ -343,9 +339,46 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   Future<void> _salvarEscala() async {
     await context.read<UsuarioProvider>().atualizarEscalaFonte(_escala);
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Tamanho do texto salvo!', style: AppTextStyles.body)),
-      );
+      showFeedbackDialog(context, message: 'Tamanho do texto salvo!');
+    }
+  }
+
+  Future<void> _confirmarModoDaltonico(ColorBlindMode modo) async {
+    final atual = context.read<UsuarioProvider>().modoDaltonico;
+    if (atual == modo.id) return;
+
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        icon: const Icon(Icons.palette_rounded, color: AppColors.primary, size: 48),
+        title: Text('Trocar as cores da tela?', style: AppTextStyles.h3, textAlign: TextAlign.center),
+        content: Text(
+          'As cores de todo o aplicativo vão mudar para o modo "${modo.label}".',
+          style: AppTextStyles.body,
+          textAlign: TextAlign.center,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+            child: const Text('Trocar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar != true || !mounted) return;
+
+    await context.read<UsuarioProvider>().definirModoDaltonico(modo.id);
+    if (mounted) {
+      showFeedbackDialog(context, message: 'Ajuste de cores salvo!');
     }
   }
 
@@ -353,18 +386,24 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
     final provider = context.read<UsuarioProvider>();
     final ok = await provider.verificarPin(_pinAtualCtrl.text);
     if (!ok) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('PIN atual incorreto', style: AppTextStyles.body)));
+      if (mounted) {
+        showFeedbackDialog(context, message: 'PIN atual incorreto', type: FeedbackType.error);
+      }
       return;
     }
     if (_pinNovoCtrl.text != _pinConfCtrl.text || _pinNovoCtrl.text.length != 4) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('PINs não conferem', style: AppTextStyles.body)));
+      if (mounted) {
+        showFeedbackDialog(context, message: 'PINs não conferem', type: FeedbackType.error);
+      }
       return;
     }
     await provider.definirPin(_pinNovoCtrl.text);
     _pinAtualCtrl.clear();
     _pinNovoCtrl.clear();
     _pinConfCtrl.clear();
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('PIN alterado com sucesso!', style: AppTextStyles.body)));
+    if (mounted) {
+      showFeedbackDialog(context, message: 'PIN alterado com sucesso!');
+    }
   }
 
   @override
@@ -535,6 +574,46 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
             ),
             const SizedBox(height: 12),
             ElviraButton(label: 'Aplicar tamanho', onPressed: _salvarEscala),
+            const SizedBox(height: 28),
+            // ─── Pessoas daltônicas ───────────────────────────
+            Text('Pessoas daltônicas', style: AppTextStyles.h3),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.blueLight)),
+              child: Column(
+                children: ColorBlindMode.values.map((modo) {
+                  final modoAtual = context.watch<UsuarioProvider>().modoDaltonico;
+                  final selecionado = modoAtual == modo.id;
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _confirmarModoDaltonico(modo),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selecionado ? AppColors.blueXLight : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Radio<String>(
+                            value: modo.id,
+                            groupValue: modoAtual,
+                            activeColor: AppColors.primary,
+                            onChanged: (_) => _confirmarModoDaltonico(modo),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(modo.label, style: AppTextStyles.body),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
             const SizedBox(height: 28),
             // Trocar PIN
             Text('Trocar PIN do cuidador', style: AppTextStyles.h3),

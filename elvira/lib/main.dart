@@ -16,6 +16,7 @@ import 'src/core/providers/medicamentos_provider.dart';
 import 'src/core/providers/consultas_provider.dart';
 import 'src/core/providers/dose_provider.dart';
 import 'src/core/routes/app_routes.dart';
+import 'src/core/theme/colorblind_filters.dart';
 import 'src/services/call_service.dart';
 import 'src/core/services/notification_service.dart';
 import 'src/core/services/volume_guard_service.dart';
@@ -181,6 +182,9 @@ class _ElviraAppState extends State<ElviraApp> {
     return Consumer<UsuarioProvider>(
       builder: (context, usuarioProvider, _) {
         final escala = usuarioProvider.escalaFonte;
+        final colorFilter = colorFilterFor(
+          ColorBlindMode.fromId(usuarioProvider.modoDaltonico),
+        );
 
         if (!usuarioProvider.loading &&
             !usuarioProvider.onboardingCompleto &&
@@ -194,18 +198,22 @@ class _ElviraAppState extends State<ElviraApp> {
           });
         }
 
+        final app = MaterialApp(
+          title: 'Elvira',
+          navigatorKey: navigatorKey,
+          theme: _buildTheme(),
+          debugShowCheckedModeBanner: false,
+          initialRoute: AppRoutes.home,
+          routes: AppRoutes.routes,
+        );
+
         return MediaQuery(
           data: MediaQuery.of(
             context,
           ).copyWith(textScaler: TextScaler.linear(escala)),
-          child: MaterialApp(
-            title: 'Elvira',
-            navigatorKey: navigatorKey,
-            theme: _buildTheme(),
-            debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.home,
-            routes: AppRoutes.routes,
-          ),
+          child: colorFilter != null
+              ? ColorFiltered(colorFilter: colorFilter, child: app)
+              : app,
         );
       },
     );

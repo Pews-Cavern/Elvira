@@ -55,12 +55,6 @@ class _DiscagemScreenState extends State<DiscagemScreen> {
     await FlutterPhoneDirectCaller.callNumber(_numero);
   }
 
-  String get _numeroFormatado {
-    if (_numero.length <= 2) return _numero;
-    if (_numero.length <= 7) return '(${_numero.substring(0, 2)}) ${_numero.substring(2)}';
-    return '(${_numero.substring(0, 2)}) ${_numero.substring(2, 7)}-${_numero.substring(7)}';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,17 +66,28 @@ class _DiscagemScreenState extends State<DiscagemScreen> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
             color: AppColors.primary,
-            child: Column(
+            child: Row(
               children: [
-                Text(
-                  _numero.isEmpty ? 'Digite o número' : _numeroFormatado,
-                  style: AppTextStyles.dialDisplay.copyWith(
-                    color: _numero.isEmpty ? Colors.white54 : Colors.white,
-                    fontSize: 36,
+                Expanded(
+                  child: Text(
+                    _numero.isEmpty ? 'Digite o número' : _numero,
+                    style: AppTextStyles.dialDisplay.copyWith(
+                      color: _numero.isEmpty ? Colors.white54 : Colors.white,
+                      fontSize: 36,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
+                if (_numero.isNotEmpty)
+                  GestureDetector(
+                    onLongPress: _apagarTudo,
+                    child: IconButton(
+                      onPressed: _apagar,
+                      icon: const Icon(Icons.backspace_outlined, color: Colors.white),
+                      tooltip: 'Apagar',
+                    ),
+                  ),
               ],
             ),
           ),
@@ -135,14 +140,6 @@ class _DiscagemScreenState extends State<DiscagemScreen> {
                       child: const Icon(Icons.call, size: 40),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                _ActionBtn(
-                  icon: Icons.arrow_back,
-                  color: AppColors.redLight,
-                  iconColor: AppColors.red,
-                  onTap: () => Navigator.pop(context),
-                  tooltip: 'Voltar',
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:android_intent_plus/android_intent.dart';
@@ -7,6 +8,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/status_bar_widget.dart';
 import '../../core/routes/app_routes.dart';
+import '../../core/providers/usuario_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -98,11 +100,21 @@ class HomeScreen extends StatelessWidget {
                             route: AppRoutes.sobre,
                             color: Color(0xFFE5F4F0),
                           ),
-                          const _AppTile(
+                          _AppTile(
                             emoji: '⚙️',
                             label: 'Cuidador',
-                            route: AppRoutes.cuidadorPin,
-                            color: Color(0xFFDCEEFB),
+                            color: const Color(0xFFDCEEFB),
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              final temCuidador =
+                                  context.read<UsuarioProvider>().temCuidador;
+                              Navigator.pushNamed(
+                                context,
+                                temCuidador
+                                    ? AppRoutes.cuidadorPin
+                                    : AppRoutes.cuidadorHome,
+                              );
+                            },
                           ),
                           _AppTile(
                             emoji: '',
@@ -174,7 +186,10 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushNamed(context, AppRoutes.emergencia);
                     },
                     icon: const Icon(Icons.warning_amber_rounded, size: 34),
-                    label: Text('EMERGÊNCIA', style: AppTextStyles.buttonLarge),
+                    label: Text(
+                      'EMERGÊNCIA',
+                      style: AppTextStyles.buttonLarge.copyWith(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.red,
                       foregroundColor: Colors.white,

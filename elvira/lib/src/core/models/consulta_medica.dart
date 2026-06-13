@@ -1,5 +1,6 @@
 class ConsultaMedica {
   final int? id;
+  final int usuarioId;
   final String hospitalName;
   final DateTime dateTime;
   final String? mapsUrl;
@@ -8,6 +9,7 @@ class ConsultaMedica {
 
   const ConsultaMedica({
     this.id,
+    this.usuarioId = 1,
     required this.hospitalName,
     required this.dateTime,
     this.mapsUrl,
@@ -17,6 +19,7 @@ class ConsultaMedica {
 
   Map<String, dynamic> toMap() => {
     'id': id,
+    'usuario_id': usuarioId,
     'hospital_name': hospitalName,
     'date_time': dateTime.toIso8601String(),
     'maps_url': mapsUrl,
@@ -26,6 +29,7 @@ class ConsultaMedica {
 
   factory ConsultaMedica.fromMap(Map<String, dynamic> m) => ConsultaMedica(
     id: m['id'] as int?,
+    usuarioId: m['usuario_id'] as int? ?? 1,
     hospitalName: m['hospital_name'] as String,
     dateTime: DateTime.parse(m['date_time'] as String),
     mapsUrl: m['maps_url'] as String?,
@@ -35,6 +39,7 @@ class ConsultaMedica {
 
   ConsultaMedica copyWith({
     int? id,
+    int? usuarioId,
     String? hospitalName,
     DateTime? dateTime,
     String? mapsUrl,
@@ -42,6 +47,7 @@ class ConsultaMedica {
     int? lembreteMinutos,
   }) => ConsultaMedica(
     id: id ?? this.id,
+    usuarioId: usuarioId ?? this.usuarioId,
     hospitalName: hospitalName ?? this.hospitalName,
     dateTime: dateTime ?? this.dateTime,
     mapsUrl: mapsUrl ?? this.mapsUrl,

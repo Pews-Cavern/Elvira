@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/elvira_app_bar.dart';
 import '../../../core/widgets/elvira_button.dart';
+import '../../../core/widgets/elvira_feedback_dialog.dart';
 
 class ContatoFormScreen extends StatefulWidget {
   const ContatoFormScreen({super.key});
@@ -58,8 +59,10 @@ class _ContatoFormScreenState extends State<ContatoFormScreen> {
     final granted = await fc.FlutterContacts.requestPermission();
     if (!granted) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permissão de contatos negada.')),
+        showFeedbackDialog(
+          context,
+          message: 'Permissão de contatos negada.',
+          type: FeedbackType.error,
         );
       }
       return;

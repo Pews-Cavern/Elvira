@@ -28,9 +28,10 @@ class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
   Future<void> _continuar() async {
     if (_temCuidador == null) return;
     final provider = context.read<UsuarioProvider>();
-    if (_temCuidador! && _pinController.text.length == 4) {
-      await provider.definirPin(_pinController.text);
-    }
+    await provider.definirCuidador(
+      _temCuidador!,
+      pin: _temCuidador! ? _pinController.text : null,
+    );
     if (mounted) Navigator.pushNamed(context, AppRoutes.step4);
   }
 
