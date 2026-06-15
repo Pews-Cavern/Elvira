@@ -63,4 +63,15 @@ class UsuarioProvider extends ChangeNotifier {
     if (_usuario == null) return;
     await salvar(_usuario!.copyWith(modoDaltonico: modo));
   }
+
+  Future<void> alternarAppVisivel(String appId, bool visivel) async {
+    if (_usuario == null) return;
+    final list = List<String>.from(_usuario!.appsOcultos);
+    if (visivel) {
+      list.remove(appId);
+    } else {
+      if (!list.contains(appId)) list.add(appId);
+    }
+    await salvar(_usuario!.copyWith(appsOcultos: list));
+  }
 }

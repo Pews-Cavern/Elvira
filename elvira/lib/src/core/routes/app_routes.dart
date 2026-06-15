@@ -25,6 +25,7 @@ import '../../features/cuidador/contatos/contato_form_screen.dart';
 import '../../features/cuidador/identidade/identidade_form_screen.dart';
 import '../../features/cuidador/relatorios/relatorios_screen.dart';
 import '../../features/cuidador/configuracoes/configuracoes_screen.dart';
+import '../../features/cuidador/configuracoes/gerenciar_apps_screen.dart';
 import '../../features/institucional/sobre_screen.dart';
 import '../../features/institucional/privacidade_screen.dart';
 import '../../features/institucional/memorial_screen.dart';
@@ -63,6 +64,7 @@ class AppRoutes {
   static const cuidadorIdentidade = '/cuidador/identidade';
   static const cuidadorRelatorios = '/cuidador/relatorios';
   static const cuidadorConfiguracoes = '/cuidador/configuracoes';
+  static const cuidadorGerenciarApps = '/cuidador/gerenciar_apps';
 
   static const ligacaoAtiva = '/ligacao/ativa';
 
@@ -100,6 +102,7 @@ class AppRoutes {
     cuidadorIdentidade: (_) => const IdentidadeFormScreen(),
     cuidadorRelatorios: (_) => const RelatoriosScreen(),
     cuidadorConfiguracoes: (_) => const ConfiguracoesScreen(),
+    cuidadorGerenciarApps: (_) => const GerenciarAppsScreen(),
     ligacaoAtiva: (ctx) {
       final args =
           ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;

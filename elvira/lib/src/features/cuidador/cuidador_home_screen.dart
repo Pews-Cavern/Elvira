@@ -211,6 +211,12 @@ class CuidadorHomeScreen extends StatelessWidget {
                       route: AppRoutes.cuidadorRelatorios,
                     ),
                     _GridBtn(
+                      emoji: '📱',
+                      titulo: 'Tela Inicial',
+                      sub: 'Ocultar ou mostrar apps',
+                      route: AppRoutes.cuidadorGerenciarApps,
+                    ),
+                    _GridBtn(
                       emoji: '⚙️',
                       titulo: 'Configurações',
                       sub: 'PIN, fonte, acessibilidade',
