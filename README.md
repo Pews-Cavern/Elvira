@@ -39,6 +39,21 @@ Acreditamos que tecnologia inclusiva deve ser acessível a todos. Por isso, a El
 
 ---
 
+## **TCC**
+Esse projeto foi colocado em prática como um Trabalho de Conclusão de Curso (TCC) para o curso de Análise e Desenvolvimento de Sistemas para a turma de 26' da Universidade Tuiuti do Paraná, onde se tornou uma das únicas equipes a tirar a nota máxima de apresentação, aplicação e documentação.<br>
+Agradeço a minha equipe maravilhosa que me ajudou a trazer esse projeto para fora do papel:
+
+- [AUDREY CRISTHINY TRINDADE KOCHINSKI](https://github.com/Audrey2112)
+- [GABRIELA ROCCA DA LOBO COSTA](https://github.com/GabRocca)
+- [JOÃO GABRIEL CASTRO DE OLIVEIRA](https://github.com/Blu-guy)
+- [JOÃO GUALBERTO BOISSA NETTO](https://github.com/PirateCoder13)
+- [LUIZ HENRIQUE DA GRAÇA](https://github.com/lhzluiz)
+- [MARCIO ANTONIO MARQUES ALMEIDA JUNIOR](https://github.com/MarcioJR-dev)
+- [PAULO EDUARDO KONOPKA](https://github.com/PewDizinho)
+
+
+---
+
 ## **Licença**
 Clique aqui para ler a nossa [LICENÇA](https://github.com/Pews-Cavern/Elvira/blob/main/LICENCE)
 
