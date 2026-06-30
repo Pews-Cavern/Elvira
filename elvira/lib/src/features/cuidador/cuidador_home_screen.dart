@@ -276,6 +276,7 @@ class CuidadorHomeScreen extends StatelessWidget {
           );
         },
       ),
+      ),
     );
   }
 }
