@@ -13,6 +13,7 @@ class Usuario {
   final double tamanhoFonteBase;
   final String modoDaltonico;
   final bool onboardingCompleto;
+  final List<String> appsOcultos;
 
   const Usuario({
     this.id,
@@ -29,6 +30,7 @@ class Usuario {
     this.tamanhoFonteBase = 1.0,
     this.modoDaltonico = 'normal',
     this.onboardingCompleto = false,
+    this.appsOcultos = const [],
   });
 
   Map<String, dynamic> toMap() => {
@@ -46,6 +48,7 @@ class Usuario {
         'tamanho_fonte_base': tamanhoFonteBase,
         'modo_daltonico': modoDaltonico,
         'onboarding_completo': onboardingCompleto ? 1 : 0,
+        'apps_ocultos': appsOcultos.join(','),
       };
 
   factory Usuario.fromMap(Map<String, dynamic> m) => Usuario(
@@ -63,6 +66,7 @@ class Usuario {
         tamanhoFonteBase: (m['tamanho_fonte_base'] as num?)?.toDouble() ?? 1.0,
         modoDaltonico: m['modo_daltonico'] as String? ?? 'normal',
         onboardingCompleto: (m['onboarding_completo'] as int?) == 1,
+        appsOcultos: (m['apps_ocultos'] as String?)?.split(',').where((e) => e.isNotEmpty).toList() ?? [],
       );
 
   Usuario copyWith({
@@ -81,6 +85,7 @@ class Usuario {
     double? tamanhoFonteBase,
     String? modoDaltonico,
     bool? onboardingCompleto,
+    List<String>? appsOcultos,
   }) =>
       Usuario(
         id: id ?? this.id,
@@ -97,5 +102,6 @@ class Usuario {
         tamanhoFonteBase: tamanhoFonteBase ?? this.tamanhoFonteBase,
         modoDaltonico: modoDaltonico ?? this.modoDaltonico,
         onboardingCompleto: onboardingCompleto ?? this.onboardingCompleto,
+        appsOcultos: appsOcultos ?? this.appsOcultos,
       );
 }

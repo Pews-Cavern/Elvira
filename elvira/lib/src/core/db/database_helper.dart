@@ -6,7 +6,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
 
   static const _dbName = 'elvira.db';
-  static const _dbVersion = 10;
+  static const _dbVersion = 11;
 
   Database? _db;
 
@@ -43,7 +43,8 @@ class DatabaseHelper {
         modo_daltonico TEXT NOT NULL DEFAULT 'normal',
         plano_saude TEXT,
         tamanho_fonte_base REAL NOT NULL DEFAULT 1.0,
-        onboarding_completo INTEGER NOT NULL DEFAULT 0
+        onboarding_completo INTEGER NOT NULL DEFAULT 0,
+        apps_ocultos TEXT NOT NULL DEFAULT ''
       )
     ''');
 
@@ -288,6 +289,13 @@ class DatabaseHelper {
       try {
         await db.execute(
           "ALTER TABLE usuario ADD COLUMN modo_daltonico TEXT NOT NULL DEFAULT 'normal';",
+        );
+      } catch (_) {}
+    }
+    if (oldVersion < 11) {
+      try {
+        await db.execute(
+          "ALTER TABLE usuario ADD COLUMN apps_ocultos TEXT NOT NULL DEFAULT '';",
         );
       } catch (_) {}
     }

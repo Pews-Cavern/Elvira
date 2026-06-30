@@ -12,8 +12,16 @@ class CuidadorHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+    var media = MediaQuery.of(context);
+    var scale = media.textScaler.scale(1.0);
+    if (scale > 1.3) {
+      media = media.copyWith(textScaler: const TextScaler.linear(1.3));
+    }
+
+    return MediaQuery(
+      data: media,
+      child: Scaffold(
+        backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
@@ -53,29 +61,33 @@ class CuidadorHomeScreen extends StatelessWidget {
                         radius: 28,
                         backgroundColor: AppColors.blueLight,
                         child: Text(
-                          usuario?.nome.substring(0, 2).toUpperCase() ?? 'EL',
+                          usuario != null && usuario.nome.isNotEmpty
+                              ? (usuario.nome.length >= 2 ? usuario.nome.substring(0, 2) : usuario.nome).toUpperCase()
+                              : 'EL',
                           style: AppTextStyles.bodyBold.copyWith(
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                       const SizedBox(width: 14),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            usuario?.nome ?? 'Usuário',
-                            style: AppTextStyles.h3.copyWith(
-                              color: Colors.white,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              usuario?.nome ?? 'Usuário',
+                              style: AppTextStyles.h3.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text(
-                            dataHoje,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: Colors.white70,
+                            Text(
+                              dataHoje,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: Colors.white70,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -178,7 +190,7 @@ class CuidadorHomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 0.92,
+                  childAspectRatio: 0.92 - ((usuProvider.escalaFonte - 1.0) * 0.3),
                   children: const [
                     _GridBtn(
                       emoji: '💊',
@@ -209,6 +221,12 @@ class CuidadorHomeScreen extends StatelessWidget {
                       titulo: 'Relatórios',
                       sub: 'Histórico de doses e uso',
                       route: AppRoutes.cuidadorRelatorios,
+                    ),
+                    _GridBtn(
+                      emoji: '📱',
+                      titulo: 'Tela Inicial',
+                      sub: 'Ocultar ou mostrar apps',
+                      route: AppRoutes.cuidadorGerenciarApps,
                     ),
                     _GridBtn(
                       emoji: '⚙️',
@@ -257,6 +275,7 @@ class CuidadorHomeScreen extends StatelessWidget {
             ),
           );
         },
+      ),
       ),
     );
   }
@@ -334,7 +353,7 @@ class _GridBtn extends StatelessWidget {
                 style: AppTextStyles.bodyBold.copyWith(
                   color: AppColors.primary,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),

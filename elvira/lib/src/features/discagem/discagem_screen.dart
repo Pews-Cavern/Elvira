@@ -166,12 +166,18 @@ class _NumpadKey extends StatelessWidget {
       elevation: 1,
       child: InkWell(
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(digito, style: AppTextStyles.numpadDigit),
-            if (letras.isNotEmpty) Text(letras, style: AppTextStyles.numpadLetters),
-          ],
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(digito, style: AppTextStyles.numpadDigit),
+                if (letras.isNotEmpty) Text(letras, style: AppTextStyles.numpadLetters),
+              ],
+            ),
+          ),
         ),
       ),
     );
