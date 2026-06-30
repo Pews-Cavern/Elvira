@@ -44,8 +44,9 @@ class HomeScreen extends StatelessWidget {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       const spacing = 12.0;
+                      final escala = context.watch<UsuarioProvider>().escalaFonte;
                       final tileWidth = (constraints.maxWidth - spacing) / 2;
-                      final tileHeight = tileWidth * 0.88;
+                      final tileHeight = tileWidth * (0.88 + ((escala - 1.0) * 0.4));
 
                       final ocultos = context.watch<UsuarioProvider>().usuario?.appsOcultos ?? [];
 
@@ -90,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                           emoji: '',
                           label: 'WhatsApp',
                           color: const Color(0xFFDCF8C6),
-                          customIcon: const FaIcon(FontAwesomeIcons.whatsapp, size: 52, color: Color(0xFF25D366)),
+                          customIcon: const FaIcon(FontAwesomeIcons.whatsapp, size: 44, color: Color(0xFF25D366)),
                           onTap: () async {
                             const intent = AndroidIntent(action: 'android.intent.action.MAIN', package: 'com.whatsapp', componentName: 'com.whatsapp.Main');
                             try { await intent.launch(); } catch (_) { await launchUrl(Uri.parse('https://play.google.com/store/apps/details?id=com.whatsapp'), mode: LaunchMode.externalApplication); }
@@ -100,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                           emoji: '',
                           label: 'Uber',
                           color: const Color(0xFFE5E5E5),
-                          customIcon: const FaIcon(FontAwesomeIcons.uber, size: 52, color: Colors.black),
+                          customIcon: const FaIcon(FontAwesomeIcons.uber, size: 44, color: Colors.black),
                           onTap: () async {
                             const intent = AndroidIntent(action: 'android.intent.action.MAIN', package: 'com.ubercab');
                             try { await intent.launch(); } catch (_) { await launchUrl(Uri.parse('https://m.uber.com/'), mode: LaunchMode.externalApplication); }
@@ -110,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                           emoji: '',
                           label: 'Mapas',
                           color: const Color(0xFFFFEBE5),
-                          customIcon: const Icon(Icons.location_on_rounded, size: 52, color: Color(0xFFEA4335)),
+                          customIcon: const Icon(Icons.location_on_rounded, size: 44, color: Color(0xFFEA4335)),
                           onTap: () async {
                             const intent = AndroidIntent(action: 'action_view', data: 'geo:0,0?q=', package: 'com.google.android.apps.maps');
                             try { await intent.launch(); } catch (_) { await launchUrl(Uri.parse('https://maps.google.com/'), mode: LaunchMode.externalApplication); }
@@ -121,7 +122,7 @@ class HomeScreen extends StatelessWidget {
                           emoji: '',
                           label: 'Pesquisa por Voz',
                           color: const Color(0xFFF0E5F8),
-                          customIcon: const Icon(Icons.mic_rounded, size: 52, color: Color(0xFF9C27B0)),
+                          customIcon: const Icon(Icons.mic_rounded, size: 44, color: Color(0xFF9C27B0)),
                           onTap: () async {
                             const intent = AndroidIntent(action: 'android.speech.action.WEB_SEARCH', package: 'com.google.android.googlequicksearchbox');
                             try { await intent.launch(); } catch (_) { await launchUrl(Uri.parse('https://www.google.com'), mode: LaunchMode.externalApplication); }
@@ -134,7 +135,7 @@ class HomeScreen extends StatelessWidget {
                           emoji: '',
                           label: 'YouTube',
                           color: const Color(0xFFFFE5E5),
-                          customIcon: const FaIcon(FontAwesomeIcons.youtube, size: 52, color: Color(0xFFFF0000)),
+                          customIcon: const FaIcon(FontAwesomeIcons.youtube, size: 44, color: Color(0xFFFF0000)),
                           onTap: () async {
                             const intent = AndroidIntent(action: 'android.intent.action.MAIN', package: 'com.google.android.youtube');
                             try { await intent.launch(); } catch (_) { await launchUrl(Uri.parse('https://www.youtube.com/'), mode: LaunchMode.externalApplication); }
@@ -279,21 +280,27 @@ class _AppTile extends StatelessWidget {
                     Navigator.pushNamed(context, route!);
                   }
                   : null),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (customIcon != null)
-                customIcon!
-              else
-                Text(emoji, style: const TextStyle(fontSize: 48)),
-              const SizedBox(height: 10),
-              Text(
-                label,
-                style: AppTextStyles.appLabel.copyWith(
-                  color: AppColors.primary,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (customIcon != null)
+                  customIcon!
+                else
+                  Text(emoji, style: const TextStyle(fontSize: 40)),
+                const SizedBox(height: 8),
+                Text(
+                  label,
+                  style: AppTextStyles.appLabel.copyWith(
+                    color: AppColors.primary,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

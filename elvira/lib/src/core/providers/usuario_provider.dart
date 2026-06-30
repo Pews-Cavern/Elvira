@@ -31,8 +31,8 @@ class UsuarioProvider extends ChangeNotifier {
   }
 
   Future<void> atualizarEscalaFonte(double escala) async {
-    if (_usuario == null) return;
-    await salvar(_usuario!.copyWith(tamanhoFonteBase: escala));
+    final u = _usuario ?? const Usuario(nome: '');
+    await salvar(u.copyWith(tamanhoFonteBase: escala));
   }
 
   bool get temCuidador => _usuario?.temCuidador ?? false;
@@ -60,8 +60,8 @@ class UsuarioProvider extends ChangeNotifier {
   String get modoDaltonico => _usuario?.modoDaltonico ?? 'normal';
 
   Future<void> definirModoDaltonico(String modo) async {
-    if (_usuario == null) return;
-    await salvar(_usuario!.copyWith(modoDaltonico: modo));
+    final u = _usuario ?? const Usuario(nome: '');
+    await salvar(u.copyWith(modoDaltonico: modo));
   }
 
   Future<void> alternarAppVisivel(String appId, bool visivel) async {

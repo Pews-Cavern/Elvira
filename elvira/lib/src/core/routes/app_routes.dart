@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../features/onboarding/welcome_screen.dart';
-import '../../features/onboarding/step1_name_screen.dart';
-import '../../features/onboarding/step2_gender_screen.dart';
-import '../../features/onboarding/step3_caregiver_screen.dart';
-import '../../features/onboarding/step4_accessibility_screen.dart';
-import '../../features/onboarding/step5_audio_screen.dart';
+import '../../features/onboarding/step1_accessibility_screen.dart';
+import '../../features/onboarding/step2_daltonismo_screen.dart';
+import '../../features/onboarding/step3_name_screen.dart';
+import '../../features/onboarding/step4_gender_screen.dart';
+import '../../features/onboarding/step5_caregiver_screen.dart';
+import '../../features/onboarding/step6_audio_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/discagem/discagem_screen.dart';
 import '../../features/contatos/contatos_screen.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const step3 = '/onboarding/step3';
   static const step4 = '/onboarding/step4';
   static const step5 = '/onboarding/step5';
+  static const step6 = '/onboarding/step6';
 
   static const home = '/home';
   static const discagem = '/discagem';
@@ -77,11 +79,12 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> get routes => {
     welcome: (_) => const WelcomeScreen(),
-    step1: (_) => const Step1NameScreen(),
-    step2: (_) => const Step2GenderScreen(),
-    step3: (_) => const Step3CaregiverScreen(),
-    step4: (_) => const Step4AccessibilityScreen(),
-    step5: (_) => const Step5AudioScreen(),
+    step1: (_) => const Step1AccessibilityScreen(),
+    step2: (_) => const Step2DaltonismoScreen(),
+    step3: (_) => const Step3NameScreen(),
+    step4: (_) => const Step4GenderScreen(),
+    step5: (_) => const Step5CaregiverScreen(),
+    step6: (_) => const Step6AudioScreen(),
     home: (_) => const HomeScreen(),
     discagem: (_) => const DiscagemScreen(),
     contatos: (_) => const ContatosScreen(),

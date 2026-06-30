@@ -6,14 +6,14 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
 import 'onboarding_scaffold.dart';
 
-class Step3CaregiverScreen extends StatefulWidget {
-  const Step3CaregiverScreen({super.key});
+class Step5CaregiverScreen extends StatefulWidget {
+  const Step5CaregiverScreen({super.key});
 
   @override
-  State<Step3CaregiverScreen> createState() => _Step3CaregiverScreenState();
+  State<Step5CaregiverScreen> createState() => _Step5CaregiverScreenState();
 }
 
-class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
+class _Step5CaregiverScreenState extends State<Step5CaregiverScreen> {
   bool? _temCuidador;
   final _pinController = TextEditingController();
   final _pinFocus = FocusNode();
@@ -32,7 +32,7 @@ class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
       _temCuidador!,
       pin: _temCuidador! ? _pinController.text : null,
     );
-    if (mounted) Navigator.pushNamed(context, AppRoutes.step4);
+    if (mounted) Navigator.pushNamed(context, AppRoutes.step6);
   }
 
   bool get _podeContinuar {
@@ -44,8 +44,8 @@ class _Step3CaregiverScreenState extends State<Step3CaregiverScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 3,
-      totalSteps: 5,
+      step: 5,
+      totalSteps: 6,
       emoji: '🤝',
       titulo: 'Alguém vai te ajudar?',
       subtitulo: 'Filho, filha, cuidador ou familiar',

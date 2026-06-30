@@ -10,14 +10,14 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'onboarding_scaffold.dart';
 
-class Step5AudioScreen extends StatefulWidget {
-  const Step5AudioScreen({super.key});
+class Step6AudioScreen extends StatefulWidget {
+  const Step6AudioScreen({super.key});
 
   @override
-  State<Step5AudioScreen> createState() => _Step5AudioScreenState();
+  State<Step6AudioScreen> createState() => _Step6AudioScreenState();
 }
 
-class _Step5AudioScreenState extends State<Step5AudioScreen> {
+class _Step6AudioScreenState extends State<Step6AudioScreen> {
   static const _niveis = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
   int _nivel = 0;
   bool _tocando = false;
@@ -81,8 +81,8 @@ class _Step5AudioScreenState extends State<Step5AudioScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 5,
-      totalSteps: 5,
+      step: 6,
+      totalSteps: 6,
       emoji: '🔊',
       titulo: 'Ajuste o volume',
       subtitulo: 'Vamos encontrar o volume ideal para você ouvir bem',

@@ -6,14 +6,14 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
 import 'onboarding_scaffold.dart';
 
-class Step2GenderScreen extends StatefulWidget {
-  const Step2GenderScreen({super.key});
+class Step4GenderScreen extends StatefulWidget {
+  const Step4GenderScreen({super.key});
 
   @override
-  State<Step2GenderScreen> createState() => _Step2GenderScreenState();
+  State<Step4GenderScreen> createState() => _Step4GenderScreenState();
 }
 
-class _Step2GenderScreenState extends State<Step2GenderScreen> {
+class _Step4GenderScreenState extends State<Step4GenderScreen> {
   String? _selected;
 
   final _opcoes = const [
@@ -26,15 +26,15 @@ class _Step2GenderScreenState extends State<Step2GenderScreen> {
     if (_selected == null) return;
     final provider = context.read<UsuarioProvider>();
     await provider.salvar(provider.usuario!.copyWith(genero: _selected));
-    if (mounted) Navigator.pushNamed(context, AppRoutes.step3);
+    if (mounted) Navigator.pushNamed(context, AppRoutes.step5);
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 2,
-      totalSteps: 5,
-      emoji: '🙋',
+      step: 4,
+      totalSteps: 6,
+      emoji: '👤',
       titulo: 'Como prefere ser chamado?',
       onContinuar: _continuar,
       onVoltar: () => Navigator.pop(context),
@@ -64,13 +64,15 @@ class _Step2GenderScreenState extends State<Step2GenderScreen> {
                         ? Image.asset(op['imagem'] as String, width: 48, height: 48, fit: BoxFit.contain)
                         : const Text('🙂', style: TextStyle(fontSize: 36)),
                     const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(op['titulo'] as String, style: AppTextStyles.bodyBold),
-                        if ((op['sub'] as String).isNotEmpty)
-                          Text(op['sub'] as String, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(op['titulo'] as String, style: AppTextStyles.bodyBold),
+                          if ((op['sub'] as String).isNotEmpty)
+                            Text(op['sub'] as String, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+                        ],
+                      ),
                     ),
                   ],
                 ),
