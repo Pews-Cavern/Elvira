@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:android_intent_plus/android_intent.dart';
 
 import '../../core/providers/consultas_provider.dart';
 import '../../core/theme/app_colors.dart';
@@ -94,6 +95,35 @@ class _ConsultaTile extends StatelessWidget {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
+  Future<void> _abrirUber(BuildContext context) async {
+    final hospital = Uri.encodeComponent(consulta.hospitalName as String);
+    final uri = 'uber://?action=setPickup&pickup=my_location&dropoff[nickname]=$hospital&dropoff[formatted_address]=$hospital';
+
+    final intent = AndroidIntent(
+      action: 'action_view',
+      data: uri,
+      package: 'com.ubercab',
+    );
+    try {
+      await intent.launch();
+    } catch (_) {
+      try {
+        await launchUrl(
+          Uri.parse('https://play.google.com/store/apps/details?id=com.ubercab'),
+          mode: LaunchMode.externalApplication,
+        );
+      } catch (_) {
+        if (context.mounted) {
+          showFeedbackDialog(
+            context,
+            message: 'Não foi possível abrir o Uber.',
+            type: FeedbackType.error,
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = DateFormat(
@@ -168,6 +198,28 @@ class _ConsultaTile extends StatelessWidget {
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.primary, width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            height: 58,
+            child: ElevatedButton.icon(
+              onPressed: () => _abrirUber(context),
+              icon: const Icon(Icons.local_taxi_rounded, color: Colors.white),
+              label: Text(
+                'Abrir no Uber',
+                style: AppTextStyles.body.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),

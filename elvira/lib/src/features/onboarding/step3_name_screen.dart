@@ -5,14 +5,14 @@ import '../../core/models/usuario.dart';
 import '../../core/routes/app_routes.dart';
 import 'onboarding_scaffold.dart';
 
-class Step1NameScreen extends StatefulWidget {
-  const Step1NameScreen({super.key});
+class Step3NameScreen extends StatefulWidget {
+  const Step3NameScreen({super.key});
 
   @override
-  State<Step1NameScreen> createState() => _Step1NameScreenState();
+  State<Step3NameScreen> createState() => _Step3NameScreenState();
 }
 
-class _Step1NameScreenState extends State<Step1NameScreen> {
+class _Step3NameScreenState extends State<Step3NameScreen> {
   final _controller = TextEditingController();
 
   @override
@@ -29,14 +29,14 @@ class _Step1NameScreenState extends State<Step1NameScreen> {
     await provider.salvar(
       atual != null ? atual.copyWith(nome: nome) : Usuario(nome: nome),
     );
-    if (mounted) Navigator.pushNamed(context, AppRoutes.step2);
+    if (mounted) Navigator.pushNamed(context, AppRoutes.step4);
   }
 
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 1,
-      totalSteps: 5,
+      step: 3,
+      totalSteps: 6,
       emoji: '👋',
       titulo: 'Qual é o seu nome?',
       subtitulo: 'Como podemos te chamar?',

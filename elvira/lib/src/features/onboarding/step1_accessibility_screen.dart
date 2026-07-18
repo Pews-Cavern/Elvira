@@ -6,14 +6,14 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
 import 'onboarding_scaffold.dart';
 
-class Step4AccessibilityScreen extends StatefulWidget {
-  const Step4AccessibilityScreen({super.key});
+class Step1AccessibilityScreen extends StatefulWidget {
+  const Step1AccessibilityScreen({super.key});
 
   @override
-  State<Step4AccessibilityScreen> createState() => _Step4AccessibilityScreenState();
+  State<Step1AccessibilityScreen> createState() => _Step1AccessibilityScreenState();
 }
 
-class _Step4AccessibilityScreenState extends State<Step4AccessibilityScreen> {
+class _Step1AccessibilityScreenState extends State<Step1AccessibilityScreen> {
   double _escala = 1.0;
   int _toquesEscala = 0;
 
@@ -26,22 +26,20 @@ class _Step4AccessibilityScreenState extends State<Step4AccessibilityScreen> {
     });
   }
 
-  Future<void> _concluir() async {
-    await context.read<UsuarioProvider>().atualizarEscalaFonte(_escala);
-    if (mounted) Navigator.pushNamed(context, AppRoutes.step5);
-  }
-
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 4,
-      totalSteps: 5,
-      emoji: '🔠',
-      titulo: 'Ajuste o tamanho do texto',
-      subtitulo: 'Toque no botão para encontrar o tamanho ideal',
-      onContinuar: _concluir,
-      onVoltar: () => Navigator.pop(context),
-      labelContinuar: 'Continuar →',
+      step: 1,
+      totalSteps: 6,
+      emoji: 'Aa',
+      titulo: 'Tamanho do texto',
+      subtitulo: 'Ajuste para ficar confortável para você ler',
+      continuarHabilitado: true,
+      labelContinuar: 'Avançar',
+      onContinuar: () {
+        context.read<UsuarioProvider>().atualizarEscalaFonte(_escala);
+        Navigator.pushNamed(context, AppRoutes.step2);
+      },
       content: Column(
         children: [
           const SizedBox(height: 16),
